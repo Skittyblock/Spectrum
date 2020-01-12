@@ -1,0 +1,9 @@
+Package: xyz.skitty.spectrum
+Name: Spectrum
+Depends: mobilesubstrate
+Version: 0.0.1
+Architecture: iphoneos-arm
+Description: Custom system colors!
+Maintainer: Skitty
+Author: Skitty & EvenDev
+Section: Tweaks
