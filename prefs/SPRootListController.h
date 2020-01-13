@@ -5,5 +5,4 @@
 #define kTintColor [UIColor systemBlueColor]
 
 @interface SPRootListController : PSListController
-
 @end

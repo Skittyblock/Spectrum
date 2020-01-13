@@ -8,5 +8,4 @@
 @end
 
 @interface SkittyColorCell : PSTableCell
-
 @end
