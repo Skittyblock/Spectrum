@@ -70,7 +70,7 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
-			<string>Dark Mode Colors</string>
+			<string>Global Colors</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -90,6 +90,12 @@
 		</dict>
 		<dict>
 			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Dark Mode Colors</string>
+		</dict>
+		<dict>
+			<key>cell</key>
 			<string>PSLinkCell</string>
 			<key>cellClass</key>
 			<string>SkittyColorCell</string>
@@ -98,7 +104,7 @@
 			<key>defaults</key>
 			<string>xyz.skitty.spectrum</string>
 			<key>key</key>
-			<string>primaryColor</string>
+			<string>darkPrimaryColor</string>
 			<key>PostNotification</key>
 			<string>xyz.skitty.spectrum.prefschanged</string>
 			<key>label</key>
@@ -114,7 +120,7 @@
 			<key>defaults</key>
 			<string>xyz.skitty.spectrum</string>
 			<key>key</key>
-			<string>secondaryColor</string>
+			<string>darkSecondaryColor</string>
 			<key>PostNotification</key>
 			<string>xyz.skitty.spectrum.prefschanged</string>
 			<key>label</key>
@@ -130,7 +136,7 @@
 			<key>defaults</key>
 			<string>xyz.skitty.spectrum</string>
 			<key>key</key>
-			<string>separatorColor</string>
+			<string>darkSeparatorColor</string>
 			<key>PostNotification</key>
 			<string>xyz.skitty.spectrum.prefschanged</string>
 			<key>label</key>
@@ -146,7 +152,7 @@
 			<key>defaults</key>
 			<string>xyz.skitty.spectrum</string>
 			<key>key</key>
-			<string>labelColor</string>
+			<string>darkLabelColor</string>
 			<key>PostNotification</key>
 			<string>xyz.skitty.spectrum.prefschanged</string>
 			<key>label</key>
