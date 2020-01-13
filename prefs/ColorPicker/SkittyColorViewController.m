@@ -2,20 +2,31 @@
 
 #import "SkittyColorViewController.h"
 
+CFNotificationCenterRef CFNotificationCenterGetDistributedCenter(void);
+
 @implementation SkittyColorViewController
+
+- (id)initWithProperties:(NSDictionary *)properties {
+    self = [super init];
+    if (self) {
+        self.properties = properties;
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
 
     if (@available(iOS 13, *)) {
         self.view.backgroundColor = [UIColor systemBackgroundColor];
-        //self.modalInPresentation = YES;
+    } else {
+        self.view.backgroundColor = [UIColor groupTableViewBackgroundColor];
     }
 
-    NSMutableDictionary *settings = [[NSMutableDictionary alloc] initWithContentsOfFile:@"/var/mobile/Library/Preferences/xyz.skitty.spectrum.plist"];
+    NSMutableDictionary *settings = [[NSMutableDictionary alloc] initWithContentsOfFile:[NSString stringWithFormat:@"/var/mobile/Library/Preferences/%@.plist", self.properties[@"defaults"]]];
 
     unsigned rgbValue = 0;
-    NSScanner *scanner = [NSScanner scannerWithString:[settings objectForKey:@"hexPick"] ?: @"ff0000"];
+    NSScanner *scanner = [NSScanner scannerWithString:[settings objectForKey:self.properties[@"key"]] ?: self.properties[@"default"]];
     [scanner setScanLocation:0];
     [scanner scanHexInt:&rgbValue];
 
@@ -45,7 +56,7 @@
     self.pickerView.hue = hue;
 
     // write color
-    NSMutableDictionary *settings = [[NSMutableDictionary alloc] initWithContentsOfFile:@"/var/mobile/Library/Preferences/xyz.skitty.spectrum.plist"];
+    NSMutableDictionary *settings = [[NSMutableDictionary alloc] initWithContentsOfFile:[NSString stringWithFormat:@"/var/mobile/Library/Preferences/%@.plist", self.properties[@"defaults"]]];
 
     UIColor *color = [UIColor colorWithHue:hue saturation:self.pickerView.value.x brightness:self.pickerView.value.y alpha:1];
     
@@ -68,9 +79,12 @@
 
     NSString *hex = [NSString stringWithFormat:@"%02lX%02lX%02lX", lroundf(r * 255), lroundf(g * 255), lroundf(b * 255)];
     
-    [settings setObject:hex forKey:@"hexPick"];
+    [settings setObject:hex forKey:self.properties[@"key"]];
 
-    [settings writeToURL:[NSURL URLWithString:[NSString stringWithFormat:@"file://%@", @"/var/mobile/Library/Preferences/xyz.skitty.spectrum.plist"]] error:nil];
+    [settings writeToURL:[NSURL URLWithString:[NSString stringWithFormat:@"file:///var/mobile/Library/Preferences/%@.plist", self.properties[@"defaults"]]] error:nil];
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"xyz.skitty.spectrum.colorupdate" object:self];
+    CFNotificationCenterPostNotification(CFNotificationCenterGetDistributedCenter(), (CFStringRef)self.properties[@"PostNotification"], nil, nil, true);
 }
 
 @end

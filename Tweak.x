@@ -1,19 +1,7 @@
 // Spectrum, by Skitty (and Even)
 // Customize system colors!
 
-CFNotificationCenterRef CFNotificationCenterGetDistributedCenter(void);
-
-@interface UIColor (Spectrum)
-+ (id)systemBlueColor;
-@end
-
-@interface UIImage (Spectrum)
-+ (id)_applicationIconImageForBundleIdentifier:(id)arg1 format:(int)arg2 scale:(double)arg3;
-@end
-
-@interface UIView (Spectrum)
-- (id)_normalInheritedTintColor;
-@end
+#import "Tweak.h"
 
 static NSMutableDictionary *settings;
 static bool global = YES;
@@ -65,7 +53,7 @@ UIColor *iconTintColorForCurrentApp() {
 UIColor *colorFromHexStringWithAlpha(NSString *hexString, double alpha) {
   unsigned rgbValue = 0;
   NSScanner *scanner = [NSScanner scannerWithString:hexString];
-  [scanner setScanLocation:1];
+  [scanner setScanLocation:0];
   [scanner scanHexInt:&rgbValue];
   return [UIColor colorWithRed:((rgbValue & 0xFF0000) >> 16)/255.0 green:((rgbValue & 0xFF00) >> 8)/255.0 blue:(rgbValue & 0xFF)/255.0 alpha:alpha];
 }
@@ -84,14 +72,13 @@ static void refreshPrefs() {
   }
 
   enabled = [([settings objectForKey:@"enabled"] ?: @(YES)) boolValue];
-  hex = [NSString stringWithFormat:@"#%@", ([settings objectForKey:@"hex"] ?: @"F22F6C")];
+  hex = [settings objectForKey:@"tintColor"] ?: @"F22F6C";
   tint = colorFromHexStringWithAlpha(hex, 1.0);
   lightTint = colorFromHexStringWithAlpha(hex, 0.5);
   highlight = colorFromHexStringWithAlpha(hex, 0.2);
 
-  if ([hex isEqualToString:@"#"]) {
-	  hex = @"#F22F6C";
-  }
+  if ([hex isEqualToString:@""])
+	  hex = @"F22F6C";
 }
 
 static void PreferencesChangedCallback(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
@@ -144,7 +131,8 @@ static UIColor *dynamicColor(UIColor *defaultColor, UIColor *darkColor) {
 }
 
 // iOS 13 System Colors
-+ (id)systemBackgroundColor {
+// Incomplete. Just tests.
+/*+ (id)systemBackgroundColor {
   return dynamicColor([UIColor redColor], [UIColor blackColor]);
 }
 + (id)secondarySystemBackgroundColor {
@@ -176,7 +164,7 @@ static UIColor *dynamicColor(UIColor *defaultColor, UIColor *darkColor) {
 }
 + (id)tableSeparatorColor {
   return dynamicColor([UIColor redColor], [UIColor blackColor]);
-}/*
+}
 + (id)labelColor {
   return dynamicColor([UIColor blackColor], [UIColor redColor]);
 }*/
@@ -200,18 +188,6 @@ static UIColor *dynamicColor(UIColor *defaultColor, UIColor *darkColor) {
 %end
 
 %end
-
-@interface SBApplication : NSObject
-@property (nonatomic, retain) NSString *displayName;
-@property (nonatomic, retain) NSString *bundleIdentifier;
-@end
-
-@interface SBApplicationController : NSObject
-+ (id)sharedInstance;
-- (id)allApplications;
-- (id)allBundleIdentifiers;
-- (id)runningApplications;
-@end
 
 static void getAppList(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
   if (![[[NSBundle mainBundle] bundleIdentifier] isEqual:@"com.apple.springboard"]) {
