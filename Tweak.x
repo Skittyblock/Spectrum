@@ -7,10 +7,16 @@ static NSMutableDictionary *settings;
 static bool global = YES;
 //static bool useIconColor = NO;
 static bool enabled;
-static NSString *hex;
+
+static bool customDarkColors;
+
 static UIColor *tint;
-static UIColor *lightTint;
 static UIColor *highlight;
+
+static UIColor *darkPrimaryColor;
+static UIColor *darkSecondaryColor;
+static UIColor *darkSeparatorColor;
+static UIColor *darkLabelColor;
 //static UIColor *iconTint;
 
 UIColor *appTintColorFromWindow(UIWindow *window) {
@@ -72,13 +78,15 @@ static void refreshPrefs() {
 	}
 
 	enabled = [([settings objectForKey:@"enabled"] ?: @(YES)) boolValue];
-	hex = [settings objectForKey:@"tintColor"] ?: @"F22F6C";
-	tint = colorFromHexStringWithAlpha(hex, 1.0);
-	lightTint = colorFromHexStringWithAlpha(hex, 0.5);
-	highlight = colorFromHexStringWithAlpha(hex, 0.2);
+	customDarkColors = [([settings objectForKey:@"customDarkColors"] ?: @(NO)) boolValue];
 
-	if ([hex isEqualToString:@""])
-		hex = @"F22F6C";
+	NSString  *tintHex = [settings objectForKey:@"tintColor"] ?: @"F22F6C";
+	tint = colorFromHexStringWithAlpha(tintHex, 1.0);
+	highlight = colorFromHexStringWithAlpha(tintHex, 0.2);
+	darkPrimaryColor = colorFromHexStringWithAlpha([settings objectForKey:@"darkPrimaryColor"] ?: @"000000", 1.0);
+	darkSecondaryColor = colorFromHexStringWithAlpha([settings objectForKey:@"darkSecondaryColor"] ?: @"000000", 1.0);
+	darkSeparatorColor = colorFromHexStringWithAlpha([settings objectForKey:@"darkSeparatorColor"] ?: @"000000", 1.0);
+	darkLabelColor = colorFromHexStringWithAlpha([settings objectForKey:@"darkLabelColor"] ?: @"FFFFFF", 1.0);
 }
 
 static void PreferencesChangedCallback(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
@@ -107,10 +115,6 @@ static UIColor *dynamicColor(UIColor *defaultColor, UIColor *darkColor) {
 	if (red == 0.0 && green == 122.0/255.0 && blue == 1.0) {
 		return tint;
 	}
-	// message bubble light color
-	if (red == 90.0/255.0 && green == 200.0/255.0 && blue == 250.0/255.0) {
-		return lightTint;
-	}
 	return %orig;
 }
 // Default tint
@@ -131,45 +135,43 @@ static UIColor *dynamicColor(UIColor *defaultColor, UIColor *darkColor) {
 }
 
 // iOS 13 System Colors
-// Incomplete. Just tests.
-/*+ (id)systemBackgroundColor {
-	return dynamicColor([UIColor redColor], [UIColor blackColor]);
++ (id)systemBackgroundColor {
+	return customDarkColors ? dynamicColor([%orig resolvedColorWithTraitCollection:[UITraitCollection traitCollectionWithUserInterfaceStyle:UIUserInterfaceStyleLight]], darkPrimaryColor) : %orig;
 }
 + (id)secondarySystemBackgroundColor {
-	return dynamicColor([UIColor redColor], [UIColor blackColor]);
+	return customDarkColors ? dynamicColor([%orig resolvedColorWithTraitCollection:[UITraitCollection traitCollectionWithUserInterfaceStyle:UIUserInterfaceStyleLight]], darkSecondaryColor) : %orig;
 }
-+ (id)tertiarySystemBackgroundColor {
-	return dynamicColor([UIColor redColor], [UIColor blackColor]);
-}
+
 + (id)systemGroupedBackgroundColor {
-	return dynamicColor([UIColor redColor], [UIColor blackColor]);
+	return customDarkColors ? dynamicColor([%orig resolvedColorWithTraitCollection:[UITraitCollection traitCollectionWithUserInterfaceStyle:UIUserInterfaceStyleLight]], darkPrimaryColor) : %orig;
 }
 + (id)secondarySystemGroupedBackgroundColor {
-	return dynamicColor([UIColor redColor], [UIColor blackColor]);
+	return customDarkColors ? dynamicColor([%orig resolvedColorWithTraitCollection:[UITraitCollection traitCollectionWithUserInterfaceStyle:UIUserInterfaceStyleLight]], darkSecondaryColor) : %orig;
 }
-+ (id)tertiarySystemGroupedBackgroundColor {
-	return dynamicColor([UIColor redColor], [UIColor blackColor]);
-}
+
 + (id)groupTableViewBackgroundColor {
-	return dynamicColor([UIColor greenColor], [UIColor blackColor]);
+	return customDarkColors ? dynamicColor([%orig resolvedColorWithTraitCollection:[UITraitCollection traitCollectionWithUserInterfaceStyle:UIUserInterfaceStyleLight]], darkPrimaryColor) : %orig;
 }
 + (id)tableCellGroupedBackgroundColor {
-	return dynamicColor([UIColor brownColor], [UIColor blackColor]);
+	return customDarkColors ? dynamicColor([%orig resolvedColorWithTraitCollection:[UITraitCollection traitCollectionWithUserInterfaceStyle:UIUserInterfaceStyleLight]], darkSecondaryColor) : %orig;
 }
+
 + (id)separatorColor {
-	return dynamicColor([UIColor orangeColor], [UIColor blackColor]);
+	return customDarkColors ? dynamicColor([%orig resolvedColorWithTraitCollection:[UITraitCollection traitCollectionWithUserInterfaceStyle:UIUserInterfaceStyleLight]], darkSeparatorColor) : %orig;
 }
 + (id)opaqueSeparatorColor {
-	return dynamicColor([UIColor magentaColor], [UIColor blackColor]);
+	return customDarkColors ? dynamicColor([%orig resolvedColorWithTraitCollection:[UITraitCollection traitCollectionWithUserInterfaceStyle:UIUserInterfaceStyleLight]], darkSeparatorColor) : %orig;
 }
 + (id)tableSeparatorColor {
-	return dynamicColor([UIColor redColor], [UIColor blackColor]);
+	return customDarkColors ? dynamicColor([%orig resolvedColorWithTraitCollection:[UITraitCollection traitCollectionWithUserInterfaceStyle:UIUserInterfaceStyleLight]], darkSeparatorColor) : %orig;
 }
+
 + (id)labelColor {
-	return dynamicColor([UIColor blackColor], [UIColor redColor]);
-}*/
+	return customDarkColors ? dynamicColor([%orig resolvedColorWithTraitCollection:[UITraitCollection traitCollectionWithUserInterfaceStyle:UIUserInterfaceStyleLight]], darkLabelColor) : %orig;
+}
+
 + (id)linkColor {
-	return dynamicColor([UIColor redColor], [UIColor greenColor]);
+	return tint;
 }
 %end
 
@@ -188,6 +190,20 @@ static UIColor *dynamicColor(UIColor *defaultColor, UIColor *darkColor) {
 %end
 
 %end
+
+// Message bubbles POC
+/*%group Messages
+
+%hook CKUITheme
+- (id)blue_balloonColors {
+	UIColor *topColor = [UIColor blueColor];
+	UIColor *bottomColor = [UIColor redColor];
+	return @[topColor, bottomColor]
+}
+// - (id)green_balloonColors
+%end
+
+%end*/
 
 static void getAppList(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
 	if (![[[NSBundle mainBundle] bundleIdentifier] isEqual:@"com.apple.springboard"]) {
