@@ -4,16 +4,26 @@
 <dict>
 	<key>name</key>
 	<string>Twitter</string>
-	<key>darkPrimaryColor</key>
+	<key>darkSystemBackgroundColor</key>
 	<string>10171E</string>
-	<key>darkSecondaryColor</key>
+	<key>darkSystemGroupedBackgroundColor</key>
+	<string>10171E</string>
+	<key>darkGroupTableViewBackgroundColor</key>
+	<string>10171E</string>
+	<key>darkSecondarySystemBackgroundColor</key>
 	<string>15202B</string>
-	<key>darkTertiaryColor</key>
+	<key>darkSecondarySystemGroupedBackgroundColor</key>
+	<string>15202B</string>
+	<key>darkPlaceholderLabelColor</key>
+	<string>FFFFFF</string>
+	<key>darkSecondaryLabelColor</key>
+	<string>FFFFFF</string>
+	<key>darkTableCellGroupedBackgroundColor</key>
 	<string>15202B</string>
 	<key>darkSeparatorColor</key>
 	<string>38434D</string>
-	<key>darkGray5Color</key>
-	<string>10171E</string>
+	<key>darkOpaqueSeparatorColor</key>
+	<string>38434D</string>
 	<key>darkBarColor</key>
 	<string>03111E</string>
 	<key>tintColor</key>

@@ -4,9 +4,23 @@
 <dict>
 	<key>name</key>
 	<string>OLED</string>
-	<key>darkPrimaryColor</key>
+	<key>darkSystemBackgroundColor</key>
 	<string>000000</string>
-	<key>darkSecondaryColor</key>
+	<key>darkSystemGroupedBackgroundColor</key>
+	<string>000000</string>
+	<key>darkGroupTableViewBackgroundColor</key>
+	<string>000000</string>
+	<key>darkSecondarySystemBackgroundColor</key>
+	<string>000000</string>
+	<key>darkSecondarySystemGroupedBackgroundColor</key>
+	<string>000000</string>
+	<key>darkTableCellGroupedBackgroundColor</key>
+	<string>000000</string>
+	<key>darkSeparatorColor</key>
+	<string>000000</string>
+	<key>darkOpaqueSeparatorColor</key>
+	<string>000000</string>
+	<key>darkBarColor</key>
 	<string>000000</string>
 	<key>darkSeparatorColor</key>
 	<string>000000</string>

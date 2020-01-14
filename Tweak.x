@@ -288,9 +288,9 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 }
 
 // UITableViewCell selection color
-+ (id)systemGray5Color {
+/*+ (id)systemGray5Color {
 	return [[UIColor blackColor] colorWithAlphaComponent:0.2];
-}
+}*/
 
 // Label colors
 + (id)labelColor {
