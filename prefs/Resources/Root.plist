@@ -126,17 +126,17 @@
 			<key>cell</key>
 			<string>PSLinkCell</string>
 			<key>detail</key>
-			<string>SPSystemFillColorsViewController</string>
+			<string>SPFillColorsListController</string>
 			<key>isController</key>
 			<true/>
 			<key>label</key>
-			<string>System Fill Colors</string>
+			<string>Fill Colors</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSLinkCell</string>
 			<key>detail</key>
-			<string>SPSystemLabelColorsViewController</string>
+			<string>SPLabelColorsListController</string>
 			<key>isController</key>
 			<true/>
 			<key>label</key>

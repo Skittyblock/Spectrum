@@ -7,17 +7,15 @@
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 
-	UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
 	self.view.tintColor = kTintColor;
-	keyWindow.tintColor = kTintColor;
+	[UIApplication sharedApplication].keyWindow.tintColor = kTintColor;
 	[UISwitch appearanceWhenContainedInInstancesOfClasses:@[self.class]].onTintColor = kTintColor;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
 
-	UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
-	keyWindow.tintColor = nil;
+	[UIApplication sharedApplication].keyWindow.tintColor = nil;
 }
 
 - (NSArray *)specifiers {
