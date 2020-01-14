@@ -247,38 +247,59 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 %group App
 
 %hook UINavigationBar
-- (void)layoutSubviews {
+%property (nonatomic, retain) UIColor *storedBarColor;
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
 	%orig;
-	if (![self barTintColor])
-		[self setBarTintColor:nil];
+	UIUserInterfaceStyle currentStyle = [UITraitCollection currentTraitCollection].userInterfaceStyle;
+	if ((currentProfile[@"lightBarColor"] && currentStyle == UIUserInterfaceStyleLight) || (currentProfile[@"darkBarColor"] && currentStyle == UIUserInterfaceStyleDark))
+		[self setBarTintColor:self.storedBarColor ?: [UIColor cyanColor]];
+	else
+		[self setBarTintColor:self.storedBarColor ?: [UIColor magentaColor]];
 }
 
 - (void)setBarTintColor:(UIColor *)color {
-	%orig(color ?: dynamicColorWithOptions(dynamicColor([UIColor clearColor], [UIColor clearColor]), @"lightBarColor", @"darkBarColor", nil, nil));
+	if ([color isEqual:[UIColor cyanColor]]) return %orig(dynamicColorWithOptions(dynamicColor([UIColor clearColor], [UIColor clearColor]), @"lightBarColor", @"darkBarColor", nil, nil));
+	if ([color isEqual:[UIColor magentaColor]]) return %orig(nil);
+	if (color) self.storedBarColor = color;
+	%orig(color);
 }
 %end
 
 %hook UIToolbar
-- (void)layoutSubviews {
+%property (nonatomic, retain) UIColor *storedBarColor;
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
 	%orig;
-	if (![self barTintColor])
-		[self setBarTintColor:nil];
+	UIUserInterfaceStyle currentStyle = [UITraitCollection currentTraitCollection].userInterfaceStyle;
+	if ((currentProfile[@"lightBarColor"] && currentStyle == UIUserInterfaceStyleLight) || (currentProfile[@"darkBarColor"] && currentStyle == UIUserInterfaceStyleDark))
+		[self setBarTintColor:self.storedBarColor ?: [UIColor cyanColor]];
+	else
+		[self setBarTintColor:self.storedBarColor ?: [UIColor magentaColor]];
 }
 
 - (void)setBarTintColor:(UIColor *)color {
-	%orig(color ?: dynamicColorWithOptions(dynamicColor([UIColor clearColor], [UIColor clearColor]), @"lightBarColor", @"darkBarColor", nil, nil));
+	if ([color isEqual:[UIColor cyanColor]]) return %orig(dynamicColorWithOptions(dynamicColor([UIColor clearColor], [UIColor clearColor]), @"lightBarColor", @"darkBarColor", nil, nil));
+	if ([color isEqual:[UIColor magentaColor]]) return %orig(nil);
+	if (color) self.storedBarColor = color;
+	%orig(color);
 }
 %end
 
 %hook UITabBar
-- (void)layoutSubviews {
+%property (nonatomic, retain) UIColor *storedBarColor;
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
 	%orig;
-	if (![self barTintColor])
-		[self setBarTintColor:nil];
+	UIUserInterfaceStyle currentStyle = [UITraitCollection currentTraitCollection].userInterfaceStyle;
+	if ((currentProfile[@"lightBarColor"] && currentStyle == UIUserInterfaceStyleLight) || (currentProfile[@"darkBarColor"] && currentStyle == UIUserInterfaceStyleDark))
+		[self setBarTintColor:self.storedBarColor ?: [UIColor cyanColor]];
+	else
+		[self setBarTintColor:self.storedBarColor ?: [UIColor magentaColor]];
 }
 
 - (void)setBarTintColor:(UIColor *)color {
-	%orig(color ?: dynamicColorWithOptions(dynamicColor([UIColor clearColor], [UIColor clearColor]), @"lightBarColor", @"darkBarColor", nil, nil));
+	if ([color isEqual:[UIColor cyanColor]]) return %orig(dynamicColorWithOptions(dynamicColor([UIColor clearColor], [UIColor clearColor]), @"lightBarColor", @"darkBarColor", nil, nil));
+	if ([color isEqual:[UIColor magentaColor]]) return %orig(nil);
+	if (color) self.storedBarColor = color;
+	%orig(color);
 }
 %end
 

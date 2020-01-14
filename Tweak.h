@@ -14,6 +14,18 @@ CFNotificationCenterRef CFNotificationCenterGetDistributedCenter(void);
 - (id)_normalInheritedTintColor;
 @end
 
+@interface UINavigationBar (Spectrum)
+@property (nonatomic, retain) UIColor *storedBarColor;
+@end
+
+@interface UIToolbar (Spectrum)
+@property (nonatomic, retain) UIColor *storedBarColor;
+@end
+
+@interface UITabBar (Spectrum)
+@property (nonatomic, retain) UIColor *storedBarColor;
+@end
+
 @interface SBApplication : NSObject
 @property (nonatomic, retain) NSString *displayName;
 @property (nonatomic, retain) NSString *bundleIdentifier;
