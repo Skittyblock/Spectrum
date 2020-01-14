@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>items</key>
+	<array>
+        <dict>
+            <key>cell</key>
+            <string>PSGroupCell</string>
+            <key>label</key>
+            <string>Dark Colors</string>
+        </dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>cellClass</key>
+			<string>SkittyColorCell</string>
+			<key>default</key>
+			<string>FFFFFF</string>
+			<key>defaults</key>
+			<string>xyz.skitty.spectrum</string>
+			<key>key</key>
+			<string>darkLabelColor</string>
+			<key>PostNotification</key>
+			<string>xyz.skitty.spectrum.prefschanged</string>
+			<key>label</key>
+			<string>Primary Label Color</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>cellClass</key>
+			<string>SkittyColorCell</string>
+			<key>default</key>
+			<string>EBEBF5</string>
+			<key>defaults</key>
+			<string>xyz.skitty.spectrum</string>
+			<key>key</key>
+			<string>darkPlaceholderLabelColor</string>
+			<key>PostNotification</key>
+			<string>xyz.skitty.spectrum.prefschanged</string>
+			<key>label</key>
+			<string>Placeholder Label Color</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>cellClass</key>
+			<string>SkittyColorCell</string>
+			<key>default</key>
+			<string>EBEBF5</string>
+			<key>defaults</key>
+			<string>xyz.skitty.spectrum</string>
+			<key>key</key>
+			<string>darkSecondaryLabelColor</string>
+			<key>PostNotification</key>
+			<string>xyz.skitty.spectrum.prefschanged</string>
+			<key>label</key>
+			<string>Secondary Label Color</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>cellClass</key>
+			<string>SkittyColorCell</string>
+			<key>default</key>
+			<string>EBEBF5</string>
+			<key>defaults</key>
+			<string>xyz.skitty.spectrum</string>
+			<key>key</key>
+			<string>darkTertiaryLabelColor</string>
+			<key>PostNotification</key>
+			<string>xyz.skitty.spectrum.prefschanged</string>
+			<key>label</key>
+			<string>Tertiary Label Color</string>
+		</dict>
+
+        <dict>
+            <key>cell</key>
+            <string>PSGroupCell</string>
+            <key>label</key>
+            <string>Light Colors</string>
+        </dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>cellClass</key>
+			<string>SkittyColorCell</string>
+			<key>default</key>
+			<string>000000</string>
+			<key>defaults</key>
+			<string>xyz.skitty.spectrum</string>
+			<key>key</key>
+			<string>lightLabelColor</string>
+			<key>PostNotification</key>
+			<string>xyz.skitty.spectrum.prefschanged</string>
+			<key>label</key>
+			<string>Primary Label Color</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>cellClass</key>
+			<string>SkittyColorCell</string>
+			<key>default</key>
+			<string>3C3C43</string>
+			<key>defaults</key>
+			<string>xyz.skitty.spectrum</string>
+			<key>key</key>
+			<string>lightPlaceholderLabelColor</string>
+			<key>PostNotification</key>
+			<string>xyz.skitty.spectrum.prefschanged</string>
+			<key>label</key>
+			<string>Placeholder Label Color</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>cellClass</key>
+			<string>SkittyColorCell</string>
+			<key>default</key>
+			<string>3C3C43</string>
+			<key>defaults</key>
+			<string>xyz.skitty.spectrum</string>
+			<key>key</key>
+			<string>lightSecondaryLabelColor</string>
+			<key>PostNotification</key>
+			<string>xyz.skitty.spectrum.prefschanged</string>
+			<key>label</key>
+			<string>Secondary Label Color</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>cellClass</key>
+			<string>SkittyColorCell</string>
+			<key>default</key>
+			<string>3C3C43</string>
+			<key>defaults</key>
+			<string>xyz.skitty.spectrum</string>
+			<key>key</key>
+			<string>lightTertiaryLabelColor</string>
+			<key>PostNotification</key>
+			<string>xyz.skitty.spectrum.prefschanged</string>
+			<key>label</key>
+			<string>Tertiary Label Color</string>
+		</dict>
+	</array>
+	<key>title</key>
+	<string>Label Colors</string>
+</dict>
+</plist>

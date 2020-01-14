@@ -120,205 +120,27 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
-			<string>Dark Mode Colors</string>
+			<string>System Colors</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSLinkCell</string>
-			<key>cellClass</key>
-			<string>SkittyColorCell</string>
-			<key>default</key>
-			<string>000000</string>
-			<key>defaults</key>
-			<string>xyz.skitty.spectrum</string>
-			<key>key</key>
-			<string>darkPrimaryColor</string>
-			<key>PostNotification</key>
-			<string>xyz.skitty.spectrum.prefschanged</string>
+			<key>detail</key>
+			<string>SPSystemFillColorsViewController</string>
+			<key>isController</key>
+			<true/>
 			<key>label</key>
-			<string>Primary Background Color</string>
+			<string>System Fill Colors</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSLinkCell</string>
-			<key>cellClass</key>
-			<string>SkittyColorCell</string>
-			<key>default</key>
-			<string>1C1C1E</string>
-			<key>defaults</key>
-			<string>xyz.skitty.spectrum</string>
-			<key>key</key>
-			<string>darkSecondaryColor</string>
-			<key>PostNotification</key>
-			<string>xyz.skitty.spectrum.prefschanged</string>
+			<key>detail</key>
+			<string>SPSystemLabelColorsViewController</string>
+			<key>isController</key>
+			<true/>
 			<key>label</key>
-			<string>Secondary Background Color</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSLinkCell</string>
-			<key>cellClass</key>
-			<string>SkittyColorCell</string>
-			<key>default</key>
-			<string>1C1C1E</string>
-			<key>defaults</key>
-			<string>xyz.skitty.spectrum</string>
-			<key>key</key>
-			<string>darkTertiaryColor</string>
-			<key>PostNotification</key>
-			<string>xyz.skitty.spectrum.prefschanged</string>
-			<key>label</key>
-			<string>Tertiary Background Color</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSLinkCell</string>
-			<key>cellClass</key>
-			<string>SkittyColorCell</string>
-			<key>default</key>
-			<string>3D3D41</string>
-			<key>defaults</key>
-			<string>xyz.skitty.spectrum</string>
-			<key>key</key>
-			<string>darkSeparatorColor</string>
-			<key>PostNotification</key>
-			<string>xyz.skitty.spectrum.prefschanged</string>
-			<key>label</key>
-			<string>Separator Color</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSLinkCell</string>
-			<key>cellClass</key>
-			<string>SkittyColorCell</string>
-			<key>default</key>
-			<string>FFFFFF</string>
-			<key>defaults</key>
-			<string>xyz.skitty.spectrum</string>
-			<key>key</key>
-			<string>darkLabelColor</string>
-			<key>PostNotification</key>
-			<string>xyz.skitty.spectrum.prefschanged</string>
-			<key>label</key>
-			<string>Label Color</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSLinkCell</string>
-			<key>cellClass</key>
-			<string>SkittyColorCell</string>
-			<key>default</key>
-			<string>808082</string>
-			<key>defaults</key>
-			<string>xyz.skitty.spectrum</string>
-			<key>key</key>
-			<string>darkSecondaryLabelColor</string>
-			<key>PostNotification</key>
-			<string>xyz.skitty.spectrum.prefschanged</string>
-			<key>label</key>
-			<string>Secondary Label Color</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-			<key>label</key>
-			<string>Light Mode Colors</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSLinkCell</string>
-			<key>cellClass</key>
-			<string>SkittyColorCell</string>
-			<key>default</key>
-			<string>EFEFF4</string>
-			<key>defaults</key>
-			<string>xyz.skitty.spectrum</string>
-			<key>key</key>
-			<string>lightPrimaryColor</string>
-			<key>PostNotification</key>
-			<string>xyz.skitty.spectrum.prefschanged</string>
-			<key>label</key>
-			<string>Primary Background Color</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSLinkCell</string>
-			<key>cellClass</key>
-			<string>SkittyColorCell</string>
-			<key>default</key>
-			<string>FFFFFF</string>
-			<key>defaults</key>
-			<string>xyz.skitty.spectrum</string>
-			<key>key</key>
-			<string>lightSecondaryColor</string>
-			<key>PostNotification</key>
-			<string>xyz.skitty.spectrum.prefschanged</string>
-			<key>label</key>
-			<string>Secondary Background Color</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSLinkCell</string>
-			<key>cellClass</key>
-			<string>SkittyColorCell</string>
-			<key>default</key>
-			<string>FFFFFF</string>
-			<key>defaults</key>
-			<string>xyz.skitty.spectrum</string>
-			<key>key</key>
-			<string>lightTertiaryColor</string>
-			<key>PostNotification</key>
-			<string>xyz.skitty.spectrum.prefschanged</string>
-			<key>label</key>
-			<string>Tertiary Background Color</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSLinkCell</string>
-			<key>cellClass</key>
-			<string>SkittyColorCell</string>
-			<key>default</key>
-			<string>C6C6C8</string>
-			<key>defaults</key>
-			<string>xyz.skitty.spectrum</string>
-			<key>key</key>
-			<string>lightSeparatorColor</string>
-			<key>PostNotification</key>
-			<string>xyz.skitty.spectrum.prefschanged</string>
-			<key>label</key>
-			<string>Separator Color</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSLinkCell</string>
-			<key>cellClass</key>
-			<string>SkittyColorCell</string>
-			<key>default</key>
-			<string>000000</string>
-			<key>defaults</key>
-			<string>xyz.skitty.spectrum</string>
-			<key>key</key>
-			<string>lightLabelColor</string>
-			<key>PostNotification</key>
-			<string>xyz.skitty.spectrum.prefschanged</string>
-			<key>label</key>
-			<string>Label Color</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSLinkCell</string>
-			<key>cellClass</key>
-			<string>SkittyColorCell</string>
-			<key>default</key>
-			<string>808082</string>
-			<key>defaults</key>
-			<string>xyz.skitty.spectrum</string>
-			<key>key</key>
-			<string>lightSecondaryLabelColor</string>
-			<key>PostNotification</key>
-			<string>xyz.skitty.spectrum.prefschanged</string>
-			<key>label</key>
-			<string>Secondary Label Color</string>
+			<string>Label Colors</string>
 		</dict>
 	</array>
 	<key>title</key>
