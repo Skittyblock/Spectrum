@@ -1,8 +1,7 @@
 // SPHeader.m
 
 #import <Preferences/PSSpecifier.h>
-
-#define kTintColor [UIColor systemBlueColor]
+#import "Preferences.h"
 
 @interface SPHeader : UITableViewCell
 

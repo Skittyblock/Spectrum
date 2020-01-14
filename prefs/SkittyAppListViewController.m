@@ -3,8 +3,6 @@
 
 #import "SkittyAppListViewController.h"
 
-CFNotificationCenterRef CFNotificationCenterGetDistributedCenter(void);
-
 SkittyAppListViewController *controller;
 
 static void setAppList(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {

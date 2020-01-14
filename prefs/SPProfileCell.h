@@ -2,10 +2,7 @@
 
 #import <Preferences/PSTableCell.h>
 #import <Preferences/PSSpecifier.h>
-
-@interface PSTableCell (Private)
-- (UIViewController *)_viewControllerForAncestor;
-@end
+#import "Preferences.h"
 
 @interface SPProfileCell : PSTableCell
 @end

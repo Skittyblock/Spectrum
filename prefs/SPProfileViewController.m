@@ -1,8 +1,7 @@
 // SPProfileViewController.m
 
 #import "SPProfileViewController.h"
-
-CFNotificationCenterRef CFNotificationCenterGetDistributedCenter(void);
+#import "Preferences.h"
 
 @implementation SPProfileViewController
 
@@ -34,7 +33,7 @@ CFNotificationCenterRef CFNotificationCenterGetDistributedCenter(void);
 			if ([extension isEqualToString:@"plist"]) {
 				NSDictionary *contents = [[NSDictionary alloc] initWithContentsOfFile:[path stringByAppendingPathComponent:filename]];
 				if (contents[@"name"])
-					[plistFiles addObject:contents];
+					[plistFiles addObject:contents[@"name"]];
 			}
 		}];
 
@@ -44,7 +43,7 @@ CFNotificationCenterRef CFNotificationCenterGetDistributedCenter(void);
 		if ([settings[self.properties[@"key"]] intValue])
 			self.selected = [settings[self.properties[@"key"]] intValue];
 		else
-			self.selected = self.profiles.count - 1;
+			self.selected = 0;
 	}
 	return self;
 }
@@ -68,10 +67,10 @@ CFNotificationCenterRef CFNotificationCenterGetDistributedCenter(void);
 	}
 	
 	NSString *title = @"";
-	if (indexPath.row == self.profiles.count)
-		title = @"Custom";
+	if (indexPath.row == 0)
+		title = @"Default";
 	else
-		title = self.profiles[indexPath.row][@"name"];
+		title = self.profiles[indexPath.row - 1];
 
 	cell.textLabel.text = title;
 
@@ -99,7 +98,7 @@ CFNotificationCenterRef CFNotificationCenterGetDistributedCenter(void);
 	[settings setObject:[NSNumber numberWithInteger:self.selected] forKey:self.properties[@"key"]];
 
 	[settings writeToURL:[NSURL URLWithString:[NSString stringWithFormat:@"file:///var/mobile/Library/Preferences/%@.plist", self.properties[@"defaults"]]] error:nil];
-	CFPreferencesSetAppValue((CFStringRef)self.properties[@"key"], (CFPropertyListRef)[NSNumber numberWithBool:self.selected], (CFStringRef)self.properties[@"defaults"]);
+	CFPreferencesSetAppValue((CFStringRef)self.properties[@"key"], (CFNumberRef)[NSNumber numberWithBool:self.selected], (CFStringRef)self.properties[@"defaults"]);
 
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"xyz.skitty.spectrum.profilechange" object:self];
 	CFNotificationCenterPostNotification(CFNotificationCenterGetDistributedCenter(), (CFStringRef)self.properties[@"PostNotification"], nil, nil, true);

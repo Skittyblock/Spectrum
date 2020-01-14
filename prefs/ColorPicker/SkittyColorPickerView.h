@@ -5,7 +5,7 @@
 
 @interface SkittyColorPickerView : UIView
 
-@property (nonatomic, retain) id<SkittyColorPickerDelegate> delegate;
+@property (nonatomic, weak) id<SkittyColorPickerDelegate> delegate;
 @property (nonatomic, retain) SkittyColorIndicatorView *indicator;
 @property (nonatomic, retain) UIImageView *imageView;
 @property (nonatomic, assign) float hue;

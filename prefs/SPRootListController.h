@@ -1,8 +1,7 @@
 // SPRootListController.h
 
 #import <Preferences/PSListController.h>
-
-#define kTintColor [UIColor systemBlueColor]
+#import "Preferences.h"
 
 @interface SPRootListController : PSListController
 @end

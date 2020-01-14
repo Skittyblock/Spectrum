@@ -8,11 +8,12 @@ static bool global = YES;
 //static bool useIconColor = NO;
 static bool enabled;
 
-static bool useCustom;
+static bool isDefault;
 static NSDictionary *currentProfile;
 
+static bool customTintColor;
 static bool customDarkColors;
-static bool customLightColors = NO;
+static bool customLightColors;
 
 static UIColor *tint;
 static UIColor *highlight;
@@ -98,17 +99,19 @@ static void refreshPrefs() {
 
 	int index = [[settings objectForKey:@"profile"] intValue];
 	
-	if (index >= plistFiles.count)
-		useCustom = YES;
+	if (index == 0)
+		isDefault = YES;
 	else
-		currentProfile = plistFiles[index];
+		currentProfile = plistFiles[index - 1];
 
 	// Settings
 	enabled = [([settings objectForKey:@"enabled"] ?: @(YES)) boolValue];
+	customTintColor = [([settings objectForKey:@"customTintColor"] ?: @(YES)) boolValue];
 	customDarkColors = [([settings objectForKey:@"customDarkColors"] ?: @(NO)) boolValue];
+	customLightColors = [([settings objectForKey:@"customLightColors"] ?: @(NO)) boolValue];
 
 	NSString  *tintHex = [settings objectForKey:@"tintColor"] ?: @"F22F6C";
-	tint = colorFromHexStringWithAlpha(tintHex, 1.0);
+	tint = customTintColor ? colorFromHexStringWithAlpha(tintHex, 1.0) : colorFromHexStringWithAlpha([settings objectForKey:@"tintColor"] ?: @"FF0000", 1.0);
 	highlight = colorFromHexStringWithAlpha(tintHex, 0.2);
 	darkPrimaryColor = colorFromHexStringWithAlpha([settings objectForKey:@"darkPrimaryColor"] ?: @"000000", 1.0);
 	darkSecondaryColor = colorFromHexStringWithAlpha([settings objectForKey:@"darkSecondaryColor"] ?: @"1C1C1E", 1.0);
@@ -138,7 +141,7 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 	UIColor *lightColor = [orig resolvedColorWithTraitCollection:[UITraitCollection traitCollectionWithUserInterfaceStyle:UIUserInterfaceStyleLight]];
 	UIColor *darkColor = [orig resolvedColorWithTraitCollection:[UITraitCollection traitCollectionWithUserInterfaceStyle:UIUserInterfaceStyleDark]];
 
-	if (useCustom && (customLightColors || customDarkColors)) {
+	if (customLightColors || customDarkColors) {
 		if (customLightColors && customLightColor)
 			lightColor = customLightColor;
 		if (customDarkColors && customDarkColor)
@@ -156,6 +159,7 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 // Global Tint Color
 %group UIColor
 
+// Override apps that try to fake it
 %hook UIColor
 + (id)colorWithRed:(double)red green:(double)green blue:(double)blue alpha:(double)alpha {
 	if (red == 0.0 && green == 122.0/255.0 && blue == 1.0) {
@@ -179,8 +183,12 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 + (id)selectionGrabberColor {
 	return tint;
 }
+// Links
++ (id)linkColor {
+	return tint;
+}
 
-// iOS 13 System Colors
+// Primary color
 + (id)systemBackgroundColor {
 	return dynamicColorWithOptions(%orig, @"lightPrimaryColor", @"darkPrimaryColor", nil, darkPrimaryColor);
 }
@@ -190,7 +198,14 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 + (id)groupTableViewBackgroundColor {
 	return dynamicColorWithOptions(%orig, @"lightPrimaryColor", @"darkPrimaryColor", nil, darkPrimaryColor);
 }
++ (id)tableBackgroundColor {
+	return dynamicColorWithOptions(%orig, @"lightPrimaryColor", @"darkPrimaryColor", nil, darkPrimaryColor);
+}
++ (id)tableCellPlainBackgroundColor {
+	return dynamicColorWithOptions(%orig, @"lightPrimaryColor", @"darkPrimaryColor", nil, darkPrimaryColor);
+}
 
+// Secondary color
 + (id)secondarySystemGroupedBackgroundColor {
 	return dynamicColorWithOptions(%orig, @"lightSecondaryColor", @"darkSecondaryColor", nil, darkSecondaryColor);
 }
@@ -217,15 +232,12 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 	return dynamicColorWithOptions(%orig, @"lightGray5Color", @"darkGray5Color", nil, nil);
 }
 
+// Label colors
 + (id)labelColor {
 	return dynamicColorWithOptions(%orig, @"lightLabelColor", @"darkLabelColor", nil, darkLabelColor);
 }
 + (id)secondaryLabelColor {
 	return dynamicColorWithOptions(%orig, @"lightSecondaryLabelColor", @"darkSecondaryLabelColor", nil, nil);
-}
-
-+ (id)linkColor {
-	return tint;
 }
 %end
 
@@ -242,7 +254,31 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 }
 
 - (void)setBarTintColor:(UIColor *)color {
-	%orig(color ?: dynamicColorWithOptions(dynamicColor([UIColor clearColor], [UIColor clearColor]), @"lightNavbarColor", @"darkNavbarColor", nil, nil));
+	%orig(color ?: dynamicColorWithOptions(dynamicColor([UIColor clearColor], [UIColor clearColor]), @"lightBarColor", @"darkBarColor", nil, nil));
+}
+%end
+
+%hook UIToolbar
+- (void)layoutSubviews {
+	%orig;
+	if (![self barTintColor])
+		[self setBarTintColor:nil];
+}
+
+- (void)setBarTintColor:(UIColor *)color {
+	%orig(color ?: dynamicColorWithOptions(dynamicColor([UIColor clearColor], [UIColor clearColor]), @"lightBarColor", @"darkBarColor", nil, nil));
+}
+%end
+
+%hook UITabBar
+- (void)layoutSubviews {
+	%orig;
+	if (![self barTintColor])
+		[self setBarTintColor:nil];
+}
+
+- (void)setBarTintColor:(UIColor *)color {
+	%orig(color ?: dynamicColorWithOptions(dynamicColor([UIColor clearColor], [UIColor clearColor]), @"lightBarColor", @"darkBarColor", nil, nil));
 }
 %end
 
@@ -277,6 +313,7 @@ static void getAppList(CFNotificationCenterRef center, void *observer, CFStringR
 	}
 	//NSLog(@"[SPEC] getAppList2");
 
+	// Ignore hidden system apps
 	NSArray *ids = @[@"com.apple.AppSSOUIService", @"com.apple.AuthKitUIService", @"com.apple.BusinessChatViewService", @"com.apple.CTNotifyUIService", @"com.apple.CarPlaySplashScreen", @"com.apple.FTMInternal", @"com.apple.appleseed.FeedbackAssistant", @"com.apple.FontInstallViewService", @"com.apple.BarcodeScanner", @"com.apple.icloud.spnfcurl", @"com.apple.ScreenTimeUnlock", @"com.apple.CarPlaySettings", @"com.apple.SharedWebCredentialViewService", @"com.apple.sidecar", @"com.apple.Spotlight", @"com.apple.iMessageAppsViewService", @"com.apple.AXUIViewService", @"com.apple.AccountAuthenticationDialog", @"com.apple.AdPlatformsDiagnostics", @"com.apple.CTCarrierSpaceAuth", @"com.apple.CheckerBoard", @"com.apple.CloudKit.ShareBear", @"com.apple.AskPermissionUI", @"com.apple.CompassCalibrationViewService", @"com.apple.sidecar.camera", @"com.apple.datadetectors.DDActionsService", @"com.apple.DataActivation", @"com.apple.DemoApp", @"com.apple.Diagnostics", @"com.apple.DiagnosticsService", @"com.apple.carkit.DNDBuddy", @"com.apple.family", @"com.apple.fieldtest", @"com.apple.gamecenter.GameCenterUIService", @"com.apple.HealthPrivacyService", @"com.apple.Home.HomeUIService", @"com.apple.InCallService", @"com.apple.MailCompositionService", @"com.apple.mobilesms.compose", @"com.apple.MobileReplayer", @"com.apple.MusicUIService", @"com.apple.PhotosViewService", @"com.apple.PreBoard", @"com.apple.PrintKit.Print-Center", @"com.apple.social.SLYahooAuth", @"com.apple.SafariViewService", @"org.coolstar.SafeMode", @"com.apple.ScreenshotServicesSharing", @"com.apple.ScreenshotServicesService", @"com.apple.ScreenSharingViewService", @"com.apple.SIMSetupUIService", @"com.apple.Magnifier", @"com.apple.purplebuddy", @"com.apple.SharedWebCredentialsViewService", @"com.apple.SharingViewService", @"com.apple.SiriViewService", @"com.apple.susuiservice", @"com.apple.StoreDemoViewService", @"com.apple.TVAccessViewService", @"com.apple.TVRemoteUIService", @"com.apple.TrustMe", @"com.apple.CoreAuthUI", @"com.apple.VSViewService", @"com.apple.PassbookStub", @"com.apple.PassbookUIService", @"com.apple.WebContentFilter.remoteUI.WebContentAnalysisUI", @"com.apple.WebSheet", @"com.apple.iad.iAdOptOut", @"com.apple.ios.StoreKitUIService", @"com.apple.webapp", @"com.apple.webapp1"];
 
 	NSMutableDictionary *mutableDict = [[NSMutableDictionary alloc] init];

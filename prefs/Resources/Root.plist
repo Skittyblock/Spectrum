@@ -51,8 +51,20 @@
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
-			<key>footerText</key>
-			<string>The custom profile must be selected for custom colors to be used</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>xyz.skitty.spectrum</string>
+			<key>PostNotification</key>
+			<string>xyz.skitty.spectrum.prefschanged</string>
+			<key>key</key>
+			<string>customTintColor</string>
+			<key>label</key>
+			<string>Custom Tint Color</string>
 		</dict>
 		<dict>
 			<key>cell</key>

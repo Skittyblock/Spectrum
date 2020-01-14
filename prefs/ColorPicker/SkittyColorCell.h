@@ -2,10 +2,7 @@
 
 #import <Preferences/PSTableCell.h>
 #import <Preferences/PSSpecifier.h>
-
-@interface PSTableCell (Private)
-- (id)_viewControllerForAncestor;
-@end
+#import "ColorPicker.h"
 
 @interface SkittyColorCell : PSTableCell
 @end

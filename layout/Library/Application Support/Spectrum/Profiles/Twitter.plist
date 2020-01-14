@@ -12,7 +12,9 @@
 	<string>38434D</string>
 	<key>darkGray5Color</key>
 	<string>10171E</string>
-	<key>darkNavbarColor</key>
-	<string>080D13</string>
+	<key>darkBarColor</key>
+	<string>03111E</string>
+	<key>tintColor</key>
+	<string>1DA1F2</string>
 </dict>
 </plist>

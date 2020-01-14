@@ -2,10 +2,7 @@
 
 #import <Preferences/PSViewController.h>
 #import <UIKit/UIKit.h>
-
-@interface UIImage (Private)
-+ (id)_applicationIconImageForBundleIdentifier:(id)identifier format:(int)format scale:(int)scale;
-@end
+#import "Preferences.h"
 
 @interface SkittyAppListViewController : PSViewController <UITableViewDelegate, UITableViewDataSource, UISearchControllerDelegate, UISearchBarDelegate>
 

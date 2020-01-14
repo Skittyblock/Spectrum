@@ -1,8 +1,7 @@
 // SkittyColorViewController.m
 
 #import "SkittyColorViewController.h"
-
-CFNotificationCenterRef CFNotificationCenterGetDistributedCenter(void);
+#import "ColorPicker.h"
 
 @implementation SkittyColorViewController
 
@@ -82,7 +81,7 @@ CFNotificationCenterRef CFNotificationCenterGetDistributedCenter(void);
 	[settings setObject:hex forKey:self.properties[@"key"]];
 
 	[settings writeToURL:[NSURL URLWithString:[NSString stringWithFormat:@"file:///var/mobile/Library/Preferences/%@.plist", self.properties[@"defaults"]]] error:nil];
-	CFPreferencesSetAppValue((CFStringRef)self.properties[@"key"], (CFPropertyListRef)hex, (CFStringRef)self.properties[@"defaults"]);
+	CFPreferencesSetAppValue((CFStringRef)self.properties[@"key"], (CFStringRef)hex, (CFStringRef)self.properties[@"defaults"]);
 
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"xyz.skitty.spectrum.colorupdate" object:self];
 	CFNotificationCenterPostNotification(CFNotificationCenterGetDistributedCenter(), (CFStringRef)self.properties[@"PostNotification"], nil, nil, true);

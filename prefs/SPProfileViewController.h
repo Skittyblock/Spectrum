@@ -6,7 +6,7 @@
 
 @property (nonatomic, retain) UITableView *tableView;
 @property (nonatomic, retain) NSDictionary *properties;
-@property (nonatomic, retain) NSArray<NSDictionary *> *profiles;
+@property (nonatomic, retain) NSArray<NSString *> *profiles;
 @property (nonatomic, assign) NSInteger selected;
 
 - (id)initWithProperties:(NSDictionary *)properties;

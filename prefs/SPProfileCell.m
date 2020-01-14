@@ -49,10 +49,10 @@
 
 	NSString *title = @"";
 	
-	if (index >= plistFiles.count)
-		title = @"Custom";
+	if (index == 0)
+		title = @"Default";
 	else
-		title = plistFiles[index];
+		title = plistFiles[index - 1];
 
 	self.detailTextLabel.text = title;
 }

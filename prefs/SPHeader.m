@@ -8,7 +8,7 @@
 	self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Cell"];
 
 	if (self) {
-		NSArray *subtitles = [NSArray arrayWithObjects:@"Customize system tints!", @"By Skitty & Even", @"Free and Open-Source!", nil];
+		NSArray *subtitles = [NSArray arrayWithObjects:@"Customize system colors!", @"By Skitty & Even", @"Free and Open-Source!", nil];
 
 		self.title = [[UILabel alloc] initWithFrame:CGRectMake(0, 30, [[UIApplication sharedApplication] keyWindow].frame.size.width, 60)];
 		self.title.numberOfLines = 1;
