@@ -58,7 +58,6 @@
 	[self.specifier setTarget:self];
 	[self.specifier setButtonAction:@selector(openColorPicker)];
 
-
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatePreview) name:@"xyz.skitty.spectrum.colorupdate" object:nil];
 }
 

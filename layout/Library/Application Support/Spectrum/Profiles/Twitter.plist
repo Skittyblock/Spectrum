@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>name</key>
+	<string>Twitter</string>
+	<key>darkPrimaryColor</key>
+	<string>10171E</string>
+	<key>darkSecondaryColor</key>
+	<string>15202B</string>
+	<key>darkSeparatorColor</key>
+	<string>38434D</string>
+	<key>darkGray5Color</key>
+	<string>10171E</string>
+	<key>darkNavbarColor</key>
+	<string>080D13</string>
+</dict>
+</plist>

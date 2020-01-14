@@ -8,7 +8,11 @@ static bool global = YES;
 //static bool useIconColor = NO;
 static bool enabled;
 
+static bool useCustom;
+static NSDictionary *currentProfile;
+
 static bool customDarkColors;
+static bool customLightColors = NO;
 
 static UIColor *tint;
 static UIColor *highlight;
@@ -77,6 +81,29 @@ static void refreshPrefs() {
 		settings = [[NSMutableDictionary alloc] initWithContentsOfFile:@"/var/mobile/Library/Preferences/xyz.skitty.spectrum.plist"];
 	}
 
+	// Profile
+	NSString *path = @"/Library/Application Support/Spectrum/Profiles";
+	NSArray *files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:nil];
+	NSMutableArray *plistFiles = [[NSMutableArray alloc] init];
+
+	[files enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+		NSString *filename = (NSString *)obj;
+		NSString *extension = [[filename pathExtension] lowercaseString];
+		if ([extension isEqualToString:@"plist"]) {
+			NSDictionary *contents = [[NSDictionary alloc] initWithContentsOfFile:[path stringByAppendingPathComponent:filename]];
+			if (contents[@"name"])
+				[plistFiles addObject:contents];
+		}
+	}];
+
+	int index = [[settings objectForKey:@"profile"] intValue];
+	
+	if (index >= plistFiles.count)
+		useCustom = YES;
+	else
+		currentProfile = plistFiles[index];
+
+	// Settings
 	enabled = [([settings objectForKey:@"enabled"] ?: @(YES)) boolValue];
 	customDarkColors = [([settings objectForKey:@"customDarkColors"] ?: @(NO)) boolValue];
 
@@ -84,8 +111,8 @@ static void refreshPrefs() {
 	tint = colorFromHexStringWithAlpha(tintHex, 1.0);
 	highlight = colorFromHexStringWithAlpha(tintHex, 0.2);
 	darkPrimaryColor = colorFromHexStringWithAlpha([settings objectForKey:@"darkPrimaryColor"] ?: @"000000", 1.0);
-	darkSecondaryColor = colorFromHexStringWithAlpha([settings objectForKey:@"darkSecondaryColor"] ?: @"000000", 1.0);
-	darkSeparatorColor = colorFromHexStringWithAlpha([settings objectForKey:@"darkSeparatorColor"] ?: @"000000", 1.0);
+	darkSecondaryColor = colorFromHexStringWithAlpha([settings objectForKey:@"darkSecondaryColor"] ?: @"1C1C1E", 1.0);
+	darkSeparatorColor = colorFromHexStringWithAlpha([settings objectForKey:@"darkSeparatorColor"] ?: @"3D3D41", 1.0);
 	darkLabelColor = colorFromHexStringWithAlpha([settings objectForKey:@"darkLabelColor"] ?: @"FFFFFF", 1.0);
 }
 
@@ -105,6 +132,25 @@ static UIColor *dynamicColor(UIColor *defaultColor, UIColor *darkColor) {
 		}];
 	}
 	return defaultColor;
+}
+
+static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSString *darkKey, UIColor *customLightColor, UIColor *customDarkColor) {
+	UIColor *lightColor = [orig resolvedColorWithTraitCollection:[UITraitCollection traitCollectionWithUserInterfaceStyle:UIUserInterfaceStyleLight]];
+	UIColor *darkColor = [orig resolvedColorWithTraitCollection:[UITraitCollection traitCollectionWithUserInterfaceStyle:UIUserInterfaceStyleDark]];
+
+	if (useCustom && (customLightColors || customDarkColors)) {
+		if (customLightColors && customLightColor)
+			lightColor = customLightColor;
+		if (customDarkColors && customDarkColor)
+			darkColor = customDarkColor;
+	} else if (currentProfile && (currentProfile[lightKey] || currentProfile[darkKey])) {
+		if (currentProfile[lightKey])
+			lightColor = colorFromHexStringWithAlpha(currentProfile[lightKey], 1.0);
+		if (currentProfile[darkKey])
+			darkColor = colorFromHexStringWithAlpha(currentProfile[darkKey], 1.0);
+	}
+
+	return dynamicColor(lightColor, darkColor);
 }
 
 // Global Tint Color
@@ -136,38 +182,46 @@ static UIColor *dynamicColor(UIColor *defaultColor, UIColor *darkColor) {
 
 // iOS 13 System Colors
 + (id)systemBackgroundColor {
-	return customDarkColors ? dynamicColor([%orig resolvedColorWithTraitCollection:[UITraitCollection traitCollectionWithUserInterfaceStyle:UIUserInterfaceStyleLight]], darkPrimaryColor) : %orig;
+	return dynamicColorWithOptions(%orig, @"lightPrimaryColor", @"darkPrimaryColor", nil, darkPrimaryColor);
+}
++ (id)systemGroupedBackgroundColor {
+	return dynamicColorWithOptions(%orig, @"lightPrimaryColor", @"darkPrimaryColor", nil, darkPrimaryColor);
+}
++ (id)groupTableViewBackgroundColor {
+	return dynamicColorWithOptions(%orig, @"lightPrimaryColor", @"darkPrimaryColor", nil, darkPrimaryColor);
+}
+
++ (id)secondarySystemGroupedBackgroundColor {
+	return dynamicColorWithOptions(%orig, @"lightSecondaryColor", @"darkSecondaryColor", nil, darkSecondaryColor);
 }
 + (id)secondarySystemBackgroundColor {
-	return customDarkColors ? dynamicColor([%orig resolvedColorWithTraitCollection:[UITraitCollection traitCollectionWithUserInterfaceStyle:UIUserInterfaceStyleLight]], darkSecondaryColor) : %orig;
-}
-
-+ (id)systemGroupedBackgroundColor {
-	return customDarkColors ? dynamicColor([%orig resolvedColorWithTraitCollection:[UITraitCollection traitCollectionWithUserInterfaceStyle:UIUserInterfaceStyleLight]], darkPrimaryColor) : %orig;
-}
-+ (id)secondarySystemGroupedBackgroundColor {
-	return customDarkColors ? dynamicColor([%orig resolvedColorWithTraitCollection:[UITraitCollection traitCollectionWithUserInterfaceStyle:UIUserInterfaceStyleLight]], darkSecondaryColor) : %orig;
-}
-
-+ (id)groupTableViewBackgroundColor {
-	return customDarkColors ? dynamicColor([%orig resolvedColorWithTraitCollection:[UITraitCollection traitCollectionWithUserInterfaceStyle:UIUserInterfaceStyleLight]], darkPrimaryColor) : %orig;
+	return dynamicColorWithOptions(%orig, @"lightSecondaryColor", @"darkSecondaryColor", nil, darkSecondaryColor);
 }
 + (id)tableCellGroupedBackgroundColor {
-	return customDarkColors ? dynamicColor([%orig resolvedColorWithTraitCollection:[UITraitCollection traitCollectionWithUserInterfaceStyle:UIUserInterfaceStyleLight]], darkSecondaryColor) : %orig;
+	return dynamicColorWithOptions(%orig, @"lightSecondaryColor", @"darkSecondaryColor", nil, darkSecondaryColor);
 }
 
+// Separator color
 + (id)separatorColor {
-	return customDarkColors ? dynamicColor([%orig resolvedColorWithTraitCollection:[UITraitCollection traitCollectionWithUserInterfaceStyle:UIUserInterfaceStyleLight]], darkSeparatorColor) : %orig;
+	return dynamicColorWithOptions(%orig, @"lightSeparatorColor", @"darkSeparatorColor", nil, darkSeparatorColor);
 }
 + (id)opaqueSeparatorColor {
-	return customDarkColors ? dynamicColor([%orig resolvedColorWithTraitCollection:[UITraitCollection traitCollectionWithUserInterfaceStyle:UIUserInterfaceStyleLight]], darkSeparatorColor) : %orig;
+	return dynamicColorWithOptions(%orig, @"lightSeparatorColor", @"darkSeparatorColor", nil, darkSeparatorColor);
 }
 + (id)tableSeparatorColor {
-	return customDarkColors ? dynamicColor([%orig resolvedColorWithTraitCollection:[UITraitCollection traitCollectionWithUserInterfaceStyle:UIUserInterfaceStyleLight]], darkSeparatorColor) : %orig;
+	return dynamicColorWithOptions(%orig, @"lightSeparatorColor", @"darkSeparatorColor", nil, darkSeparatorColor);
+}
+
+// UITableViewCell selection color
++ (id)systemGray5Color {
+	return dynamicColorWithOptions(%orig, @"lightGray5Color", @"darkGray5Color", nil, nil);
 }
 
 + (id)labelColor {
-	return customDarkColors ? dynamicColor([%orig resolvedColorWithTraitCollection:[UITraitCollection traitCollectionWithUserInterfaceStyle:UIUserInterfaceStyleLight]], darkLabelColor) : %orig;
+	return dynamicColorWithOptions(%orig, @"lightLabelColor", @"darkLabelColor", nil, darkLabelColor);
+}
++ (id)secondaryLabelColor {
+	return dynamicColorWithOptions(%orig, @"lightSecondaryLabelColor", @"darkSecondaryLabelColor", nil, nil);
 }
 
 + (id)linkColor {
@@ -179,6 +233,18 @@ static UIColor *dynamicColor(UIColor *defaultColor, UIColor *darkColor) {
 
 // Per App Tint Color
 %group App
+
+%hook UINavigationBar
+- (void)layoutSubviews {
+	%orig;
+	if (![self barTintColor])
+		[self setBarTintColor:nil];
+}
+
+- (void)setBarTintColor:(UIColor *)color {
+	%orig(color ?: dynamicColorWithOptions(dynamicColor([UIColor clearColor], [UIColor clearColor]), @"lightNavbarColor", @"darkNavbarColor", nil, nil));
+}
+%end
 
 %hook UIView
 - (UIColor *)tintColor {
