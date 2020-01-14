@@ -20,8 +20,17 @@ static UIColor *highlight;
 
 static UIColor *darkPrimaryColor;
 static UIColor *darkSecondaryColor;
+static UIColor *darkTertiaryColor;
 static UIColor *darkSeparatorColor;
 static UIColor *darkLabelColor;
+static UIColor *darkSecondaryLabelColor;
+
+static UIColor *lightPrimaryColor;
+static UIColor *lightSecondaryColor;
+static UIColor *lightTertiaryColor;
+static UIColor *lightSeparatorColor;
+static UIColor *lightLabelColor;
+static UIColor *lightSecondaryLabelColor;
 //static UIColor *iconTint;
 
 UIColor *appTintColorFromWindow(UIWindow *window) {
@@ -113,10 +122,20 @@ static void refreshPrefs() {
 	NSString  *tintHex = [settings objectForKey:@"tintColor"] ?: @"F22F6C";
 	tint = customTintColor ? colorFromHexStringWithAlpha(tintHex, 1.0) : colorFromHexStringWithAlpha([settings objectForKey:@"tintColor"] ?: @"FF0000", 1.0);
 	highlight = colorFromHexStringWithAlpha(tintHex, 0.2);
+
 	darkPrimaryColor = colorFromHexStringWithAlpha([settings objectForKey:@"darkPrimaryColor"] ?: @"000000", 1.0);
 	darkSecondaryColor = colorFromHexStringWithAlpha([settings objectForKey:@"darkSecondaryColor"] ?: @"1C1C1E", 1.0);
+	darkTertiaryColor = colorFromHexStringWithAlpha([settings objectForKey:@"darkTertiaryColor"] ?: @"1C1C1E", 1.0);
 	darkSeparatorColor = colorFromHexStringWithAlpha([settings objectForKey:@"darkSeparatorColor"] ?: @"3D3D41", 1.0);
 	darkLabelColor = colorFromHexStringWithAlpha([settings objectForKey:@"darkLabelColor"] ?: @"FFFFFF", 1.0);
+	darkSecondaryLabelColor = colorFromHexStringWithAlpha([settings objectForKey:@"darkSecondaryLabelColor"] ?: @"808082", 1.0);
+
+	lightPrimaryColor = colorFromHexStringWithAlpha([settings objectForKey:@"lightPrimaryColor"] ?: @"EFEFF4", 1.0);
+	lightSecondaryColor = colorFromHexStringWithAlpha([settings objectForKey:@"lightSecondaryColor"] ?: @"FFFFFF", 1.0);
+	lightTertiaryColor = colorFromHexStringWithAlpha([settings objectForKey:@"lightTertiaryColor"] ?: @"FFFFFF", 1.0);
+	lightSeparatorColor = colorFromHexStringWithAlpha([settings objectForKey:@"lightSeparatorColor"] ?: @"3D3D41", 1.0);
+	lightLabelColor = colorFromHexStringWithAlpha([settings objectForKey:@"lightLabelColor"] ?: @"000000", 1.0);
+	lightSecondaryLabelColor = colorFromHexStringWithAlpha([settings objectForKey:@"lightSecondaryLabelColor"] ?: @"808082", 1.0);
 }
 
 static void PreferencesChangedCallback(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
@@ -190,41 +209,49 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 
 // Primary color
 + (id)systemBackgroundColor {
-	return dynamicColorWithOptions(%orig, @"lightPrimaryColor", @"darkPrimaryColor", nil, darkPrimaryColor);
+	return dynamicColorWithOptions(%orig, @"lightPrimaryColor", @"darkPrimaryColor", lightPrimaryColor, darkPrimaryColor);
 }
 + (id)systemGroupedBackgroundColor {
-	return dynamicColorWithOptions(%orig, @"lightPrimaryColor", @"darkPrimaryColor", nil, darkPrimaryColor);
+	return dynamicColorWithOptions(%orig, @"lightPrimaryColor", @"darkPrimaryColor", lightPrimaryColor, darkPrimaryColor);
 }
 + (id)groupTableViewBackgroundColor {
-	return dynamicColorWithOptions(%orig, @"lightPrimaryColor", @"darkPrimaryColor", nil, darkPrimaryColor);
+	return dynamicColorWithOptions(%orig, @"lightPrimaryColor", @"darkPrimaryColor", lightPrimaryColor, darkPrimaryColor);
 }
 + (id)tableBackgroundColor {
-	return dynamicColorWithOptions(%orig, @"lightPrimaryColor", @"darkPrimaryColor", nil, darkPrimaryColor);
+	return dynamicColorWithOptions(%orig, @"lightPrimaryColor", @"darkPrimaryColor", lightPrimaryColor, darkPrimaryColor);
 }
 + (id)tableCellPlainBackgroundColor {
-	return dynamicColorWithOptions(%orig, @"lightPrimaryColor", @"darkPrimaryColor", nil, darkPrimaryColor);
+	return dynamicColorWithOptions(%orig, @"lightPrimaryColor", @"darkPrimaryColor", lightPrimaryColor, darkPrimaryColor);
 }
 
 // Secondary color
-+ (id)secondarySystemGroupedBackgroundColor {
-	return dynamicColorWithOptions(%orig, @"lightSecondaryColor", @"darkSecondaryColor", nil, darkSecondaryColor);
-}
 + (id)secondarySystemBackgroundColor {
-	return dynamicColorWithOptions(%orig, @"lightSecondaryColor", @"darkSecondaryColor", nil, darkSecondaryColor);
+	return dynamicColorWithOptions(%orig, @"lightSecondaryColor", @"darkSecondaryColor", lightSecondaryColor, darkSecondaryColor);
+}
++ (id)secondarySystemGroupedBackgroundColor {
+	return dynamicColorWithOptions(%orig, @"lightSecondaryColor", @"darkSecondaryColor", lightSecondaryColor, darkSecondaryColor);
 }
 + (id)tableCellGroupedBackgroundColor {
-	return dynamicColorWithOptions(%orig, @"lightSecondaryColor", @"darkSecondaryColor", nil, darkSecondaryColor);
+	return dynamicColorWithOptions(%orig, @"lightSecondaryColor", @"darkSecondaryColor", lightSecondaryColor, darkSecondaryColor);
+}
+
+// Tertiary color
++ (id)tertiarySystemBackgroundColor {
+	return dynamicColorWithOptions(%orig, @"lightTertiaryColor", @"darkTertiaryColorr", lightTertiaryColor, darkTertiaryColor);
+}
++ (id)tertiarySystemGroupedBackgroundColor {
+	return dynamicColorWithOptions(%orig, @"lightTertiaryColor", @"darkTertiaryColorr", lightTertiaryColor, darkTertiaryColor);
 }
 
 // Separator color
 + (id)separatorColor {
-	return dynamicColorWithOptions(%orig, @"lightSeparatorColor", @"darkSeparatorColor", nil, darkSeparatorColor);
+	return dynamicColorWithOptions(%orig, @"lightSeparatorColor", @"darkSeparatorColor", lightSeparatorColor, darkSeparatorColor);
 }
 + (id)opaqueSeparatorColor {
-	return dynamicColorWithOptions(%orig, @"lightSeparatorColor", @"darkSeparatorColor", nil, darkSeparatorColor);
+	return dynamicColorWithOptions(%orig, @"lightSeparatorColor", @"darkSeparatorColor", lightSeparatorColor, darkSeparatorColor);
 }
 + (id)tableSeparatorColor {
-	return dynamicColorWithOptions(%orig, @"lightSeparatorColor", @"darkSeparatorColor", nil, darkSeparatorColor);
+	return dynamicColorWithOptions(%orig, @"lightSeparatorColor", @"darkSeparatorColor", lightSeparatorColor, darkSeparatorColor);
 }
 
 // UITableViewCell selection color
@@ -234,10 +261,10 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 
 // Label colors
 + (id)labelColor {
-	return dynamicColorWithOptions(%orig, @"lightLabelColor", @"darkLabelColor", nil, darkLabelColor);
+	return dynamicColorWithOptions(%orig, @"lightLabelColor", @"darkLabelColor", lightLabelColor, darkLabelColor);
 }
 + (id)secondaryLabelColor {
-	return dynamicColorWithOptions(%orig, @"lightSecondaryLabelColor", @"darkSecondaryLabelColor", nil, nil);
+	return dynamicColorWithOptions(%orig, @"lightSecondaryLabelColor", @"darkSecondaryLabelColor", lightSecondaryLabelColor, darkSecondaryLabelColor);
 }
 %end
 

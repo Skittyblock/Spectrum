@@ -8,6 +8,8 @@
 	<string>10171E</string>
 	<key>darkSecondaryColor</key>
 	<string>15202B</string>
+	<key>darkTertiaryColor</key>
+	<string>15202B</string>
 	<key>darkSeparatorColor</key>
 	<string>38434D</string>
 	<key>darkGray5Color</key>
