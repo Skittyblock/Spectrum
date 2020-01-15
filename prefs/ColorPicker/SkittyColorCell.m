@@ -35,8 +35,11 @@
 	colorPreview.layer.borderColor = [UIColor lightGrayColor].CGColor;
 
 	NSMutableDictionary *settings = [[NSMutableDictionary alloc] initWithContentsOfFile:[NSString stringWithFormat:@"/var/mobile/Library/Preferences/%@.plist", self.specifier.properties[@"defaults"]]];
-	
 	NSString *hex = [settings objectForKey:self.specifier.properties[@"key"]] ?: self.specifier.properties[@"default"];
+
+	//CFStringRef ref = CFPreferencesCopyAppValue((CFStringRef)self.specifier.properties[@"key"], (CFStringRef)self.specifier.properties[@"defaults"]);
+	//NSString *hex = (__bridge NSString *)ref ?: self.specifier.properties[@"default"];
+
 	UIColor *color = colorFromHexString(hex);
 
 	colorPreview.backgroundColor = color;

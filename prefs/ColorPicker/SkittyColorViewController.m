@@ -22,9 +22,12 @@
 		self.view.backgroundColor = [UIColor groupTableViewBackgroundColor];
 	}
 
-	NSMutableDictionary *settings = [[NSMutableDictionary alloc] initWithContentsOfFile:[NSString stringWithFormat:@"/var/mobile/Library/Preferences/%@.plist", self.properties[@"defaults"]]];
+	//NSMutableDictionary *settings = [[NSMutableDictionary alloc] initWithContentsOfFile:[NSString stringWithFormat:@"/var/mobile/Library/Preferences/%@.plist", self.properties[@"defaults"]]];
+	//NSString *hex = [settings objectForKey:self.properties[@"key"]] ?: self.properties[@"default"];
 
-	NSString *hex = [settings objectForKey:self.properties[@"key"]] ?: self.properties[@"default"];
+	CFStringRef ref = CFPreferencesCopyAppValue((CFStringRef)self.properties[@"key"], (CFStringRef)self.properties[@"defaults"]);
+	NSString *hex = (__bridge NSString *)ref ?: self.properties[@"default"];
+
 	UIColor *color = colorFromHexString(hex);
 
 	CGFloat hue, saturation, brightness, alpha;
@@ -82,7 +85,7 @@
 	
 	[settings setObject:hex forKey:self.properties[@"key"]];
 
-	//[settings writeToURL:[NSURL URLWithString:[NSString stringWithFormat:@"file:///var/mobile/Library/Preferences/%@.plist", self.properties[@"defaults"]]] error:nil];
+	[settings writeToURL:[NSURL URLWithString:[NSString stringWithFormat:@"file:///var/mobile/Library/Preferences/%@.plist", self.properties[@"defaults"]]] error:nil];
 	CFPreferencesSetAppValue((CFStringRef)self.properties[@"key"], (CFStringRef)hex, (CFStringRef)self.properties[@"defaults"]);
 
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"xyz.skitty.spectrum.colorupdate" object:self];

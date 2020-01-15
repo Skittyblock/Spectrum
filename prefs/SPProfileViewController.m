@@ -41,7 +41,7 @@
 
 		//NSDictionary *settings = [[NSDictionary alloc] initWithContentsOfFile:[NSString stringWithFormat:@"/var/mobile/Library/Preferences/%@.plist", self.properties[@"defaults"]]];
 		//int index = [settings[self.properties[@"key"]] intValue];
-		CFPreferencesAppSynchronize((CFStringRef)self.properties[@"defaults"]);
+		//CFPreferencesAppSynchronize((CFStringRef)self.properties[@"defaults"]);
 		CFNumberRef ref = CFPreferencesCopyAppValue((CFStringRef)self.properties[@"key"], (CFStringRef)self.properties[@"defaults"]);
 		int index = [(__bridge NSNumber *)ref intValue];
 
@@ -51,12 +51,6 @@
 			self.selected = 0;
 	}
 	return self;
-}
-
-- (void)viewDidLoad {
-	[super viewDidLoad];
-
-	//NSMutableDictionary *settings = [[NSMutableDictionary alloc] initWithContentsOfFile:[NSString stringWithFormat:@"/var/mobile/Library/Preferences/%@.plist", self.properties[@"defaults"]]];
 }
 
 // Table View
@@ -102,8 +96,8 @@
 
 	[settings setObject:[NSNumber numberWithInteger:self.selected] forKey:self.properties[@"key"]];
 
-	//[settings writeToURL:[NSURL URLWithString:[NSString stringWithFormat:@"file:///var/mobile/Library/Preferences/%@.plist", self.properties[@"defaults"]]] error:nil];
-	CFPreferencesAppSynchronize((CFStringRef)self.properties[@"defaults"]);
+	[settings writeToURL:[NSURL URLWithString:[NSString stringWithFormat:@"file:///var/mobile/Library/Preferences/%@.plist", self.properties[@"defaults"]]] error:nil];
+	//CFPreferencesAppSynchronize((CFStringRef)self.properties[@"defaults"]);
 	CFPreferencesSetAppValue((CFStringRef)self.properties[@"key"], (CFNumberRef)[NSNumber numberWithInteger:self.selected], (CFStringRef)self.properties[@"defaults"]);
 
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"xyz.skitty.spectrum.profilechange" object:self];
