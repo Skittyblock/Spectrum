@@ -34,24 +34,22 @@ static void post() {
 
 		CFNotificationCenterAddObserver(CFNotificationCenterGetDistributedCenter(), NULL, setAppList, CFSTR("xyz.skitty.spectrum.setapps"), nil, CFNotificationSuspensionBehaviorDeliverImmediately);
 
+		[self getAppList];
+		
 		NSString *prefPath = @"/var/mobile/Library/Preferences/xyz.skitty.spectrum.apps.plist";
+		NSMutableDictionary *prefs = [NSMutableDictionary dictionaryWithContentsOfFile:prefPath];
 		NSArray *apps;
 		if ([[NSFileManager defaultManager] fileExistsAtPath:prefPath]) {
-			NSDictionary *prefs = [NSDictionary dictionaryWithContentsOfFile:prefPath];
-			apps = [prefs objectForKey:@"Apps"];
-		} else {
-			apps = @[];
+			apps = [prefs objectForKey:@"Enabled"];
 		}
 		self.preferencesAppList = apps;
 		
 		self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
-		//self.searchController.searchResultsUpdater = self;
 		self.searchController.dimsBackgroundDuringPresentation = NO;
 		self.searchController.delegate = self;
 		self.searchController.searchBar.delegate = self;
 		self.searchController.searchBar.placeholder = @"Search";
 
-		//self.tableView.tableHeaderView = self.searchController.searchBar;
 		self.navigationItem.searchController = self.searchController;
 		self.navigationItem.hidesSearchBarWhenScrolling = NO; // unfortunatly, this is required.
 
@@ -59,8 +57,6 @@ static void post() {
 		self.tableView.delegate = self;
 		self.tableView.dataSource = self;
 		[self.view addSubview:self.tableView];
-
-		[self getAppList];
 
 		// This is probably a terrible way to do it.
 		controller = self;
@@ -76,7 +72,7 @@ static void post() {
 
 - (void)updatePreferencesAppList {
 	NSString *prefPath = @"/var/mobile/Library/Preferences/xyz.skitty.spectrum.apps.plist";
-	NSDictionary *preferencesDict = @{ @"Apps": self.preferencesAppList };
+	NSDictionary *preferencesDict = @{ @"Enabled": self.preferencesAppList };
 	[preferencesDict writeToFile:prefPath atomically:YES];
 }
 
@@ -87,15 +83,8 @@ static void post() {
 	NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:section];
 	UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
 	BOOL on = [(UISwitch *)cell.accessoryView isOn];
-	//setOn:animated:
 
-	NSString *bundleIdentifier;
-	/*if (indexPath.section == 0) {
-		bundleIdentifier = self.supportedIdentifiers[indexPath.row];
-	} else if (indexPath.section == 1) {
-		bundleIdentifier = self.unsupportedIdentifiers[indexPath.row];
-	}*/
-	bundleIdentifier = self.identifiers[indexPath.row];
+	NSString *bundleIdentifier = self.identifiers[indexPath.row];
 
 	NSMutableArray *list = [self.preferencesAppList mutableCopy];
 	if (on) {
@@ -111,8 +100,6 @@ static void post() {
 // App List
 
 - (void)getAppList {
-	NSLog(@"[SPEC] getAppList");
-
 	if (self.appList.count == 0) {
 		self.appList = @{@"Loading!": @"Loading..."};
 	}
@@ -133,19 +120,13 @@ static void post() {
 		return [obj1 compare:obj2];
 	}];
 
-	/*NSMutableArray *supportedIds = [[NSMutableArray alloc] init];
-	NSMutableArray *unsupportedIds = [ids mutableCopy];
-	for (int i = 0; i < self.supportedApps.count; i++) {
-		if ([appList objectForKey:self.supportedApps[i]]) {
-			[supportedIds addObject:self.supportedApps[i]];
-			[unsupportedIds removeObject:self.supportedApps[i]];
-		}
-	}
-
-	self.supportedIdentifiers = supportedIds;
-	self.unsupportedIdentifiers = unsupportedIds;*/
-	self.identifiers = ids;
 	self.appList = appList;
+	self.identifiers = ids;
+	
+	if (!self.preferencesAppList) {
+		self.preferencesAppList = ids;
+		[self updatePreferencesAppList];
+	}
 
 	[self.tableView reloadData];
 }
@@ -169,21 +150,12 @@ static void post() {
 	
 	cell.detailTextLabel.textColor = [UIColor grayColor];
 	
-	//if (indexPath.section == 0) {
-		if ([self.preferencesAppList containsObject:self.identifiers[indexPath.row]]) {
-			[appSwitch setOn:YES animated:NO];
-		}
-		cell.textLabel.text = [self.fullAppList objectForKey:self.identifiers[indexPath.row]];
-		//cell.detailTextLabel.text = self.identifiers[indexPath.row];
-		cell.imageView.image = [UIImage _applicationIconImageForBundleIdentifier:self.identifiers[indexPath.row] format:0 scale:[UIScreen mainScreen].scale];
-	/*} else if (indexPath.section == 1) {
-		if ([self.preferencesAppList containsObject:self.unsupportedIdentifiers[indexPath.row]]) {
-			[appSwitch setOn:YES animated:NO];
-		}
-		cell.textLabel.text = [self.fullAppList objectForKey:self.unsupportedIdentifiers[indexPath.row]];
-		//cell.detailTextLabel.text = self.unsupportedIdentifiers[indexPath.row];
-		cell.imageView.image = [UIImage _applicationIconImageForBundleIdentifier:self.unsupportedIdentifiers[indexPath.row] format:0 scale:[UIScreen mainScreen].scale];
-	}*/
+	if ([self.preferencesAppList containsObject:self.identifiers[indexPath.row]]) {
+		[appSwitch setOn:YES animated:NO];
+	}
+	cell.textLabel.text = [self.fullAppList objectForKey:self.identifiers[indexPath.row]];
+	//cell.detailTextLabel.text = self.identifiers[indexPath.row];
+	cell.imageView.image = [UIImage _applicationIconImageForBundleIdentifier:self.identifiers[indexPath.row] format:0 scale:[UIScreen mainScreen].scale];
 	
 	return cell;
 }
@@ -193,28 +165,16 @@ static void post() {
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	/*if (section == 0) {
-		return self.supportedIdentifiers.count;
-	} else if (section == 1) {
-		return self.unsupportedIdentifiers.count;
-	}*/
 	return self.identifiers.count;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-	/*if (section == 0) {
-		return @"Supported Apps";
-	} else if (section == 1) {
-		return @"Unsupported Apps";
-	}*/
 	return nil;
 }
 
 // Search Bar
 
 - (void)searchWithText:(NSString *)text {
-	NSLog(@"[SPEC] searchWithText: %@", text);
-	//text = @"Cal";
 	NSDictionary *newAppList;
 	if (text.length == 0) {
 		newAppList = self.fullAppList;
@@ -233,26 +193,18 @@ static void post() {
 		}
 		newAppList = [mutableList copy];
 	}
-	NSLog(@"[SPEC] search list: %@", newAppList);
 	[self updateAppList:newAppList];
 }
-/*
-- (void)updateSearchResultsForSearchController:(UISearchController *)searchController {
-	NSLog(@"[SPEC] updateSearchResultsForSearchController");
-}
-*/
+
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)text {
-	//NSLog(@"[SPEC] textDidChange: %@", text);
 	[self searchWithText:text];
 }
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
-	//NSLog(@"[SPEC] searchBarTextDidBeginEditing");
 	[searchBar setShowsCancelButton:YES animated:YES];
 }
 
 - (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
-	//NSLog(@"[SPEC] searchBarTextDidEndEditing: %@", searchBar.text);
 	[self searchWithText:searchBar.text];
 }
 
