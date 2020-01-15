@@ -135,10 +135,18 @@ static UIColor *colorFromHexString(NSString *hexString) {
 	return [UIColor colorWithRed:red green:green blue:blue alpha:alpha];
 }
 
+UIColor *colorFromHexStringWithAlpha(NSString *hexString, double alpha) {
+	unsigned rgbValue = 0;
+	NSScanner *scanner = [NSScanner scannerWithString:hexString];
+	[scanner setScanLocation:0];
+	[scanner scanHexInt:&rgbValue];
+	return [UIColor colorWithRed:((rgbValue & 0xFF0000) >> 16)/255.0 green:((rgbValue & 0xFF00) >> 8)/255.0 blue:(rgbValue & 0xFF)/255.0 alpha:alpha];
+}
+
 // Preference Updates
 static void refreshPrefs() {
 	CFArrayRef keyList = CFPreferencesCopyKeyList(CFSTR("xyz.skitty.spectrum"), kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
-	if(keyList) {
+	if (keyList) {
 		settings = (NSMutableDictionary *)CFBridgingRelease(CFPreferencesCopyMultiple(keyList, CFSTR("xyz.skitty.spectrum"), kCFPreferencesCurrentUser, kCFPreferencesAnyHost));
 		CFRelease(keyList);
 	} else {
@@ -178,7 +186,7 @@ static void refreshPrefs() {
 
 	NSString *tintHex = [settings objectForKey:@"tintColor"] ?: @"F22F6CFF";
 	tint = colorFromHexString(tintHex);
-	highlight = colorFromHexString(tintHex);
+	highlight = colorFromHexStringWithAlpha(tintHex, 0.3);
 
 	darkGroupTableViewBackgroundColor = colorFromHexString([settings objectForKey:@"darkGroupTableViewBackgroundColor"] ?: @"000000FF");
 	darkOpaqueSeparatorColor = colorFromHexString([settings objectForKey:@"darkOpaqueSeparatorColor"] ?: @"38383AFF");
