@@ -470,26 +470,13 @@ static void getAppList(CFNotificationCenterRef center, void *observer, CFStringR
 	CFNotificationCenterPostNotification(CFNotificationCenterGetDistributedCenter(), CFSTR("xyz.skitty.spectrum.setapps"), nil, (__bridge CFDictionaryRef)mutableDict, true);
 }
 
-static NSArray *enabledApps() {
-	NSArray *apps;
+static NSArray *disabledApps() {
+	NSArray *apps = @[];
 	NSString *prefPath = @"/var/mobile/Library/Preferences/xyz.skitty.spectrum.apps.plist";
 	if ([[NSFileManager defaultManager] fileExistsAtPath:prefPath]) {
 		NSDictionary *appPrefs = [NSDictionary dictionaryWithContentsOfFile:prefPath];
-		apps = appPrefs[@"Enabled"];
-	} /*else if ([[[NSBundle mainBundle] bundleIdentifier] isEqual:@"com.apple.springboard"]) {
-		NSMutableDictionary *dict = appList();
-		if (dict) {
-			NSArray *ids = [dict keysSortedByValueUsingComparator:^(NSString *obj1, NSString *obj2) {
-				return [obj1 compare:obj2];
-			}];
-			NSDictionary *preferencesDict = @{ @"Enabled": ids };
-			[preferencesDict writeToFile:prefPath atomically:YES];
-			apps = ids;
-		}
-	}*/
-	
-	if (!apps)
-		apps = @[@"Error"];
+		apps = appPrefs[@"Disabled"];
+	}
 
 	return apps;
 }
@@ -505,9 +492,9 @@ static NSArray *enabledApps() {
 
 	refreshPrefs();
 
-	NSArray *apps = enabledApps();
+	NSArray *apps = disabledApps();
 
-	if (enabled && ([apps containsObject:[[NSBundle mainBundle] bundleIdentifier]] || ([apps[0] isEqualToString:@"Error"] && ![systemIdentifiers containsObject:[[NSBundle mainBundle] bundleIdentifier]]))) {
+	if (enabled && ![apps containsObject:[[NSBundle mainBundle] bundleIdentifier]] && ![systemIdentifiers containsObject:[[NSBundle mainBundle] bundleIdentifier]]) {
 		%init(App);
 		if (global) {
 			%init(UIColor);

@@ -54,7 +54,7 @@
 	
 	if (index == 0)
 		title = @"Default";
-	else
+	else if (plistFiles.count >= index - 1)
 		title = plistFiles[index - 1];
 
 	self.detailTextLabel.text = title;

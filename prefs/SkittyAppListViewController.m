@@ -40,7 +40,9 @@ static void post() {
 		NSMutableDictionary *prefs = [NSMutableDictionary dictionaryWithContentsOfFile:prefPath];
 		NSArray *apps;
 		if ([[NSFileManager defaultManager] fileExistsAtPath:prefPath]) {
-			apps = [prefs objectForKey:@"Enabled"];
+			apps = [prefs objectForKey:@"Disabled"];
+		} else {
+			apps = @[];
 		}
 		self.preferencesAppList = apps;
 		
@@ -72,7 +74,7 @@ static void post() {
 
 - (void)updatePreferencesAppList {
 	NSString *prefPath = @"/var/mobile/Library/Preferences/xyz.skitty.spectrum.apps.plist";
-	NSDictionary *preferencesDict = @{ @"Enabled": self.preferencesAppList };
+	NSDictionary *preferencesDict = @{ @"Disabled": self.preferencesAppList };
 	[preferencesDict writeToFile:prefPath atomically:YES];
 }
 
@@ -87,7 +89,7 @@ static void post() {
 	NSString *bundleIdentifier = self.identifiers[indexPath.row];
 
 	NSMutableArray *list = [self.preferencesAppList mutableCopy];
-	if (on) {
+	if (!on) {
 		[list addObject:bundleIdentifier];
 	} else {
 		[list removeObject:bundleIdentifier];
@@ -122,11 +124,6 @@ static void post() {
 
 	self.appList = appList;
 	self.identifiers = ids;
-	
-	if (!self.preferencesAppList) {
-		self.preferencesAppList = ids;
-		[self updatePreferencesAppList];
-	}
 
 	[self.tableView reloadData];
 }
@@ -150,11 +147,13 @@ static void post() {
 	
 	cell.detailTextLabel.textColor = [UIColor grayColor];
 	
-	if ([self.preferencesAppList containsObject:self.identifiers[indexPath.row]]) {
+	if (![self.preferencesAppList containsObject:self.identifiers[indexPath.row]]) {
 		[appSwitch setOn:YES animated:NO];
 	}
+
 	cell.textLabel.text = [self.fullAppList objectForKey:self.identifiers[indexPath.row]];
 	//cell.detailTextLabel.text = self.identifiers[indexPath.row];
+	
 	cell.imageView.image = [UIImage _applicationIconImageForBundleIdentifier:self.identifiers[indexPath.row] format:0 scale:[UIScreen mainScreen].scale];
 	
 	return cell;
