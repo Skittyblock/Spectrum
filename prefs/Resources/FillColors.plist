@@ -16,7 +16,7 @@
 			<key>cellClass</key>
 			<string>SkittyColorCell</string>
 			<key>default</key>
-			<string>000000</string>
+			<string>000000FF</string>
 			<key>defaults</key>
 			<string>xyz.skitty.spectrum</string>
 			<key>key</key>
@@ -32,7 +32,7 @@
 			<key>cellClass</key>
 			<string>SkittyColorCell</string>
 			<key>default</key>
-			<string>000000</string>
+			<string>000000FF</string>
 			<key>defaults</key>
 			<string>xyz.skitty.spectrum</string>
 			<key>key</key>
@@ -48,7 +48,7 @@
 			<key>cellClass</key>
 			<string>SkittyColorCell</string>
 			<key>default</key>
-			<string>000000</string>
+			<string>000000FF</string>
 			<key>defaults</key>
 			<string>xyz.skitty.spectrum</string>
 			<key>key</key>
@@ -64,7 +64,7 @@
 			<key>cellClass</key>
 			<string>SkittyColorCell</string>
 			<key>default</key>
-			<string>1C1C1E</string>
+			<string>1C1C1EFF</string>
 			<key>defaults</key>
 			<string>xyz.skitty.spectrum</string>
 			<key>key</key>
@@ -80,7 +80,7 @@
 			<key>cellClass</key>
 			<string>SkittyColorCell</string>
 			<key>default</key>
-			<string>1C1C1E</string>
+			<string>1C1C1EFF</string>
 			<key>defaults</key>
 			<string>xyz.skitty.spectrum</string>
 			<key>key</key>
@@ -96,7 +96,7 @@
 			<key>cellClass</key>
 			<string>SkittyColorCell</string>
 			<key>default</key>
-			<string>2C2C2E</string>
+			<string>2C2C2EFF</string>
 			<key>defaults</key>
 			<string>xyz.skitty.spectrum</string>
 			<key>key</key>
@@ -112,7 +112,7 @@
 			<key>cellClass</key>
 			<string>SkittyColorCell</string>
 			<key>default</key>
-			<string>2C2C2E</string>
+			<string>2C2C2EFF</string>
 			<key>defaults</key>
 			<string>xyz.skitty.spectrum</string>
 			<key>key</key>
@@ -128,7 +128,7 @@
 			<key>cellClass</key>
 			<string>SkittyColorCell</string>
 			<key>default</key>
-			<string>545458</string>
+			<string>54545899</string>
 			<key>defaults</key>
 			<string>xyz.skitty.spectrum</string>
 			<key>key</key>
@@ -144,7 +144,7 @@
 			<key>cellClass</key>
 			<string>SkittyColorCell</string>
 			<key>default</key>
-			<string>38383A</string>
+			<string>38383AFF</string>
 			<key>defaults</key>
 			<string>xyz.skitty.spectrum</string>
 			<key>key</key>
@@ -160,7 +160,7 @@
 			<key>cellClass</key>
 			<string>SkittyColorCell</string>
 			<key>default</key>
-			<string>1C1C1E</string>
+			<string>1C1C1EFF</string>
 			<key>defaults</key>
 			<string>xyz.skitty.spectrum</string>
 			<key>key</key>
@@ -170,7 +170,6 @@
 			<key>label</key>
 			<string>Grouped Table Cell Background Color</string>
 		</dict>
-
         <dict>
             <key>cell</key>
             <string>PSGroupCell</string>
@@ -183,7 +182,7 @@
 			<key>cellClass</key>
 			<string>SkittyColorCell</string>
 			<key>default</key>
-			<string>FFFFFF</string>
+			<string>FFFFFFFF</string>
 			<key>defaults</key>
 			<string>xyz.skitty.spectrum</string>
 			<key>key</key>
@@ -199,7 +198,7 @@
 			<key>cellClass</key>
 			<string>SkittyColorCell</string>
 			<key>default</key>
-			<string>F2F2F7</string>
+			<string>F2F2F7FF</string>
 			<key>defaults</key>
 			<string>xyz.skitty.spectrum</string>
 			<key>key</key>
@@ -215,7 +214,7 @@
 			<key>cellClass</key>
 			<string>SkittyColorCell</string>
 			<key>default</key>
-			<string>F2F2F7</string>
+			<string>F2F2F7FF</string>
 			<key>defaults</key>
 			<string>xyz.skitty.spectrum</string>
 			<key>key</key>
@@ -231,7 +230,7 @@
 			<key>cellClass</key>
 			<string>SkittyColorCell</string>
 			<key>default</key>
-			<string>F2F2F7</string>
+			<string>F2F2F7FF</string>
 			<key>defaults</key>
 			<string>xyz.skitty.spectrum</string>
 			<key>key</key>
@@ -247,7 +246,7 @@
 			<key>cellClass</key>
 			<string>SkittyColorCell</string>
 			<key>default</key>
-			<string>FFFFFF</string>
+			<string>FFFFFFFF</string>
 			<key>defaults</key>
 			<string>xyz.skitty.spectrum</string>
 			<key>key</key>
@@ -263,7 +262,7 @@
 			<key>cellClass</key>
 			<string>SkittyColorCell</string>
 			<key>default</key>
-			<string>FFFFFF</string>
+			<string>FFFFFFFF</string>
 			<key>defaults</key>
 			<string>xyz.skitty.spectrum</string>
 			<key>key</key>
@@ -279,7 +278,7 @@
 			<key>cellClass</key>
 			<string>SkittyColorCell</string>
 			<key>default</key>
-			<string>F2F2F7</string>
+			<string>F2F2F7FF</string>
 			<key>defaults</key>
 			<string>xyz.skitty.spectrum</string>
 			<key>key</key>
@@ -295,7 +294,7 @@
 			<key>cellClass</key>
 			<string>SkittyColorCell</string>
 			<key>default</key>
-			<string>3C3C43</string>
+			<string>3C3C434C</string>
 			<key>defaults</key>
 			<string>xyz.skitty.spectrum</string>
 			<key>key</key>
@@ -311,7 +310,7 @@
 			<key>cellClass</key>
 			<string>SkittyColorCell</string>
 			<key>default</key>
-			<string>C6C6C8</string>
+			<string>C6C6C8FF</string>
 			<key>defaults</key>
 			<string>xyz.skitty.spectrum</string>
 			<key>key</key>
@@ -327,7 +326,7 @@
 			<key>cellClass</key>
 			<string>SkittyColorCell</string>
 			<key>default</key>
-			<string>FFFFFF</string>
+			<string>FFFFFFFF</string>
 			<key>defaults</key>
 			<string>xyz.skitty.spectrum</string>
 			<key>key</key>

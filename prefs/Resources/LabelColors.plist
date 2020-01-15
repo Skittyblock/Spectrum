@@ -16,7 +16,7 @@
 			<key>cellClass</key>
 			<string>SkittyColorCell</string>
 			<key>default</key>
-			<string>FFFFFF</string>
+			<string>FFFFFFFF</string>
 			<key>defaults</key>
 			<string>xyz.skitty.spectrum</string>
 			<key>key</key>
@@ -32,7 +32,7 @@
 			<key>cellClass</key>
 			<string>SkittyColorCell</string>
 			<key>default</key>
-			<string>EBEBF5</string>
+			<string>EBEBF54C</string>
 			<key>defaults</key>
 			<string>xyz.skitty.spectrum</string>
 			<key>key</key>
@@ -48,7 +48,7 @@
 			<key>cellClass</key>
 			<string>SkittyColorCell</string>
 			<key>default</key>
-			<string>EBEBF5</string>
+			<string>EBEBF599</string>
 			<key>defaults</key>
 			<string>xyz.skitty.spectrum</string>
 			<key>key</key>
@@ -64,7 +64,7 @@
 			<key>cellClass</key>
 			<string>SkittyColorCell</string>
 			<key>default</key>
-			<string>EBEBF5</string>
+			<string>EBEBF54C</string>
 			<key>defaults</key>
 			<string>xyz.skitty.spectrum</string>
 			<key>key</key>
@@ -74,7 +74,6 @@
 			<key>label</key>
 			<string>Tertiary Label Color</string>
 		</dict>
-
         <dict>
             <key>cell</key>
             <string>PSGroupCell</string>
@@ -87,7 +86,7 @@
 			<key>cellClass</key>
 			<string>SkittyColorCell</string>
 			<key>default</key>
-			<string>000000</string>
+			<string>000000FF</string>
 			<key>defaults</key>
 			<string>xyz.skitty.spectrum</string>
 			<key>key</key>
@@ -103,7 +102,7 @@
 			<key>cellClass</key>
 			<string>SkittyColorCell</string>
 			<key>default</key>
-			<string>3C3C43</string>
+			<string>3C3C434C</string>
 			<key>defaults</key>
 			<string>xyz.skitty.spectrum</string>
 			<key>key</key>
@@ -119,7 +118,7 @@
 			<key>cellClass</key>
 			<string>SkittyColorCell</string>
 			<key>default</key>
-			<string>3C3C43</string>
+			<string>3C3C4399</string>
 			<key>defaults</key>
 			<string>xyz.skitty.spectrum</string>
 			<key>key</key>
@@ -135,7 +134,7 @@
 			<key>cellClass</key>
 			<string>SkittyColorCell</string>
 			<key>default</key>
-			<string>3C3C43</string>
+			<string>3C3C434C</string>
 			<key>defaults</key>
 			<string>xyz.skitty.spectrum</string>
 			<key>key</key>

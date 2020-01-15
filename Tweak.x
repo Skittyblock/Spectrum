@@ -89,13 +89,50 @@ UIColor *iconTintColorForCurrentApp() {
 	return color;
 }
 
-// Color from hex function
-UIColor *colorFromHexStringWithAlpha(NSString *hexString, double alpha) {
-	unsigned rgbValue = 0;
-	NSScanner *scanner = [NSScanner scannerWithString:hexString];
-	[scanner setScanLocation:0];
-	[scanner scanHexInt:&rgbValue];
-	return [UIColor colorWithRed:((rgbValue & 0xFF0000) >> 16)/255.0 green:((rgbValue & 0xFF00) >> 8)/255.0 blue:(rgbValue & 0xFF)/255.0 alpha:alpha];
+// Color from hex
+static CGFloat colorComponentFrom(NSString *string, NSInteger start, NSInteger length) {
+	NSString *substring = [string substringWithRange: NSMakeRange(start, length)];
+    NSString *fullHex = length == 2 ? substring : [NSString stringWithFormat: @"%@%@", substring, substring];
+    unsigned hexComponent;
+    [[NSScanner scannerWithString:fullHex] scanHexInt:&hexComponent];
+    return hexComponent / 255.0;
+}
+
+static UIColor *colorFromHexString(NSString *hexString) {
+	CGFloat red, green, blue, alpha;
+	switch(hexString.length) {
+		case 3: // #RGB
+			red = colorComponentFrom(hexString, 0, 1);
+			green = colorComponentFrom(hexString, 1, 1);
+			blue = colorComponentFrom(hexString, 2, 1);
+			alpha = 1;
+			break;
+		case 4: // #RGBA
+			red = colorComponentFrom(hexString, 0, 1);
+			green = colorComponentFrom(hexString, 1, 1);
+			blue = colorComponentFrom(hexString, 2, 1);
+			alpha = colorComponentFrom(hexString, 3, 1);
+			break;
+		case 6: // #RRGGBB
+			red = colorComponentFrom(hexString, 0, 2);
+			green = colorComponentFrom(hexString, 2, 2);
+			blue = colorComponentFrom(hexString, 4, 2);
+			alpha = 1;
+			break;
+		case 8: // #RRGGBBAA
+			red = colorComponentFrom(hexString, 0, 2);
+			green = colorComponentFrom(hexString, 2, 2);
+			blue = colorComponentFrom(hexString, 4, 2);
+			alpha = colorComponentFrom(hexString, 6, 2);
+			break;
+        default: // Invalid color
+			red = 0;
+			green = 0;
+			blue = 0;
+			alpha = 0;
+            break;
+	}
+	return [UIColor colorWithRed:red green:green blue:blue alpha:alpha];
 }
 
 // Preference Updates
@@ -139,39 +176,39 @@ static void refreshPrefs() {
 	customDarkColors = [([settings objectForKey:@"customDarkColors"] ?: @(NO)) boolValue];
 	customLightColors = [([settings objectForKey:@"customLightColors"] ?: @(NO)) boolValue];
 
-	NSString  *tintHex = [settings objectForKey:@"tintColor"] ?: @"F22F6C";
-	tint = customTintColor ? colorFromHexStringWithAlpha(tintHex, 1.0) : colorFromHexStringWithAlpha([settings objectForKey:@"tintColor"] ?: @"FF0000", 1.0);
-	highlight = colorFromHexStringWithAlpha(tintHex, 0.2);
+	NSString *tintHex = [settings objectForKey:@"tintColor"] ?: @"F22F6CFF";
+	tint = colorFromHexString(tintHex);
+	highlight = colorFromHexString(tintHex);
 
-	darkGroupTableViewBackgroundColor = colorFromHexStringWithAlpha([settings objectForKey:@"darkGroupTableViewBackgroundColor"] ?: @"000000", 1.0);
-	darkOpaqueSeparatorColor = colorFromHexStringWithAlpha([settings objectForKey:@"darkOpaqueSeparatorColor"] ?: @"38383A", 1.0);
-	darkSeparatorColor = colorFromHexStringWithAlpha([settings objectForKey:@"darkSeparatorColor"] ?: @"545458", 0.6);
-	darkSystemBackgroundColor = colorFromHexStringWithAlpha([settings objectForKey:@"darkSystemBackgroundColor"] ?: @"000000", 1.0);
-	darkSystemGroupedBackgroundColor = colorFromHexStringWithAlpha([settings objectForKey:@"darkSystemGroupedBackgroundColor"] ?: @"000000", 1.0);
-	darkTableCellGroupedBackgroundColor = colorFromHexStringWithAlpha([settings objectForKey:@"darkTableCellGroupedBackgroundColor"] ?: @"1C1C1E", 1.0);
-	darkSecondarySystemBackgroundColor = colorFromHexStringWithAlpha([settings objectForKey:@"darkSecondarySystemBackgroundColor"] ?: @"1C1C1E", 1.0);
-	darkSecondarySystemGroupedBackgroundColor = colorFromHexStringWithAlpha([settings objectForKey:@"darkSecondarySystemGroupedBackgroundColor"] ?: @"1C1C1E", 1.0);
-	darkTertiarySystemBackgroundColor = colorFromHexStringWithAlpha([settings objectForKey:@"darkTertiarySystemBackgroundColor"] ?: @"2C2C2E", 1.0);
-	darkTertiarySystemGroupedBackgroundColor = colorFromHexStringWithAlpha([settings objectForKey:@"darkTertiarySystemGroupedBackgroundColor"] ?: @"2C2C2E", 1.0);
-	darkLabelColor = colorFromHexStringWithAlpha([settings objectForKey:@"darkLabelColor"] ?: @"FFFFFF", 1.0);
-	darkPlaceholderLabelColor = colorFromHexStringWithAlpha([settings objectForKey:@"darkPlaceholderLabelColor"] ?: @"EBEBF5", 0.3);
-	darkSecondaryLabelColor = colorFromHexStringWithAlpha([settings objectForKey:@"darkSecondaryLabelColor"] ?: @"EBEBF5", 0.6);
-	darkTertiaryLabelColor = colorFromHexStringWithAlpha([settings objectForKey:@"darkTertiaryLabelColor"] ?: @"EBEBF5", 0.3);
+	darkGroupTableViewBackgroundColor = colorFromHexString([settings objectForKey:@"darkGroupTableViewBackgroundColor"] ?: @"000000FF");
+	darkOpaqueSeparatorColor = colorFromHexString([settings objectForKey:@"darkOpaqueSeparatorColor"] ?: @"38383AFF");
+	darkSeparatorColor = colorFromHexString([settings objectForKey:@"darkSeparatorColor"] ?: @"54545899");
+	darkSystemBackgroundColor = colorFromHexString([settings objectForKey:@"darkSystemBackgroundColor"] ?: @"000000FF");
+	darkSystemGroupedBackgroundColor = colorFromHexString([settings objectForKey:@"darkSystemGroupedBackgroundColor"] ?: @"000000FF");
+	darkTableCellGroupedBackgroundColor = colorFromHexString([settings objectForKey:@"darkTableCellGroupedBackgroundColor"] ?: @"1C1C1EFF");
+	darkSecondarySystemBackgroundColor = colorFromHexString([settings objectForKey:@"darkSecondarySystemBackgroundColor"] ?: @"1C1C1EFF");
+	darkSecondarySystemGroupedBackgroundColor = colorFromHexString([settings objectForKey:@"darkSecondarySystemGroupedBackgroundColor"] ?: @"1C1C1EFF");
+	darkTertiarySystemBackgroundColor = colorFromHexString([settings objectForKey:@"darkTertiarySystemBackgroundColor"] ?: @"2C2C2EFF");
+	darkTertiarySystemGroupedBackgroundColor = colorFromHexString([settings objectForKey:@"darkTertiarySystemGroupedBackgroundColor"] ?: @"2C2C2EFF");
+	darkLabelColor = colorFromHexString([settings objectForKey:@"darkLabelColor"] ?: @"FFFFFFFF");
+	darkPlaceholderLabelColor = colorFromHexString([settings objectForKey:@"darkPlaceholderLabelColor"] ?: @"EBEBF54C");
+	darkSecondaryLabelColor = colorFromHexString([settings objectForKey:@"darkSecondaryLabelColor"] ?: @"EBEBF599");
+	darkTertiaryLabelColor = colorFromHexString([settings objectForKey:@"darkTertiaryLabelColor"] ?: @"EBEBF54C");
 
-	lightGroupTableViewBackgroundColor = colorFromHexStringWithAlpha([settings objectForKey:@"lightGroupTableViewBackgroundColor"] ?: @"F2F2F7", 1.0);
-	lightOpaqueSeparatorColor = colorFromHexStringWithAlpha([settings objectForKey:@"lightOpaqueSeparatorColor"] ?: @"C6C6C8", 1.0);
-	lightSeparatorColor = colorFromHexStringWithAlpha([settings objectForKey:@"lightSeparatorColor"] ?: @"3C3C43", 0.29);
-	lightSystemBackgroundColor = colorFromHexStringWithAlpha([settings objectForKey:@"lightSystemBackgroundColor"] ?: @"FFFFFF", 1.0);
-	lightSystemGroupedBackgroundColor = colorFromHexStringWithAlpha([settings objectForKey:@"lightSystemGroupedBackgroundColor"] ?: @"F2F2F7", 1.0);
-	lightTableCellGroupedBackgroundColor = colorFromHexStringWithAlpha([settings objectForKey:@"lightTableCellGroupedBackgroundColor"] ?: @"FFFFFF", 1.0);
-	lightSecondarySystemBackgroundColor = colorFromHexStringWithAlpha([settings objectForKey:@"lightSecondarySystemBackgroundColor"] ?: @"F2F2F7", 1.0);
-	lightSecondarySystemGroupedBackgroundColor = colorFromHexStringWithAlpha([settings objectForKey:@"lightSecondarySystemGroupedBackgroundColor"] ?: @"FFFFFF", 1.0);
-	lightTertiarySystemBackgroundColor = colorFromHexStringWithAlpha([settings objectForKey:@"lightTertiarySystemBackgroundColor"] ?: @"FFFFFF", 1.0);
-	lightTertiarySystemGroupedBackgroundColor = colorFromHexStringWithAlpha([settings objectForKey:@"lightTertiarySystemGroupedBackgroundColor"] ?: @"F2F2F7", 1.0);
-	lightLabelColor = colorFromHexStringWithAlpha([settings objectForKey:@"lightLabelColor"] ?: @"000000", 1.0);
-	lightPlaceholderLabelColor = colorFromHexStringWithAlpha([settings objectForKey:@"lightPlaceholderLabelColor"] ?: @"3C3C43", 0.3);
-	lightSecondaryLabelColor = colorFromHexStringWithAlpha([settings objectForKey:@"lightSecondaryLabelColor"] ?: @"3C3C43", 0.6);
-	lightTertiaryLabelColor = colorFromHexStringWithAlpha([settings objectForKey:@"lightTertiaryLabelColor"] ?: @"3C3C43", 0.3);
+	lightGroupTableViewBackgroundColor = colorFromHexString([settings objectForKey:@"lightGroupTableViewBackgroundColor"] ?: @"F2F2F7FF");
+	lightOpaqueSeparatorColor = colorFromHexString([settings objectForKey:@"lightOpaqueSeparatorColor"] ?: @"C6C6C8FF");
+	lightSeparatorColor = colorFromHexString([settings objectForKey:@"lightSeparatorColor"] ?: @"3C3C434C");
+	lightSystemBackgroundColor = colorFromHexString([settings objectForKey:@"lightSystemBackgroundColor"] ?: @"FFFFFFFF");
+	lightSystemGroupedBackgroundColor = colorFromHexString([settings objectForKey:@"lightSystemGroupedBackgroundColor"] ?: @"F2F2F7FF");
+	lightTableCellGroupedBackgroundColor = colorFromHexString([settings objectForKey:@"lightTableCellGroupedBackgroundColor"] ?: @"FFFFFFFF");
+	lightSecondarySystemBackgroundColor = colorFromHexString([settings objectForKey:@"lightSecondarySystemBackgroundColor"] ?: @"F2F2F7FF");
+	lightSecondarySystemGroupedBackgroundColor = colorFromHexString([settings objectForKey:@"lightSecondarySystemGroupedBackgroundColor"] ?: @"FFFFFFFF");
+	lightTertiarySystemBackgroundColor = colorFromHexString([settings objectForKey:@"lightTertiarySystemBackgroundColor"] ?: @"FFFFFFFF");
+	lightTertiarySystemGroupedBackgroundColor = colorFromHexString([settings objectForKey:@"lightTertiarySystemGroupedBackgroundColor"] ?: @"F2F2F7FF");
+	lightLabelColor = colorFromHexString([settings objectForKey:@"lightLabelColor"] ?: @"000000FF");
+	lightPlaceholderLabelColor = colorFromHexString([settings objectForKey:@"lightPlaceholderLabelColor"] ?: @"3C3C434C");
+	lightSecondaryLabelColor = colorFromHexString([settings objectForKey:@"lightSecondaryLabelColor"] ?: @"3C3C4399");
+	lightTertiaryLabelColor = colorFromHexString([settings objectForKey:@"lightTertiaryLabelColor"] ?: @"3C3C434C");
 }
 
 static void PreferencesChangedCallback(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
@@ -203,9 +240,9 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 			darkColor = customDarkColor;
 	} else if (currentProfile && (currentProfile[lightKey] || currentProfile[darkKey])) {
 		if (currentProfile[lightKey])
-			lightColor = colorFromHexStringWithAlpha(currentProfile[lightKey], 1.0);
+			lightColor = colorFromHexString(currentProfile[lightKey]);
 		if (currentProfile[darkKey])
-			darkColor = colorFromHexStringWithAlpha(currentProfile[darkKey], 1.0);
+			darkColor = colorFromHexString(currentProfile[darkKey]);
 	}
 
 	return dynamicColor(lightColor, darkColor);

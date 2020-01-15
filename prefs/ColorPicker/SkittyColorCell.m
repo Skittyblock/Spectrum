@@ -36,14 +36,8 @@
 
 	NSMutableDictionary *settings = [[NSMutableDictionary alloc] initWithContentsOfFile:[NSString stringWithFormat:@"/var/mobile/Library/Preferences/%@.plist", self.specifier.properties[@"defaults"]]];
 	
-	NSString *fallback = self.specifier.properties[@"default"];
-	
-	unsigned rgbValue = 0;
-	NSScanner *scanner = [NSScanner scannerWithString:[settings objectForKey:self.specifier.properties[@"key"]] ?: fallback];
-	[scanner setScanLocation:0];
-	[scanner scanHexInt:&rgbValue];
-
-	UIColor *color = [UIColor colorWithRed:((rgbValue & 0xFF0000) >> 16)/255.0 green:((rgbValue & 0xFF00) >> 8)/255.0 blue:(rgbValue & 0xFF)/255.0 alpha:1.0];
+	NSString *hex = [settings objectForKey:self.specifier.properties[@"key"]] ?: self.specifier.properties[@"default"];
+	UIColor *color = colorFromHexString(hex);
 
 	colorPreview.backgroundColor = color;
 

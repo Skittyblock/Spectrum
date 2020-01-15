@@ -10,7 +10,9 @@ CGContextRef createBGRxImageContext(int, int, void *);
 CGImageRef createSaturationBrightnessSquareContentImageWithHue(float);
 CGImageRef createHSVBarContentImage(int, float[3]);
 CGImageRef createContentImage();
+UIColor *colorFromHexString(NSString *);
 
 @protocol SkittyColorPickerDelegate <NSObject>
 - (void)updateHue:(float)hue;
+- (void)updateAlpha:(float)alpha;
 @end

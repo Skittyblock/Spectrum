@@ -24,12 +24,9 @@
 
 	NSMutableDictionary *settings = [[NSMutableDictionary alloc] initWithContentsOfFile:[NSString stringWithFormat:@"/var/mobile/Library/Preferences/%@.plist", self.properties[@"defaults"]]];
 
-	unsigned rgbValue = 0;
-	NSScanner *scanner = [NSScanner scannerWithString:[settings objectForKey:self.properties[@"key"]] ?: self.properties[@"default"]];
-	[scanner setScanLocation:0];
-	[scanner scanHexInt:&rgbValue];
+	NSString *hex = [settings objectForKey:self.properties[@"key"]] ?: self.properties[@"default"];
+	UIColor *color = colorFromHexString(hex);
 
-	UIColor *color = [UIColor colorWithRed:((rgbValue & 0xFF0000) >> 16)/255.0 green:((rgbValue & 0xFF00) >> 8)/255.0 blue:(rgbValue & 0xFF)/255.0 alpha:1.0];
 	CGFloat hue, saturation, brightness, alpha;
 
 	[color getHue:&hue saturation:&saturation brightness:&brightness alpha:&alpha];
@@ -44,6 +41,11 @@
 	self.hueView.delegate = self;
 	self.hueView.hue = hue;
 	[self.view addSubview:self.hueView];
+
+	self.alphaView = [[SkittyColorAlphaView alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width / 2 - 128, 436, 256, 40)];
+	self.alphaView.delegate = self;
+	self.alphaView.alphaValue = alpha;
+	[self.view addSubview:self.alphaView];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -57,7 +59,7 @@
 	// write color
 	NSMutableDictionary *settings = [[NSMutableDictionary alloc] initWithContentsOfFile:[NSString stringWithFormat:@"/var/mobile/Library/Preferences/%@.plist", self.properties[@"defaults"]]];
 
-	UIColor *color = [UIColor colorWithHue:hue saturation:self.pickerView.value.x brightness:self.pickerView.value.y alpha:1];
+	UIColor *color = [UIColor colorWithHue:hue saturation:self.pickerView.value.x brightness:self.pickerView.value.y alpha:self.alphaView.alphaValue];
 	
 	CGColorSpaceModel colorSpace = CGColorSpaceGetModel(CGColorGetColorSpace(color.CGColor));
 	const CGFloat *components = CGColorGetComponents(color.CGColor);
@@ -76,7 +78,7 @@
 		a = components[3];
 	}
 
-	NSString *hex = [NSString stringWithFormat:@"%02lX%02lX%02lX", lroundf(r * 255), lroundf(g * 255), lroundf(b * 255)];
+	NSString *hex = [NSString stringWithFormat:@"%02lX%02lX%02lX%02lX", lroundf(r * 255), lroundf(g * 255), lroundf(b * 255), lroundf(a * 255)];
 	
 	[settings setObject:hex forKey:self.properties[@"key"]];
 
@@ -85,6 +87,10 @@
 
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"xyz.skitty.spectrum.colorupdate" object:self];
 	CFNotificationCenterPostNotification(CFNotificationCenterGetDistributedCenter(), (CFStringRef)self.properties[@"PostNotification"], nil, nil, true);
+}
+
+- (void)updateAlpha:(float)alpha {
+	[self updateHue:self.hueView.hue];
 }
 
 @end
