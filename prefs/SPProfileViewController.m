@@ -39,9 +39,14 @@
 
 		self.profiles = plistFiles;
 
-		NSDictionary *settings = [[NSDictionary alloc] initWithContentsOfFile:[NSString stringWithFormat:@"/var/mobile/Library/Preferences/%@.plist", self.properties[@"defaults"]]];
-		if ([settings[self.properties[@"key"]] intValue])
-			self.selected = [settings[self.properties[@"key"]] intValue];
+		//NSDictionary *settings = [[NSDictionary alloc] initWithContentsOfFile:[NSString stringWithFormat:@"/var/mobile/Library/Preferences/%@.plist", self.properties[@"defaults"]]];
+		//int index = [settings[self.properties[@"key"]] intValue];
+		CFPreferencesAppSynchronize((CFStringRef)self.properties[@"defaults"]);
+		CFNumberRef ref = CFPreferencesCopyAppValue((CFStringRef)self.properties[@"key"], (CFStringRef)self.properties[@"defaults"]);
+		int index = [(__bridge NSNumber *)ref intValue];
+
+		if (index)
+			self.selected = index;
 		else
 			self.selected = 0;
 	}
@@ -97,8 +102,9 @@
 
 	[settings setObject:[NSNumber numberWithInteger:self.selected] forKey:self.properties[@"key"]];
 
-	[settings writeToURL:[NSURL URLWithString:[NSString stringWithFormat:@"file:///var/mobile/Library/Preferences/%@.plist", self.properties[@"defaults"]]] error:nil];
-	CFPreferencesSetAppValue((CFStringRef)self.properties[@"key"], (CFNumberRef)[NSNumber numberWithBool:self.selected], (CFStringRef)self.properties[@"defaults"]);
+	//[settings writeToURL:[NSURL URLWithString:[NSString stringWithFormat:@"file:///var/mobile/Library/Preferences/%@.plist", self.properties[@"defaults"]]] error:nil];
+	CFPreferencesAppSynchronize((CFStringRef)self.properties[@"defaults"]);
+	CFPreferencesSetAppValue((CFStringRef)self.properties[@"key"], (CFNumberRef)[NSNumber numberWithInteger:self.selected], (CFStringRef)self.properties[@"defaults"]);
 
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"xyz.skitty.spectrum.profilechange" object:self];
 	CFNotificationCenterPostNotification(CFNotificationCenterGetDistributedCenter(), (CFStringRef)self.properties[@"PostNotification"], nil, nil, true);

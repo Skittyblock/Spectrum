@@ -82,7 +82,7 @@
 	
 	[settings setObject:hex forKey:self.properties[@"key"]];
 
-	[settings writeToURL:[NSURL URLWithString:[NSString stringWithFormat:@"file:///var/mobile/Library/Preferences/%@.plist", self.properties[@"defaults"]]] error:nil];
+	//[settings writeToURL:[NSURL URLWithString:[NSString stringWithFormat:@"file:///var/mobile/Library/Preferences/%@.plist", self.properties[@"defaults"]]] error:nil];
 	CFPreferencesSetAppValue((CFStringRef)self.properties[@"key"], (CFStringRef)hex, (CFStringRef)self.properties[@"defaults"]);
 
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"xyz.skitty.spectrum.colorupdate" object:self];

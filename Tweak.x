@@ -324,11 +324,6 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 	return dynamicColorWithOptions(%orig, @"lightSeparatorColor", @"darkSeparatorColor", lightSeparatorColor, darkSeparatorColor);
 }
 
-// UITableViewCell selection color
-/*+ (id)systemGray5Color {
-	return [[UIColor blackColor] colorWithAlphaComponent:0.2];
-}*/
-
 // Label colors
 + (id)labelColor {
 	return dynamicColorWithOptions(%orig, @"lightLabelColor", @"darkLabelColor", lightLabelColor, darkLabelColor);
@@ -341,6 +336,11 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 }
 + (id)tertiaryLabelColor {
 	return dynamicColorWithOptions(%orig, @"lightTertiaryLabelColor", @"darkTertiaryLabelColor", lightTertiaryLabelColor, darkTertiaryLabelColor);
+}
+
+// UITableViewCell selection color
++ (id)systemGray5Color {
+	return dynamicColorWithOptions(%orig, @"lightGray5Color", @"darkGray5Color", nil, nil);
 }
 
 %end

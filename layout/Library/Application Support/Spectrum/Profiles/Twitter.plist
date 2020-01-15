@@ -16,10 +16,10 @@
 	<string>15202B</string>
 	<key>darkPlaceholderLabelColor</key>
 	<string>FFFFFF</string>
-	<key>darkSecondaryLabelColor</key>
-	<string>FFFFFF</string>
 	<key>darkTableCellGroupedBackgroundColor</key>
 	<string>15202B</string>
+	<key>darkGray5Color</key>
+	<string>10171E</string>
 	<key>darkSeparatorColor</key>
 	<string>38434D</string>
 	<key>darkOpaqueSeparatorColor</key>

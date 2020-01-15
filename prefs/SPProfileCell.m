@@ -43,9 +43,12 @@
 		}
 	}];
 
-	NSDictionary *settings = [[NSDictionary alloc] initWithContentsOfFile:[NSString stringWithFormat:@"/var/mobile/Library/Preferences/%@.plist", self.specifier.properties[@"defaults"]]];
+	//NSDictionary *settings = [[NSDictionary alloc] initWithContentsOfFile:[NSString stringWithFormat:@"/var/mobile/Library/Preferences/%@.plist", self.specifier.properties[@"defaults"]]];
+	//int index = [[settings objectForKey:self.specifier.properties[@"key"]] intValue];
 
-	int index = [[settings objectForKey:self.specifier.properties[@"key"]] intValue];
+	CFPreferencesAppSynchronize((CFStringRef)self.specifier.properties[@"defaults"]);
+	CFNumberRef ref = CFPreferencesCopyAppValue((CFStringRef)self.specifier.properties[@"key"], (CFStringRef)self.specifier.properties[@"defaults"]);
+	int index = [(__bridge NSNumber *)ref intValue];
 
 	NSString *title = @"";
 	
