@@ -3,28 +3,22 @@
 <plist version="1.0">
 <dict>
 	<key>name</key>
-	<string>OLED</string>
+	<string>Google</string>
 	<key>darkSystemBackgroundColor</key>
-	<string>000000</string>
+	<string>212121</string>
 	<key>darkSystemGroupedBackgroundColor</key>
-	<string>000000</string>
+	<string>212121</string>
 	<key>darkGroupTableViewBackgroundColor</key>
-	<string>000000</string>
+	<string>212121</string>
 	<key>darkSecondarySystemBackgroundColor</key>
-	<string>000000</string>
+	<string>282828</string>
 	<key>darkSecondarySystemGroupedBackgroundColor</key>
-	<string>000000</string>
+	<string>282828</string>
 	<key>darkTableCellGroupedBackgroundColor</key>
-	<string>000000</string>
+	<string>282828</string>
 	<key>darkSeparatorColor</key>
-	<string>000000</string>
+	<string>373737</string>
 	<key>darkOpaqueSeparatorColor</key>
-	<string>000000</string>
-	<key>darkGray4Color</key>
-	<string>000000</string>
-	<key>darkGray5Color</key>
-	<string>000000</string>
-	<key>darkBarColor</key>
-	<string>000000</string>
+	<string>373737</string>
 </dict>
 </plist>

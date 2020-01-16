@@ -18,12 +18,14 @@
 	<string>FFFFFF</string>
 	<key>darkTableCellGroupedBackgroundColor</key>
 	<string>15202B</string>
-	<key>darkGray5Color</key>
-	<string>10171E</string>
 	<key>darkSeparatorColor</key>
 	<string>38434D</string>
 	<key>darkOpaqueSeparatorColor</key>
 	<string>38434D</string>
+	<key>darkGray4Color</key>
+	<string>10171E</string>
+	<key>darkGray5Color</key>
+	<string>10171E</string>
 	<key>darkBarColor</key>
 	<string>03111E</string>
 	<key>tintColor</key>
