@@ -185,7 +185,7 @@ static void refreshPrefs() {
 	customDarkColors = [([settings objectForKey:@"customDarkColors"] ?: @(NO)) boolValue];
 	customLightColors = [([settings objectForKey:@"customLightColors"] ?: @(NO)) boolValue];
 
-	NSString *tintHex = [settings objectForKey:@"tintColor"] ?: @"F22F6CFF";
+	NSString *tintHex = (!customTintColor && currentProfile[@"tintColor"]) ? currentProfile[@"tintColor"] : ([settings objectForKey:@"tintColor"] ?: @"F22F6CFF");
 	tint = colorFromHexString(tintHex);
 	highlight = colorFromHexStringWithAlpha(tintHex, 0.3);
 
@@ -264,29 +264,29 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 %hook UIColor
 + (id)colorWithRed:(double)red green:(double)green blue:(double)blue alpha:(double)alpha {
 	if (red == 0.0 && green == 122.0/255.0 && blue == 1.0) {
-		return tint;
+		return (customTintColor || currentProfile[@"tintColor"]) ? tint : %orig;
 	}
 	return %orig;
 }
 // Default tint
 + (id)systemBlueColor {
-	return tint;
+	return (customTintColor || currentProfile[@"tintColor"]) ? tint : %orig;
 }
 // Selection point
 + (id)insertionPointColor {
-	return tint;
+	return (customTintColor || currentProfile[@"tintColor"]) ? tint : %orig;
 }
 // Selection highlight
 + (id)selectionHighlightColor {
-	return highlight;
+	return (customTintColor || currentProfile[@"tintColor"]) ? highlight : %orig;
 }
 // Selection grabbers
 + (id)selectionGrabberColor {
-	return tint;
+	return (customTintColor || currentProfile[@"tintColor"]) ? tint : %orig;
 }
 // Links
 + (id)linkColor {
-	return tint;
+	return (customTintColor || currentProfile[@"tintColor"]) ? tint : %orig;
 }
 
 // Primary color
@@ -348,6 +348,9 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 }
 
 // UITableViewCell selection color
++ (id)systemGray4Color {
+	return dynamicColorWithOptions(%orig, @"lightGray4Color", @"darkGray4Color", nil, nil);
+}
 + (id)systemGray5Color {
 	return dynamicColorWithOptions(%orig, @"lightGray5Color", @"darkGray5Color", nil, nil);
 }
@@ -419,7 +422,7 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 %hook UIView
 - (UIColor *)tintColor {
 	if (![self isKindOfClass:%c(UIWindow)] && [self _normalInheritedTintColor] == appTintColorFromWindow([self window])) {
-		return tint;
+		return (customTintColor || currentProfile[@"tintColor"]) ? tint : %orig;
 	}
 	return %orig;
 }
