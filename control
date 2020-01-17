@@ -4,6 +4,9 @@ Depends: mobilesubstrate, libskittycolor, firmware (>= 13.0)
 Version: 1.0
 Architecture: iphoneos-arm
 Description: Customize system colors!
+Depiction: https://skitty.xyz/repo/depictions/?p=xyz.skitty.spectrum
+SileoDepiction: https://skitty.xyz/repo/depictions/?s=xyz.skitty.spectrum
+Icon: https://skitty.xyz/repo/icons/xyz.skitty.spectrum.png
 Maintainer: Skitty
 Author: Skitty & EvenDev
 Section: Tweaks
