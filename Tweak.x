@@ -379,6 +379,15 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 
 %hook UINavigationBar
 %property (nonatomic, retain) UIColor *storedBarColor;
+-(void)didMoveToSuperview {
+	%orig;
+	UIUserInterfaceStyle currentStyle = [UITraitCollection currentTraitCollection].userInterfaceStyle;
+	if (((currentProfile[@"lightBarColor"] || lightBarColor) && currentStyle == UIUserInterfaceStyleLight) || ((currentProfile[@"darkBarColor"] || darkBarColor) && currentStyle == UIUserInterfaceStyleDark))
+		[self setBarTintColor:self.storedBarColor ?: [UIColor cyanColor]];
+	else
+		[self setBarTintColor:self.storedBarColor ?: [UIColor magentaColor]];
+}
+
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
 	%orig;
 	UIUserInterfaceStyle currentStyle = [UITraitCollection currentTraitCollection].userInterfaceStyle;
@@ -398,6 +407,15 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 
 %hook UIToolbar
 %property (nonatomic, retain) UIColor *storedBarColor;
+-(void)didMoveToSuperview {
+	%orig;
+	UIUserInterfaceStyle currentStyle = [UITraitCollection currentTraitCollection].userInterfaceStyle;
+	if (((currentProfile[@"lightBarColor"] || lightBarColor) && currentStyle == UIUserInterfaceStyleLight) || ((currentProfile[@"darkBarColor"] || darkBarColor) && currentStyle == UIUserInterfaceStyleDark))
+		[self setBarTintColor:self.storedBarColor ?: [UIColor cyanColor]];
+	else
+		[self setBarTintColor:self.storedBarColor ?: [UIColor magentaColor]];
+}
+
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
 	%orig;
 	UIUserInterfaceStyle currentStyle = [UITraitCollection currentTraitCollection].userInterfaceStyle;
@@ -417,6 +435,15 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 
 %hook UITabBar
 %property (nonatomic, retain) UIColor *storedBarColor;
+-(void)didMoveToSuperview {
+	%orig;
+	UIUserInterfaceStyle currentStyle = [UITraitCollection currentTraitCollection].userInterfaceStyle;
+	if (((currentProfile[@"lightBarColor"] || lightBarColor) && currentStyle == UIUserInterfaceStyleLight) || ((currentProfile[@"darkBarColor"] || darkBarColor) && currentStyle == UIUserInterfaceStyleDark))
+		[self setBarTintColor:self.storedBarColor ?: [UIColor cyanColor]];
+	else
+		[self setBarTintColor:self.storedBarColor ?: [UIColor magentaColor]];
+}
+
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
 	%orig;
 	UIUserInterfaceStyle currentStyle = [UITraitCollection currentTraitCollection].userInterfaceStyle;
