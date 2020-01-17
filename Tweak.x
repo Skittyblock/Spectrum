@@ -36,6 +36,8 @@ static UIColor *darkPlaceholderLabelColor;
 static UIColor *darkSecondaryLabelColor;
 static UIColor *darkTertiaryLabelColor;
 
+static UIColor *darkBarColor;
+
 // Light Colors
 static UIColor *lightGroupTableViewBackgroundColor;
 static UIColor *lightSeparatorColor;
@@ -52,6 +54,8 @@ static UIColor *lightLabelColor;
 static UIColor *lightPlaceholderLabelColor;
 static UIColor *lightSecondaryLabelColor;
 static UIColor *lightTertiaryLabelColor;
+
+static UIColor *lightBarColor;
 //static UIColor *iconTint;
 
 UIColor *appTintColorFromWindow(UIWindow *window) {
@@ -203,6 +207,8 @@ static void refreshPrefs() {
 	darkSecondaryLabelColor = colorFromHexString([settings objectForKey:@"darkSecondaryLabelColor"] ?: @"EBEBF599");
 	darkTertiaryLabelColor = colorFromHexString([settings objectForKey:@"darkTertiaryLabelColor"] ?: @"EBEBF54C");
 	darkTableViewCellSelectionColor = colorFromHexString([settings objectForKey:@"darkTableViewCellSelectionColor"] ?: @"2C2C2EFF");
+	if ([[settings objectForKey:@"darkBarColor"] isEqualToString:@"00000000"] || !customDarkColors) darkBarColor = nil;
+	else darkBarColor = colorFromHexString([settings objectForKey:@"darkBarColor"]);
 
 	lightGroupTableViewBackgroundColor = colorFromHexString([settings objectForKey:@"lightGroupTableViewBackgroundColor"] ?: @"F2F2F7FF");
 	lightSeparatorColor = colorFromHexString([settings objectForKey:@"lightSeparatorColor"] ?: @"3C3C434C");
@@ -218,6 +224,8 @@ static void refreshPrefs() {
 	lightSecondaryLabelColor = colorFromHexString([settings objectForKey:@"lightSecondaryLabelColor"] ?: @"3C3C4399");
 	lightTertiaryLabelColor = colorFromHexString([settings objectForKey:@"lightTertiaryLabelColor"] ?: @"3C3C434C");
 	lightTableViewCellSelectionColor = colorFromHexString([settings objectForKey:@"lightTableViewCellSelectionColor"] ?: @"E5E5EAFF");
+	if ([[settings objectForKey:@"lightBarColor"] isEqualToString:@"00000000"] || !customLightColors) lightBarColor = nil;
+	else lightBarColor = colorFromHexString([settings objectForKey:@"lightBarColor"]);
 }
 
 static void PreferencesChangedCallback(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
@@ -374,14 +382,14 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
 	%orig;
 	UIUserInterfaceStyle currentStyle = [UITraitCollection currentTraitCollection].userInterfaceStyle;
-	if ((currentProfile[@"lightBarColor"] && currentStyle == UIUserInterfaceStyleLight) || (currentProfile[@"darkBarColor"] && currentStyle == UIUserInterfaceStyleDark))
+	if (((currentProfile[@"lightBarColor"] || lightBarColor) && currentStyle == UIUserInterfaceStyleLight) || ((currentProfile[@"darkBarColor"] || darkBarColor) && currentStyle == UIUserInterfaceStyleDark))
 		[self setBarTintColor:self.storedBarColor ?: [UIColor cyanColor]];
 	else
 		[self setBarTintColor:self.storedBarColor ?: [UIColor magentaColor]];
 }
 
 - (void)setBarTintColor:(UIColor *)color {
-	if ([color isEqual:[UIColor cyanColor]]) return %orig(dynamicColorWithOptions(dynamicColor([UIColor clearColor], [UIColor clearColor]), @"lightBarColor", @"darkBarColor", nil, nil));
+	if ([color isEqual:[UIColor cyanColor]]) return %orig(dynamicColorWithOptions(dynamicColor([UIColor clearColor], [UIColor clearColor]), @"lightBarColor", @"darkBarColor", lightBarColor, darkBarColor));
 	if ([color isEqual:[UIColor magentaColor]]) return %orig(nil);
 	if (color) self.storedBarColor = color;
 	%orig(color);
@@ -393,14 +401,14 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
 	%orig;
 	UIUserInterfaceStyle currentStyle = [UITraitCollection currentTraitCollection].userInterfaceStyle;
-	if ((currentProfile[@"lightBarColor"] && currentStyle == UIUserInterfaceStyleLight) || (currentProfile[@"darkBarColor"] && currentStyle == UIUserInterfaceStyleDark))
+	if (((currentProfile[@"lightBarColor"] || lightBarColor) && currentStyle == UIUserInterfaceStyleLight) || ((currentProfile[@"darkBarColor"] || darkBarColor) && currentStyle == UIUserInterfaceStyleDark))
 		[self setBarTintColor:self.storedBarColor ?: [UIColor cyanColor]];
 	else
 		[self setBarTintColor:self.storedBarColor ?: [UIColor magentaColor]];
 }
 
 - (void)setBarTintColor:(UIColor *)color {
-	if ([color isEqual:[UIColor cyanColor]]) return %orig(dynamicColorWithOptions(dynamicColor([UIColor clearColor], [UIColor clearColor]), @"lightBarColor", @"darkBarColor", nil, nil));
+	if ([color isEqual:[UIColor cyanColor]]) return %orig(dynamicColorWithOptions(dynamicColor([UIColor clearColor], [UIColor clearColor]), @"lightBarColor", @"darkBarColor", lightBarColor, darkBarColor));
 	if ([color isEqual:[UIColor magentaColor]]) return %orig(nil);
 	if (color) self.storedBarColor = color;
 	%orig(color);
@@ -412,14 +420,14 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
 	%orig;
 	UIUserInterfaceStyle currentStyle = [UITraitCollection currentTraitCollection].userInterfaceStyle;
-	if ((currentProfile[@"lightBarColor"] && currentStyle == UIUserInterfaceStyleLight) || (currentProfile[@"darkBarColor"] && currentStyle == UIUserInterfaceStyleDark))
+	if (((currentProfile[@"lightBarColor"] || lightBarColor) && currentStyle == UIUserInterfaceStyleLight) || ((currentProfile[@"darkBarColor"] || darkBarColor) && currentStyle == UIUserInterfaceStyleDark))
 		[self setBarTintColor:self.storedBarColor ?: [UIColor cyanColor]];
 	else
 		[self setBarTintColor:self.storedBarColor ?: [UIColor magentaColor]];
 }
 
 - (void)setBarTintColor:(UIColor *)color {
-	if ([color isEqual:[UIColor cyanColor]]) return %orig(dynamicColorWithOptions(dynamicColor([UIColor clearColor], [UIColor clearColor]), @"lightBarColor", @"darkBarColor", nil, nil));
+	if ([color isEqual:[UIColor cyanColor]]) return %orig(dynamicColorWithOptions(dynamicColor([UIColor clearColor], [UIColor clearColor]), @"lightBarColor", @"darkBarColor", lightBarColor, darkBarColor));
 	if ([color isEqual:[UIColor magentaColor]]) return %orig(nil);
 	if (color) self.storedBarColor = color;
 	%orig(color);

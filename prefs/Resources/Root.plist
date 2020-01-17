@@ -142,6 +142,16 @@
 			<key>label</key>
 			<string>Label Colors</string>
 		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>detail</key>
+			<string>SPOtherColorsListController</string>
+			<key>isController</key>
+			<true/>
+			<key>label</key>
+			<string>Other Colors</string>
+		</dict>
 	</array>
 	<key>title</key>
 	<string>Spectrum</string>
