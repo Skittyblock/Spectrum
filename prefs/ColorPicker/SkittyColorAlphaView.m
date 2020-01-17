@@ -1,18 +1,8 @@
 // SkittyColorAlphaView.m
 
 #import "SkittyColorAlphaView.h"
-#import "ColorPicker.h"
 
 @implementation SkittyColorAlphaView
-
-- (id)init {
-	self = [super init];
-
-	if (self) {
-	}
-
-	return self;
-}
 
 - (void)updateContent {
 	if (!self.imageView) {
@@ -34,16 +24,9 @@
 	self.imageView.image = UIGraphicsGetImageFromCurrentImageContext();
 	
 	UIGraphicsEndImageContext();
-	
-	/*CGImageRef imageRef = createContentImage();
-	self.imageView.image = [UIImage imageWithCGImage:imageRef];
-	CGImageRelease(imageRef);*/
 }
 
 - (void)layoutSubviews {
-	if (!self.alphaValue) {
-		self.alphaValue = 1;
-	}
 	if (!self.indicator) {
 		self.indicator = [[SkittyColorIndicatorView alloc] initWithFrame:CGRectMake(116, 116, 24, 24)];
 		[self addSubview:self.indicator];
@@ -58,7 +41,7 @@
 
 	self.indicator.center = CGPointMake(indicatorX, indicatorY);
 
-	self.indicator.color = [UIColor colorWithWhite:0 alpha:self.alphaValue];
+	self.indicator.color = [UIColor colorWithWhite:1 - self.alphaValue alpha:1];
 }
 
 - (void)setAlphaValue:(float)value {
@@ -66,7 +49,7 @@
 		_alphaValue = value;
 		
 		if (self.delegate)
-			[self.delegate updateAlpha:value];
+			[self.delegate updateColor];
 		
 		[self updateContent];
 		[self setNeedsLayout];

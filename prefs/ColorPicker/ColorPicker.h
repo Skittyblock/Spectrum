@@ -11,8 +11,9 @@ CGImageRef createSaturationBrightnessSquareContentImageWithHue(float);
 CGImageRef createHSVBarContentImage(int, float[3]);
 CGImageRef createContentImage();
 UIColor *colorFromHexString(NSString *);
+NSString *stringFromColor(UIColor *);
 
 @protocol SkittyColorPickerDelegate <NSObject>
-- (void)updateHue:(float)hue;
-- (void)updateAlpha:(float)alpha;
+- (void)updateColor;
+- (void)updateWithColor:(UIColor *)color;
 @end

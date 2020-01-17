@@ -1,7 +1,6 @@
 // SkittyColorPickerView.m
 
 #import "SkittyColorPickerView.h"
-#import "ColorPicker.h"
 
 @implementation SkittyColorPickerView
 
@@ -61,7 +60,7 @@
 		_value = newValue;
 		
 		if (self.delegate)
-			[self.delegate updateHue:self.hue];
+			[self.delegate updateColor];
 
 		//[self sendActionsForControlEvents:UIControlEventValueChanged];
 		[self setNeedsLayout];
@@ -83,30 +82,5 @@
 	
 	self.value = touchValue;
 }
-/*
-- (void)trackIndicatorWithTouch:(UITouch *)touch {
-	CGRect bounds = self.bounds;
-	
-	CGPoint touchValue;
-	
-	touchValue.x = [touch locationInView:self].x / bounds.size.width;
-	
-	touchValue.y = [touch locationInView: self].y / bounds.size.height;
-	
-	touchValue.x = pin(0.0f, touchValue.x, 1.0f);
-	touchValue.y = 1.0f - pin(0.0f, touchValue.y, 1.0f);
-	
-	self.value = touchValue;
-}
 
-- (BOOL)beginTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event {
-	[self trackIndicatorWithTouch:touch];
-	return YES;
-}
-
-- (BOOL)continueTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event {
-	[self trackIndicatorWithTouch:touch];
-	return YES;
-}
-*/
 @end

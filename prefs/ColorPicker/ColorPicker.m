@@ -186,6 +186,8 @@ CGFloat colorComponentFrom(NSString *string, NSInteger start, NSInteger length) 
 }
 
 UIColor *colorFromHexString(NSString *hexString) {
+	if ([[hexString substringToIndex:1] isEqualToString:@"#"])
+		hexString = [hexString substringWithRange:NSMakeRange(1, hexString.length - 1)];
 	CGFloat red, green, blue, alpha;
 	switch(hexString.length) {
 		case 3: // #RGB
@@ -213,11 +215,28 @@ UIColor *colorFromHexString(NSString *hexString) {
 			alpha = colorComponentFrom(hexString, 6, 2);
 			break;
         default: // Invalid color
-			red = 0;
-			green = 0;
-			blue = 0;
-			alpha = 0;
-            break;
+			return nil;
 	}
 	return [UIColor colorWithRed:red green:green blue:blue alpha:alpha];
+}
+
+NSString *stringFromColor(UIColor *color) {
+	CGColorSpaceModel colorSpace = CGColorSpaceGetModel(CGColorGetColorSpace(color.CGColor));
+	const CGFloat *components = CGColorGetComponents(color.CGColor);
+
+	CGFloat r = 0, g = 0, b = 0, a = 0;
+
+	if (colorSpace == kCGColorSpaceModelMonochrome) {
+		r = components[0];
+		g = components[0];
+		b = components[0];
+		a = components[1];
+	} else if (colorSpace == kCGColorSpaceModelRGB) {
+		r = components[0];
+		g = components[1];
+		b = components[2];
+		a = components[3];
+	}
+
+	return [NSString stringWithFormat:@"%02lX%02lX%02lX%02lX", lroundf(r * 255), lroundf(g * 255), lroundf(b * 255), lroundf(a * 255)];
 }

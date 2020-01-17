@@ -1,18 +1,8 @@
 // SkittyColorHueView.m
 
 #import "SkittyColorHueView.h"
-#import "ColorPicker.h"
 
 @implementation SkittyColorHueView
-
-- (id)init {
-    self = [super init];
-
-    if (self) {
-    }
-
-    return self;
-}
 
 - (void)updateContent {
     if (!self.imageView) {
@@ -51,7 +41,7 @@
 		_hue = value;
 		
 		if (self.delegate)
-			[self.delegate updateHue:value];
+			[self.delegate updateColor];
 		
 		[self updateContent];
 		[self setNeedsLayout];
