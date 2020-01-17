@@ -21,7 +21,6 @@ static UIColor *highlight;
 
 // Dark Colors
 static UIColor *darkGroupTableViewBackgroundColor;
-static UIColor *darkOpaqueSeparatorColor;
 static UIColor *darkSeparatorColor;
 static UIColor *darkSystemBackgroundColor;
 static UIColor *darkSystemGroupedBackgroundColor;
@@ -38,7 +37,6 @@ static UIColor *darkTertiaryLabelColor;
 
 // Light Colors
 static UIColor *lightGroupTableViewBackgroundColor;
-static UIColor *lightOpaqueSeparatorColor;
 static UIColor *lightSeparatorColor;
 static UIColor *lightSystemBackgroundColor;
 static UIColor *lightSystemGroupedBackgroundColor;
@@ -190,7 +188,6 @@ static void refreshPrefs() {
 	highlight = colorFromHexStringWithAlpha(tintHex, 0.3);
 
 	darkGroupTableViewBackgroundColor = colorFromHexString([settings objectForKey:@"darkGroupTableViewBackgroundColor"] ?: @"000000FF");
-	darkOpaqueSeparatorColor = colorFromHexString([settings objectForKey:@"darkOpaqueSeparatorColor"] ?: @"38383AFF");
 	darkSeparatorColor = colorFromHexString([settings objectForKey:@"darkSeparatorColor"] ?: @"54545899");
 	darkSystemBackgroundColor = colorFromHexString([settings objectForKey:@"darkSystemBackgroundColor"] ?: @"000000FF");
 	darkSystemGroupedBackgroundColor = colorFromHexString([settings objectForKey:@"darkSystemGroupedBackgroundColor"] ?: @"000000FF");
@@ -205,7 +202,6 @@ static void refreshPrefs() {
 	darkTertiaryLabelColor = colorFromHexString([settings objectForKey:@"darkTertiaryLabelColor"] ?: @"EBEBF54C");
 
 	lightGroupTableViewBackgroundColor = colorFromHexString([settings objectForKey:@"lightGroupTableViewBackgroundColor"] ?: @"F2F2F7FF");
-	lightOpaqueSeparatorColor = colorFromHexString([settings objectForKey:@"lightOpaqueSeparatorColor"] ?: @"C6C6C8FF");
 	lightSeparatorColor = colorFromHexString([settings objectForKey:@"lightSeparatorColor"] ?: @"3C3C434C");
 	lightSystemBackgroundColor = colorFromHexString([settings objectForKey:@"lightSystemBackgroundColor"] ?: @"FFFFFFFF");
 	lightSystemGroupedBackgroundColor = colorFromHexString([settings objectForKey:@"lightSystemGroupedBackgroundColor"] ?: @"F2F2F7FF");
@@ -299,6 +295,9 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 + (id)groupTableViewBackgroundColor {
 	return dynamicColorWithOptions(%orig, @"lightGroupTableViewBackgroundColor", @"darkGroupTableViewBackgroundColor", lightGroupTableViewBackgroundColor, darkGroupTableViewBackgroundColor);
 }
++ (id)tableBackgroundColor {
+	return dynamicColorWithOptions(%orig, @"lightGroupTableViewBackgroundColor", @"darkGroupTableViewBackgroundColor", lightGroupTableViewBackgroundColor, darkGroupTableViewBackgroundColor);
+}
 + (id)tableCellPlainBackgroundColor {
 	return dynamicColorWithOptions(%orig, @"lightSystemBackgroundColor", @"darkSystemBackgroundColor", lightSystemBackgroundColor, darkSystemBackgroundColor);
 }
@@ -327,7 +326,7 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 	return dynamicColorWithOptions(%orig, @"lightSeparatorColor", @"darkSeparatorColor", lightSeparatorColor, darkSeparatorColor);
 }
 + (id)opaqueSeparatorColor {
-	return dynamicColorWithOptions(%orig, @"lightOpaqueSeparatorColor", @"darkOpaqueSeparatorColor", lightOpaqueSeparatorColor, darkOpaqueSeparatorColor);
+	return dynamicColorWithOptions(%orig, @"lightSeparatorColor", @"darkSeparatorColor", lightSeparatorColor, darkSeparatorColor);
 }
 + (id)tableSeparatorColor {
 	return dynamicColorWithOptions(%orig, @"lightSeparatorColor", @"darkSeparatorColor", lightSeparatorColor, darkSeparatorColor);
@@ -344,6 +343,10 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 	return dynamicColorWithOptions(%orig, @"lightPlaceholderLabelColor", @"darkPlaceholderLabelColor", lightPlaceholderLabelColor, darkPlaceholderLabelColor);
 }
 + (id)tertiaryLabelColor {
+	return dynamicColorWithOptions(%orig, @"lightTertiaryLabelColor", @"darkTertiaryLabelColor", lightTertiaryLabelColor, darkTertiaryLabelColor);
+}
+
++ (id)tablePlainHeaderFooterBackgroundColor {
 	return dynamicColorWithOptions(%orig, @"lightTertiaryLabelColor", @"darkTertiaryLabelColor", lightTertiaryLabelColor, darkTertiaryLabelColor);
 }
 
@@ -486,7 +489,7 @@ static NSArray *disabledApps() {
 
 %ctor {
 	// Hidden system apps
-	systemIdentifiers = @[@"com.apple.AppSSOUIService", @"com.apple.AuthKitUIService", @"com.apple.BusinessChatViewService", @"com.apple.CTNotifyUIService", @"com.apple.CarPlaySplashScreen", @"com.apple.FTMInternal", @"com.apple.appleseed.FeedbackAssistant", @"com.apple.FontInstallViewService", @"com.apple.BarcodeScanner", @"com.apple.icloud.spnfcurl", @"com.apple.ScreenTimeUnlock", @"com.apple.CarPlaySettings", @"com.apple.SharedWebCredentialViewService", @"com.apple.sidecar", @"com.apple.Spotlight", @"com.apple.iMessageAppsViewService", @"com.apple.AXUIViewService", @"com.apple.AccountAuthenticationDialog", @"com.apple.AdPlatformsDiagnostics", @"com.apple.CTCarrierSpaceAuth", @"com.apple.CheckerBoard", @"com.apple.CloudKit.ShareBear", @"com.apple.AskPermissionUI", @"com.apple.CompassCalibrationViewService", @"com.apple.sidecar.camera", @"com.apple.datadetectors.DDActionsService", @"com.apple.DataActivation", @"com.apple.DemoApp", @"com.apple.Diagnostics", @"com.apple.DiagnosticsService", @"com.apple.carkit.DNDBuddy", @"com.apple.family", @"com.apple.fieldtest", @"com.apple.gamecenter.GameCenterUIService", @"com.apple.HealthPrivacyService", @"com.apple.Home.HomeUIService", @"com.apple.InCallService", @"com.apple.MailCompositionService", @"com.apple.mobilesms.compose", @"com.apple.MobileReplayer", @"com.apple.MusicUIService", @"com.apple.PhotosViewService", @"com.apple.PreBoard", @"com.apple.PrintKit.Print-Center", @"com.apple.social.SLYahooAuth", @"com.apple.SafariViewService", @"org.coolstar.SafeMode", @"com.apple.ScreenshotServicesSharing", @"com.apple.ScreenshotServicesService", @"com.apple.ScreenSharingViewService", @"com.apple.SIMSetupUIService", @"com.apple.Magnifier", @"com.apple.purplebuddy", @"com.apple.SharedWebCredentialsViewService", @"com.apple.SharingViewService", @"com.apple.SiriViewService", @"com.apple.susuiservice", @"com.apple.StoreDemoViewService", @"com.apple.TVAccessViewService", @"com.apple.TVRemoteUIService", @"com.apple.TrustMe", @"com.apple.CoreAuthUI", @"com.apple.VSViewService", @"com.apple.PassbookStub", @"com.apple.PassbookUIService", @"com.apple.WebContentFilter.remoteUI.WebContentAnalysisUI", @"com.apple.WebSheet", @"com.apple.iad.iAdOptOut", @"com.apple.ios.StoreKitUIService", @"com.apple.webapp", @"com.apple.webapp1"];
+	systemIdentifiers = @[@"com.apple.AppSSOUIService", @"com.apple.AuthKitUIService", @"com.apple.BusinessChatViewService", @"com.apple.CTNotifyUIService", @"com.apple.CarPlaySplashScreen", @"com.apple.FTMInternal", @"com.apple.appleseed.FeedbackAssistant", @"com.apple.FontInstallViewService", @"com.apple.BarcodeScanner", @"com.apple.icloud.spnfcurl", @"com.apple.ScreenTimeUnlock", @"com.apple.CarPlaySettings", @"com.apple.SharedWebCredentialViewService", @"com.apple.sidecar", @"com.apple.Spotlight", @"com.apple.iMessageAppsViewService", @"com.apple.AXUIViewService", @"com.apple.AccountAuthenticationDialog", @"com.apple.AdPlatformsDiagnostics", @"com.apple.CTCarrierSpaceAuth", @"com.apple.CheckerBoard", @"com.apple.CloudKit.ShareBear", @"com.apple.AskPermissionUI", @"com.apple.CompassCalibrationViewService", @"com.apple.sidecar.camera", @"com.apple.datadetectors.DDActionsService", @"com.apple.DataActivation", @"com.apple.DemoApp", @"com.apple.Diagnostics", @"com.apple.DiagnosticsService", @"com.apple.carkit.DNDBuddy", @"com.apple.family", @"com.apple.fieldtest", @"com.apple.gamecenter.GameCenterUIService", @"com.apple.HealthPrivacyService", @"com.apple.Home.HomeUIService", @"com.apple.InCallService", @"com.apple.MailCompositionService", @"com.apple.mobilesms.compose", @"com.apple.MobileReplayer", @"com.apple.MusicUIService", @"com.apple.PhotosViewService", @"com.apple.PreBoard", @"com.apple.PrintKit.Print-Center", @"com.apple.social.SLYahooAuth", @"com.apple.SafariViewService", @"org.coolstar.SafeMode", @"com.apple.ScreenshotServicesSharing", @"com.apple.ScreenshotServicesService", @"com.apple.ScreenSharingViewService", @"com.apple.SIMSetupUIService", @"com.apple.Magnifier", @"com.apple.purplebuddy", @"com.apple.SharedWebCredentialsViewService", @"com.apple.SharingViewService", @"com.apple.SiriViewService", @"com.apple.susuiservice", @"com.apple.StoreDemoViewService", @"com.apple.TVAccessViewService", @"com.apple.TVRemoteUIService", @"com.apple.TrustMe", @"com.apple.CoreAuthUI", @"com.apple.VSViewService", @"com.apple.PassbookStub", @"com.apple.PassbookUIService", @"com.apple.WebContentFilter.remoteUI.WebContentAnalysisUI", @"com.apple.WebSheet", @"com.apple.iad.iAdOptOut", @"com.apple.ios.StoreKitUIService", @"com.apple.webapp", @"com.apple.webapp1", @"com.apple.springboard"];
 
 	//iconTint = iconTintColorForCurrentApp();
 	CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback) PreferencesChangedCallback, CFSTR("xyz.skitty.spectrum.prefschanged"), NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
