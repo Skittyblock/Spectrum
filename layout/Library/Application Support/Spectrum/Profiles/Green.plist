@@ -20,9 +20,7 @@
 	<string>202B2A</string>
 	<key>darkOpaqueSeparatorColor</key>
 	<string>202B2A</string>
-	<key>darkGray4Color</key>
-	<string>0F1717</string>
-	<key>darkGray5Color</key>
+	<key>darkTableViewCellSelectionColor</key>
 	<string>0F1717</string>
 	<key>darkBarColor</key>
 	<string>061312</string>

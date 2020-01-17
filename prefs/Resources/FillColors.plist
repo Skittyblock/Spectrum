@@ -154,6 +154,22 @@
 			<key>label</key>
 			<string>Grouped Table Cell Background Color</string>
 		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>cellClass</key>
+			<string>SkittyColorCell</string>
+			<key>default</key>
+			<string>2C2C2EFF</string>
+			<key>defaults</key>
+			<string>xyz.skitty.spectrum</string>
+			<key>key</key>
+			<string>darkTableViewCellSelectionColor</string>
+			<key>PostNotification</key>
+			<string>xyz.skitty.spectrum.prefschanged</string>
+			<key>label</key>
+			<string>Table View Cell Selection Color</string>
+		</dict>
         <dict>
             <key>cell</key>
             <string>PSGroupCell</string>
@@ -303,6 +319,22 @@
 			<string>xyz.skitty.spectrum.prefschanged</string>
 			<key>label</key>
 			<string>Grouped Table Cell Background Color</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>cellClass</key>
+			<string>SkittyColorCell</string>
+			<key>default</key>
+			<string>E5E5EAFF</string>
+			<key>defaults</key>
+			<string>xyz.skitty.spectrum</string>
+			<key>key</key>
+			<string>lightTableViewCellSelectionColor</string>
+			<key>PostNotification</key>
+			<string>xyz.skitty.spectrum.prefschanged</string>
+			<key>label</key>
+			<string>Table View Cell Selection Color</string>
 		</dict>
 	</array>
 	<key>title</key>

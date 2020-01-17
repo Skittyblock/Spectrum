@@ -29,6 +29,7 @@ static UIColor *darkSecondarySystemBackgroundColor;
 static UIColor *darkSecondarySystemGroupedBackgroundColor;
 static UIColor *darkTertiarySystemBackgroundColor;
 static UIColor *darkTertiarySystemGroupedBackgroundColor;
+static UIColor *darkTableViewCellSelectionColor;
 
 static UIColor *darkLabelColor;
 static UIColor *darkPlaceholderLabelColor;
@@ -45,6 +46,7 @@ static UIColor *lightSecondarySystemBackgroundColor;
 static UIColor *lightSecondarySystemGroupedBackgroundColor;
 static UIColor *lightTertiarySystemBackgroundColor;
 static UIColor *lightTertiarySystemGroupedBackgroundColor;
+static UIColor *lightTableViewCellSelectionColor;
 
 static UIColor *lightLabelColor;
 static UIColor *lightPlaceholderLabelColor;
@@ -200,6 +202,7 @@ static void refreshPrefs() {
 	darkPlaceholderLabelColor = colorFromHexString([settings objectForKey:@"darkPlaceholderLabelColor"] ?: @"EBEBF54C");
 	darkSecondaryLabelColor = colorFromHexString([settings objectForKey:@"darkSecondaryLabelColor"] ?: @"EBEBF599");
 	darkTertiaryLabelColor = colorFromHexString([settings objectForKey:@"darkTertiaryLabelColor"] ?: @"EBEBF54C");
+	darkTableViewCellSelectionColor = colorFromHexString([settings objectForKey:@"darkTableViewCellSelectionColor"] ?: @"2C2C2EFF");
 
 	lightGroupTableViewBackgroundColor = colorFromHexString([settings objectForKey:@"lightGroupTableViewBackgroundColor"] ?: @"F2F2F7FF");
 	lightSeparatorColor = colorFromHexString([settings objectForKey:@"lightSeparatorColor"] ?: @"3C3C434C");
@@ -214,6 +217,7 @@ static void refreshPrefs() {
 	lightPlaceholderLabelColor = colorFromHexString([settings objectForKey:@"lightPlaceholderLabelColor"] ?: @"3C3C434C");
 	lightSecondaryLabelColor = colorFromHexString([settings objectForKey:@"lightSecondaryLabelColor"] ?: @"3C3C4399");
 	lightTertiaryLabelColor = colorFromHexString([settings objectForKey:@"lightTertiaryLabelColor"] ?: @"3C3C434C");
+	lightTableViewCellSelectionColor = colorFromHexString([settings objectForKey:@"lightTableViewCellSelectionColor"] ?: @"E5E5EAFF");
 }
 
 static void PreferencesChangedCallback(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
@@ -352,10 +356,10 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 
 // UITableViewCell selection color
 + (id)systemGray4Color {
-	return dynamicColorWithOptions(%orig, @"lightGray4Color", @"darkGray4Color", nil, nil);
+	return dynamicColorWithOptions(%orig, @"lightTableViewCellSelectionColor", @"darkTableViewCellSelectionColor", lightTableViewCellSelectionColor, darkTableViewCellSelectionColor);
 }
 + (id)systemGray5Color {
-	return dynamicColorWithOptions(%orig, @"lightGray5Color", @"darkGray5Color", nil, nil);
+	return dynamicColorWithOptions(%orig, @"lightTableViewCellSelectionColor", @"darkTableViewCellSelectionColor", lightTableViewCellSelectionColor, darkTableViewCellSelectionColor);
 }
 
 %end
