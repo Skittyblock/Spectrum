@@ -93,6 +93,9 @@ UIColor *colorFromHexStringWithAlpha(NSString *hexString, double alpha) {
 static bool getPrefBool(NSString *key) {
 	return [([settings objectForKey:key] ?: defaults[key]) boolValue];
 }
+static NSString *getPrefString(NSString *key) {
+	return [settings objectForKey:key] ?: defaults[key];
+}
 static UIColor *getPrefColor(NSString *key) {
 	return colorFromHexString([settings objectForKey:key] ?: defaults[key]);
 }
@@ -181,10 +184,10 @@ static void refreshPrefs() {
 	tint = colorFromHexString(tintHex);
 	highlight = colorFromHexStringWithAlpha(tintHex, 0.3);
 
-	if ([[settings objectForKey:@"darkBarColor"] isEqualToString:@"00000000"] || !getPrefBool(@"customDarkColors")) darkBarColor = nil;
+	if ([getPrefString(@"darkBarColor") isEqualToString:@"00000000"]) darkBarColor = nil;
 	else darkBarColor = colorFromHexString([settings objectForKey:@"darkBarColor"]);
 
-	if ([[settings objectForKey:@"lightBarColor"] isEqualToString:@"00000000"] || !getPrefBool(@"customLightColors")) lightBarColor = nil;
+	if ([getPrefString(@"lightBarColor") isEqualToString:@"00000000"]) lightBarColor = nil;
 	else lightBarColor = colorFromHexString([settings objectForKey:@"lightBarColor"]);
 }
 
@@ -214,7 +217,7 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 		if (getPrefBool(@"customLightColors"))
 			lightColor = getPrefColor(lightKey);
 		if (getPrefBool(@"customDarkColors"))
-			lightColor = getPrefColor(darkKey);
+			darkColor = getPrefColor(darkKey);
 	}
 	if (getPrefBool(@"hookSpringBoard") && ([lightKey isEqualToString:@"lightBadgeColor"] || [lightKey isEqualToString:@"lightBadgeTextColor"])) {
 		lightColor = getPrefColor(lightKey);
