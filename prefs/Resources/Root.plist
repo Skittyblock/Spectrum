@@ -62,6 +62,20 @@
 			<key>PostNotification</key>
 			<string>xyz.skitty.spectrum.prefschanged</string>
 			<key>key</key>
+			<string>hookSpringBoard</string>
+			<key>label</key>
+			<string>SpringBoard</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>xyz.skitty.spectrum</string>
+			<key>PostNotification</key>
+			<string>xyz.skitty.spectrum.prefschanged</string>
+			<key>key</key>
 			<string>customTintColor</string>
 			<key>label</key>
 			<string>Custom Tint Color</string>

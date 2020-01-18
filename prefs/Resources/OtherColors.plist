@@ -26,6 +26,38 @@
 			<key>label</key>
 			<string>Bar Color</string>
 		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>cellClass</key>
+			<string>SkittyColorCell</string>
+			<key>default</key>
+			<string>FF0000</string>
+			<key>defaults</key>
+			<string>xyz.skitty.spectrum</string>
+			<key>key</key>
+			<string>darkBadgeColor</string>
+			<key>PostNotification</key>
+			<string>xyz.skitty.spectrum.prefschanged</string>
+			<key>label</key>
+			<string>Badge Color</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>cellClass</key>
+			<string>SkittyColorCell</string>
+			<key>default</key>
+			<string>FFFFFF</string>
+			<key>defaults</key>
+			<string>xyz.skitty.spectrum</string>
+			<key>key</key>
+			<string>darkBadgeTextColor</string>
+			<key>PostNotification</key>
+			<string>xyz.skitty.spectrum.prefschanged</string>
+			<key>label</key>
+			<string>Badge Text Color</string>
+		</dict>
         <dict>
             <key>cell</key>
             <string>PSGroupCell</string>
@@ -47,6 +79,38 @@
 			<string>xyz.skitty.spectrum.prefschanged</string>
 			<key>label</key>
 			<string>Bar Color</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>cellClass</key>
+			<string>SkittyColorCell</string>
+			<key>default</key>
+			<string>FF0000</string>
+			<key>defaults</key>
+			<string>xyz.skitty.spectrum</string>
+			<key>key</key>
+			<string>lightBadgeColor</string>
+			<key>PostNotification</key>
+			<string>xyz.skitty.spectrum.prefschanged</string>
+			<key>label</key>
+			<string>Badge Color</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>cellClass</key>
+			<string>SkittyColorCell</string>
+			<key>default</key>
+			<string>FFFFFF</string>
+			<key>defaults</key>
+			<string>xyz.skitty.spectrum</string>
+			<key>key</key>
+			<string>lightBadgeTextColor</string>
+			<key>PostNotification</key>
+			<string>xyz.skitty.spectrum.prefschanged</string>
+			<key>label</key>
+			<string>Badge Text Color</string>
 		</dict>
 	</array>
 	<key>title</key>

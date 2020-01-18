@@ -37,3 +37,10 @@ CFNotificationCenterRef CFNotificationCenterGetDistributedCenter(void);
 - (id)allBundleIdentifiers;
 - (id)runningApplications;
 @end
+
+@interface SBIconView : UIView
+@end
+
+@interface SBIconBadgeView : UIView
+- (void)updateColor;
+@end

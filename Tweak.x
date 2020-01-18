@@ -12,6 +12,7 @@ static bool enabled;
 static bool isDefault;
 static NSDictionary *currentProfile;
 
+static bool hookSpringBoard;
 static bool customTintColor;
 static bool customDarkColors;
 static bool customLightColors;
@@ -37,6 +38,8 @@ static UIColor *darkSecondaryLabelColor;
 static UIColor *darkTertiaryLabelColor;
 
 static UIColor *darkBarColor;
+static UIColor *darkBadgeColor;
+static UIColor *darkBadgeTextColor;
 
 // Light Colors
 static UIColor *lightGroupTableViewBackgroundColor;
@@ -56,6 +59,8 @@ static UIColor *lightSecondaryLabelColor;
 static UIColor *lightTertiaryLabelColor;
 
 static UIColor *lightBarColor;
+static UIColor *lightBadgeColor;
+static UIColor *lightBadgeTextColor;
 //static UIColor *iconTint;
 
 UIColor *appTintColorFromWindow(UIWindow *window) {
@@ -185,6 +190,7 @@ static void refreshPrefs() {
 
 	// Settings
 	enabled = [([settings objectForKey:@"enabled"] ?: @(YES)) boolValue];
+	hookSpringBoard = [([settings objectForKey:@"hookSpringBoard"] ?: @(YES)) boolValue];
 	customTintColor = [([settings objectForKey:@"customTintColor"] ?: @(YES)) boolValue];
 	customDarkColors = [([settings objectForKey:@"customDarkColors"] ?: @(NO)) boolValue];
 	customLightColors = [([settings objectForKey:@"customLightColors"] ?: @(NO)) boolValue];
@@ -210,6 +216,9 @@ static void refreshPrefs() {
 	if ([[settings objectForKey:@"darkBarColor"] isEqualToString:@"00000000"] || !customDarkColors) darkBarColor = nil;
 	else darkBarColor = colorFromHexString([settings objectForKey:@"darkBarColor"]);
 
+	darkBadgeColor = colorFromHexString([settings objectForKey:@"darkBadgeColor"] ?: @"FF0000");
+	darkBadgeTextColor = colorFromHexString([settings objectForKey:@"darkBadgeTextColor"] ?: @"FFFFFF");
+
 	lightGroupTableViewBackgroundColor = colorFromHexString([settings objectForKey:@"lightGroupTableViewBackgroundColor"] ?: @"F2F2F7FF");
 	lightSeparatorColor = colorFromHexString([settings objectForKey:@"lightSeparatorColor"] ?: @"3C3C434C");
 	lightSystemBackgroundColor = colorFromHexString([settings objectForKey:@"lightSystemBackgroundColor"] ?: @"FFFFFFFF");
@@ -226,6 +235,9 @@ static void refreshPrefs() {
 	lightTableViewCellSelectionColor = colorFromHexString([settings objectForKey:@"lightTableViewCellSelectionColor"] ?: @"E5E5EAFF");
 	if ([[settings objectForKey:@"lightBarColor"] isEqualToString:@"00000000"] || !customLightColors) lightBarColor = nil;
 	else lightBarColor = colorFromHexString([settings objectForKey:@"lightBarColor"]);
+
+	lightBadgeColor = colorFromHexString([settings objectForKey:@"lightBadgeColor"] ?: @"FF0000");
+	lightBadgeTextColor = colorFromHexString([settings objectForKey:@"lightBadgeTextColor"] ?: @"FFFFFF");
 }
 
 static void PreferencesChangedCallback(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
@@ -247,13 +259,18 @@ static UIColor *dynamicColor(UIColor *defaultColor, UIColor *darkColor) {
 }
 
 static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSString *darkKey, UIColor *customLightColor, UIColor *customDarkColor) {
-	UIColor *lightColor = [orig resolvedColorWithTraitCollection:[UITraitCollection traitCollectionWithUserInterfaceStyle:UIUserInterfaceStyleLight]];
-	UIColor *darkColor = [orig resolvedColorWithTraitCollection:[UITraitCollection traitCollectionWithUserInterfaceStyle:UIUserInterfaceStyleDark]];
+	UIColor *lightColor = orig ? [orig resolvedColorWithTraitCollection:[UITraitCollection traitCollectionWithUserInterfaceStyle:UIUserInterfaceStyleLight]] : [UIColor whiteColor];
+	UIColor *darkColor = orig ? [orig resolvedColorWithTraitCollection:[UITraitCollection traitCollectionWithUserInterfaceStyle:UIUserInterfaceStyleDark]] : [UIColor blackColor];
 
 	if (customLightColors || customDarkColors) {
 		if (customLightColors && customLightColor)
 			lightColor = customLightColor;
 		if (customDarkColors && customDarkColor)
+			darkColor = customDarkColor;
+	} else if (hookSpringBoard) {
+		if ([lightKey isEqualToString:@"lightBadgeColor"] || [lightKey isEqualToString:@"lightBadgeTextColor"])
+			lightColor = customLightColor;
+		if ([darkKey isEqualToString:@"darkBadgeColor"] || [darkKey isEqualToString:@"darkBadgeTextColor"])
 			darkColor = customDarkColor;
 	} else if (currentProfile && (currentProfile[lightKey] || currentProfile[darkKey])) {
 		if (currentProfile[lightKey])
@@ -265,7 +282,7 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 	return dynamicColor(lightColor, darkColor);
 }
 
-// Global Tint Color
+// UIColor Hooks
 %group UIColor
 
 // Override apps that try to fake it
@@ -374,7 +391,7 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 
 %end
 
-// Per App Tint Color
+// App Hooks
 %group App
 
 %hook UINavigationBar
@@ -472,6 +489,35 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 
 %end
 
+// SpringBoard Hooks
+%group SpringBoard
+
+// Badge color
+%hook SBIconBadgeView
+- (void)configureForIcon:(id)arg1 infoProvider:(SBIconView *)arg2 {
+	%orig;
+	[self updateColor];
+}
+
+- (void)drawRect:(CGRect)arg1 {
+	%orig;
+	[self updateColor];
+}
+
+%new
+- (void)updateColor {
+	UIImageView *textView = [self valueForKey:@"_textView"];
+ 	textView.image = [textView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+	[textView setTintColor:dynamicColorWithOptions(nil, @"lightBadgeTextColor", @"darkBadgeTextColor", lightBadgeTextColor, darkBadgeTextColor)];
+
+	UIImageView *backgroundView = [self valueForKey:@"_backgroundView"];
+	backgroundView.image = [backgroundView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+	[backgroundView setTintColor:dynamicColorWithOptions(nil, @"lightBadgeColor", @"darkBadgeColor", lightBadgeColor, darkBadgeColor)];
+}
+%end
+
+%end
+
 // Message bubbles POC
 /*%group Messages
 
@@ -539,10 +585,13 @@ static NSArray *disabledApps() {
 
 	NSArray *apps = disabledApps();
 
-	if (enabled && ![apps containsObject:[[NSBundle mainBundle] bundleIdentifier]] && ![systemIdentifiers containsObject:[[NSBundle mainBundle] bundleIdentifier]]) {
+	if (enabled && ((![apps containsObject:[[NSBundle mainBundle] bundleIdentifier]] && ![systemIdentifiers containsObject:[[NSBundle mainBundle] bundleIdentifier]]) || (hookSpringBoard && [[[NSBundle mainBundle] bundleIdentifier] isEqual:@"com.apple.springboard"]))) {
 		%init(App);
 		if (global) {
 			%init(UIColor);
 		}
+	}
+	if (enabled && hookSpringBoard && [[[NSBundle mainBundle] bundleIdentifier] isEqual:@"com.apple.springboard"]) {
+		%init(SpringBoard)
 	}
 }
