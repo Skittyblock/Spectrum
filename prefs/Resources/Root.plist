@@ -166,6 +166,37 @@
 			<key>label</key>
 			<string>Other Colors</string>
 		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>label</key>
+			<string>Reset Settings</string>
+			<key>action</key>
+			<string>resetSettings</string>
+			<key>confirmation</key>
+			<dict>
+				<key>title</key>
+				<string>Reset</string>
+				<key>prompt</key>
+				<string>Reset all settings?</string>
+				<key>okTitle</key>
+				<string>Reset</string>
+				<key>cancelTitle</key>
+				<string>Cancel</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>label</key>
+			<string>Respring</string>
+			<key>action</key>
+			<string>respring</string>
+		</dict>
 	</array>
 	<key>title</key>
 	<string>Spectrum</string>
