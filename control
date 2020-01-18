@@ -1,7 +1,7 @@
 Package: xyz.skitty.spectrum
 Name: Spectrum
 Depends: mobilesubstrate, libskittycolor, firmware (>= 13.0)
-Version: 1.0
+Version: 1.0.1
 Architecture: iphoneos-arm
 Description: Customize system colors!
 Depiction: https://skitty.xyz/repo/depictions/?p=xyz.skitty.spectrum
