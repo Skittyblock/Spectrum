@@ -475,18 +475,22 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 %end
 
 // Message bubbles POC
-/*%group Messages
+%group Messages
 
 %hook CKUITheme
 - (id)blue_balloonColors {
-	UIColor *topColor = [UIColor blueColor];
-	UIColor *bottomColor = [UIColor redColor];
-	return @[topColor, bottomColor]
+	UIColor *topColor = (getPrefBool(@"customTintColor") || currentProfile[@"tintColor"]) ? tint : %orig;
+	UIColor *bottomColor = (getPrefBool(@"customTintColor") || currentProfile[@"tintColor"]) ? tint : %orig;
+	return @[topColor, bottomColor];
 }
-// - (id)green_balloonColors
+ - (id)green_balloonColors {
+	UIColor *topColor = (getPrefBool(@"customTintColor") || currentProfile[@"tintColor"]) ? tint : %orig;
+	UIColor *bottomColor = (getPrefBool(@"customTintColor") || currentProfile[@"tintColor"]) ? tint : %orig;
+	return @[topColor, bottomColor];
+}
 %end
 
-%end*/
+%end
 
 // App List
 static NSMutableDictionary *appList() {
@@ -544,6 +548,7 @@ static NSArray *disabledApps() {
 	if (getPrefBool(@"enabled") && ((![apps containsObject:[[NSBundle mainBundle] bundleIdentifier]] && ![systemIdentifiers containsObject:[[NSBundle mainBundle] bundleIdentifier]]) || (getPrefBool(@"hookSpringBoard") && [[[NSBundle mainBundle] bundleIdentifier] isEqual:@"com.apple.springboard"]))) {
 		%init(App);
 		%init(UIColor);
+		%init(Messages);
 	}
 	if (getPrefBool(@"enabled") && getPrefBool(@"hookSpringBoard") && [[[NSBundle mainBundle] bundleIdentifier] isEqual:@"com.apple.springboard"]) {
 		%init(SpringBoard)
