@@ -18,6 +18,20 @@
 			<key>PostNotification</key>
 			<string>xyz.skitty.spectrum.prefschanged</string>
 			<key>key</key>
+			<string>useBarColor</string>
+			<key>label</key>
+			<string>Custom Bar Color</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>xyz.skitty.spectrum</string>
+			<key>PostNotification</key>
+			<string>xyz.skitty.spectrum.prefschanged</string>
+			<key>key</key>
 			<string>useBadgeColor</string>
 			<key>label</key>
 			<string>Custom Badge Color</string>

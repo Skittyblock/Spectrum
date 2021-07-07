@@ -48,7 +48,7 @@
 			<key>isController</key>
 			<true/>
 			<key>label</key>
-			<string>Enabled Applications</string>
+			<string>Blacklisted Applications</string>
 		</dict>
 		<dict>
 			<key>cell</key>

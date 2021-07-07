@@ -27,11 +27,6 @@ UIColor *appTintColorFromWindow(UIWindow *window) {
 		UIView *view = [[UIView alloc] init];
 		return [view _normalInheritedTintColor];
 	}
-	if (!window.tintColor) {
-		if (window.rootViewController) {
-			//return window.rootViewController.view.tintColor;
-		}
-	}
 	return window.tintColor;
 }
 
@@ -108,6 +103,7 @@ static void refreshPrefs() {
 		@"customLightColors": @NO,
 		@"tintColor": @"F22F6C",
 
+		@"useBarColor": @NO,
 		@"useBadgeColor": @NO,
 
 		@"darkGroupTableViewBackgroundColor": @"000000",
@@ -160,7 +156,7 @@ static void refreshPrefs() {
 	}
 
 	// Profile
-	NSString *path = @"/Library/Application Support/Spectrum/Profiles";
+	NSString *path = @"/Library/Spectrum/Profiles";
 	NSArray *files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:nil];
 	NSMutableArray *plistFiles = [[NSMutableArray alloc] init];
 
@@ -242,31 +238,38 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 
 // Override apps that try to fake it
 %hook UIColor
+
 + (id)colorWithRed:(double)red green:(double)green blue:(double)blue alpha:(double)alpha {
 	if (red == 0.0 && green == 122.0/255.0 && blue == 1.0) {
 		return (getPrefBool(@"customTintColor") || currentProfile[@"tintColor"]) ? tint : %orig;
 	}
 	return %orig;
 }
+
 // Default tint
 + (id)systemBlueColor {
 	return (getPrefBool(@"customTintColor") || currentProfile[@"tintColor"]) ? tint : %orig;
 }
+
 + (id)_systemBlueColor2 {
 	return (getPrefBool(@"customTintColor") || currentProfile[@"tintColor"]) ? tint : %orig;
 }
+
 // Selection point
 + (id)insertionPointColor {
 	return (getPrefBool(@"customTintColor") || currentProfile[@"tintColor"]) ? tint : %orig;
 }
+
 // Selection highlight
 + (id)selectionHighlightColor {
 	return (getPrefBool(@"customTintColor") || currentProfile[@"tintColor"]) ? highlight : %orig;
 }
+
 // Selection grabbers
 + (id)selectionGrabberColor {
 	return (getPrefBool(@"customTintColor") || currentProfile[@"tintColor"]) ? tint : %orig;
 }
+
 // Links
 + (id)linkColor {
 	return (getPrefBool(@"customTintColor") || currentProfile[@"tintColor"]) ? tint : %orig;
@@ -276,18 +279,23 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 + (id)systemBackgroundColor {
 	return dynamicColorWithOptions(%orig, @"lightSystemBackgroundColor", @"darkSystemBackgroundColor");
 }
+
 + (id)systemGroupedBackgroundColor {
 	return dynamicColorWithOptions(%orig, @"lightSystemGroupedBackgroundColor", @"darkSystemGroupedBackgroundColor");
 }
+
 + (id)groupTableViewBackgroundColor {
 	return dynamicColorWithOptions(%orig, @"lightGroupTableViewBackgroundColor", @"darkGroupTableViewBackgroundColor");
 }
+
 + (id)tableBackgroundColor {
 	return dynamicColorWithOptions(%orig, @"lightGroupTableViewBackgroundColor", @"darkGroupTableViewBackgroundColor");
 }
+
 + (id)tableCellPlainBackgroundColor {
 	return dynamicColorWithOptions(%orig, @"lightSystemBackgroundColor", @"darkSystemBackgroundColor");
 }
+
 + (id)tableCellGroupedBackgroundColor {
 	return dynamicColorWithOptions(%orig, @"lightTableCellGroupedBackgroundColor", @"darkTableCellGroupedBackgroundColor");
 }
@@ -296,6 +304,7 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 + (id)secondarySystemBackgroundColor {
 	return dynamicColorWithOptions(%orig, @"lightSecondarySystemBackgroundColor", @"darkSecondarySystemBackgroundColor");
 }
+
 + (id)secondarySystemGroupedBackgroundColor {
 	return dynamicColorWithOptions(%orig, @"lightSecondarySystemGroupedBackgroundColor", @"darkSecondarySystemGroupedBackgroundColor");
 }
@@ -304,6 +313,7 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 + (id)tertiarySystemBackgroundColor {
 	return dynamicColorWithOptions(%orig, @"lightTertiarySystemBackgroundColor", @"darkTertiarySystemBackgroundColor");
 }
+
 + (id)tertiarySystemGroupedBackgroundColor {
 	return dynamicColorWithOptions(%orig, @"lightTertiarySystemGroupedBackgroundColor", @"darkTertiarySystemGroupedBackgroundColor");
 }
@@ -312,9 +322,11 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 + (id)separatorColor {
 	return dynamicColorWithOptions(%orig, @"lightSeparatorColor", @"darkSeparatorColor");
 }
+
 + (id)opaqueSeparatorColor {
 	return dynamicColorWithOptions(%orig, @"lightSeparatorColor", @"darkSeparatorColor");
 }
+
 + (id)tableSeparatorColor {
 	return dynamicColorWithOptions(%orig, @"lightSeparatorColor", @"darkSeparatorColor");
 }
@@ -323,12 +335,15 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 + (id)labelColor {
 	return dynamicColorWithOptions(%orig, @"lightLabelColor", @"darkLabelColor");
 }
+
 + (id)secondaryLabelColor {
 	return dynamicColorWithOptions(%orig, @"lightSecondaryLabelColor", @"darkSecondaryLabelColor");
 }
+
 + (id)placeholderLabelColor {
 	return dynamicColorWithOptions(%orig, @"lightPlaceholderLabelColor", @"darkPlaceholderLabelColor");
 }
+
 + (id)tertiaryLabelColor {
 	return dynamicColorWithOptions(%orig, @"lightTertiaryLabelColor", @"darkTertiaryLabelColor");
 }
@@ -341,6 +356,7 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 + (id)systemGray4Color {
 	return dynamicColorWithOptions(%orig, @"lightTableViewCellSelectionColor", @"darkTableViewCellSelectionColor");
 }
+
 + (id)systemGray5Color {
 	return dynamicColorWithOptions(%orig, @"lightTableViewCellSelectionColor", @"darkTableViewCellSelectionColor");
 }
@@ -354,8 +370,10 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 
 %hook UINavigationBar
 %property (nonatomic, retain) UIColor *storedBarColor;
--(void)didMoveToSuperview {
+
+- (void)didMoveToSuperview {
 	%orig;
+	if (!(getPrefBool(@"useBarColor") || currentProfile[@"lightBarColor"] || currentProfile[@"darkBarColor"])) return;
 	UIUserInterfaceStyle currentStyle = [UITraitCollection currentTraitCollection].userInterfaceStyle;
 	if (((currentProfile[@"lightBarColor"] || lightBarColor) && currentStyle == UIUserInterfaceStyleLight) || ((currentProfile[@"darkBarColor"] || darkBarColor) && currentStyle == UIUserInterfaceStyleDark))
 		[self setBarTintColor:self.storedBarColor ?: [UIColor cyanColor]];
@@ -365,6 +383,7 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
 	%orig;
+	if (!(getPrefBool(@"useBarColor") || currentProfile[@"lightBarColor"] || currentProfile[@"darkBarColor"])) return;
 	UIUserInterfaceStyle currentStyle = [UITraitCollection currentTraitCollection].userInterfaceStyle;
 	if (((currentProfile[@"lightBarColor"] || lightBarColor) && currentStyle == UIUserInterfaceStyleLight) || ((currentProfile[@"darkBarColor"] || darkBarColor) && currentStyle == UIUserInterfaceStyleDark))
 		[self setBarTintColor:self.storedBarColor ?: [UIColor cyanColor]];
@@ -378,12 +397,15 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 	if (color) self.storedBarColor = color;
 	%orig(color);
 }
+
 %end
 
 %hook UIToolbar
 %property (nonatomic, retain) UIColor *storedBarColor;
--(void)didMoveToSuperview {
+
+- (void)didMoveToSuperview {
 	%orig;
+	if (!(getPrefBool(@"useBarColor") || currentProfile[@"lightBarColor"] || currentProfile[@"darkBarColor"])) return;
 	UIUserInterfaceStyle currentStyle = [UITraitCollection currentTraitCollection].userInterfaceStyle;
 	if (((currentProfile[@"lightBarColor"] || lightBarColor) && currentStyle == UIUserInterfaceStyleLight) || ((currentProfile[@"darkBarColor"] || darkBarColor) && currentStyle == UIUserInterfaceStyleDark))
 		[self setBarTintColor:self.storedBarColor ?: [UIColor cyanColor]];
@@ -393,6 +415,7 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
 	%orig;
+	if (!(getPrefBool(@"useBarColor") || currentProfile[@"lightBarColor"] || currentProfile[@"darkBarColor"])) return;
 	UIUserInterfaceStyle currentStyle = [UITraitCollection currentTraitCollection].userInterfaceStyle;
 	if (((currentProfile[@"lightBarColor"] || lightBarColor) && currentStyle == UIUserInterfaceStyleLight) || ((currentProfile[@"darkBarColor"] || darkBarColor) && currentStyle == UIUserInterfaceStyleDark))
 		[self setBarTintColor:self.storedBarColor ?: [UIColor cyanColor]];
@@ -406,12 +429,15 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 	if (color) self.storedBarColor = color;
 	%orig(color);
 }
+
 %end
 
 %hook UITabBar
 %property (nonatomic, retain) UIColor *storedBarColor;
--(void)didMoveToSuperview {
+
+- (void)didMoveToSuperview {
 	%orig;
+	if (!(getPrefBool(@"useBarColor") || currentProfile[@"lightBarColor"] || currentProfile[@"darkBarColor"])) return;
 	UIUserInterfaceStyle currentStyle = [UITraitCollection currentTraitCollection].userInterfaceStyle;
 	if (((currentProfile[@"lightBarColor"] || lightBarColor) && currentStyle == UIUserInterfaceStyleLight) || ((currentProfile[@"darkBarColor"] || darkBarColor) && currentStyle == UIUserInterfaceStyleDark))
 		[self setBarTintColor:self.storedBarColor ?: [UIColor cyanColor]];
@@ -421,6 +447,7 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
 	%orig;
+	if (!(getPrefBool(@"useBarColor") || currentProfile[@"lightBarColor"] || currentProfile[@"darkBarColor"])) return;
 	UIUserInterfaceStyle currentStyle = [UITraitCollection currentTraitCollection].userInterfaceStyle;
 	if (((currentProfile[@"lightBarColor"] || lightBarColor) && currentStyle == UIUserInterfaceStyleLight) || ((currentProfile[@"darkBarColor"] || darkBarColor) && currentStyle == UIUserInterfaceStyleDark))
 		[self setBarTintColor:self.storedBarColor ?: [UIColor cyanColor]];
@@ -434,15 +461,18 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 	if (color) self.storedBarColor = color;
 	%orig(color);
 }
+
 %end
 
 %hook UIView
+
 - (UIColor *)tintColor {
 	if (![self isKindOfClass:%c(UIWindow)] && [self _normalInheritedTintColor] == appTintColorFromWindow([self window])) {
 		return (getPrefBool(@"customTintColor") || currentProfile[@"tintColor"]) ? tint : %orig;
 	}
 	return %orig;
 }
+
 %end
 
 %end
@@ -491,7 +521,7 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 - (id)blue_balloonColors {
 	UIColor *topColor = [UIColor blueColor];
 	UIColor *bottomColor = [UIColor redColor];
-	return @[topColor, bottomColor]
+	return @[topColor, bottomColor];
 }
 // - (id)green_balloonColors
 %end
@@ -532,7 +562,7 @@ static NSArray *disabledApps() {
 	NSString *prefPath = [NSString stringWithFormat:@"/var/mobile/Library/Preferences/%@.apps.plist", BUNDLE_ID];
 	if ([[NSFileManager defaultManager] fileExistsAtPath:prefPath]) {
 		NSDictionary *appPrefs = [NSDictionary dictionaryWithContentsOfFile:prefPath];
-		apps = appPrefs[@"Disabled"];
+		apps = appPrefs[@"Enabled"];
 	}
 
 	return apps;

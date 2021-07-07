@@ -2,6 +2,9 @@
 // By Skitty
 
 #import "SkittyAppListViewController.h"
+#import "Preferences.h"
+
+#define BUNDLE_ID @"xyz.skitty.spectrum"
 
 SkittyAppListViewController *controller;
 
@@ -9,13 +12,11 @@ static void setAppList(CFNotificationCenterRef center, void *observer, CFStringR
 	if ([(__bridge NSDictionary *)userInfo count] < 2) { // people must have at least two apps, right?
 		return;
 	}
-	NSLog(@"[SPEC] setAppList: %@", userInfo);
 	[controller recieveAppList:(__bridge NSDictionary *)userInfo];
 }
 
 static void post() {
-	NSLog(@"[SPEC] post");
-	CFNotificationCenterPostNotification(CFNotificationCenterGetDistributedCenter(), CFSTR("xyz.skitty.spectrum.getapps"), nil, nil, true);
+	CFNotificationCenterPostNotification(CFNotificationCenterGetDistributedCenter(), (CFStringRef)[BUNDLE_ID stringByAppendingString:@".getapps"], nil, nil, true);
 }
 
 @implementation SkittyAppListViewController
@@ -27,27 +28,20 @@ static void post() {
 - (id)init {
 	self = [super init];
 	if (self) {
-		// Supported Apps
-		//self.supportedApps = @[@"com.apple.AppStore", @"com.apple.mobilecal", @"com.apple.MobileAddressBook", @"com.apple.mobilemail", @"com.apple.Maps", @"com.apple.MobileSMS", @"com.apple.Music", @"com.apple.mobileslideshow", @"com.apple.mobilephone", @"com.apple.news", @"com.apple.podcasts", @"com.apple.Preferences", @"is.workflow.my.app"];
-		
-		self.title = @"Enabled Apps";
+		self.title = @"Blacklisted Apps";
 
-		CFNotificationCenterAddObserver(CFNotificationCenterGetDistributedCenter(), NULL, setAppList, CFSTR("xyz.skitty.spectrum.setapps"), nil, CFNotificationSuspensionBehaviorDeliverImmediately);
+		CFNotificationCenterAddObserver(CFNotificationCenterGetDistributedCenter(), NULL, setAppList, (CFStringRef)[BUNDLE_ID stringByAppendingString:@".setapps"], nil, CFNotificationSuspensionBehaviorDeliverImmediately);
 
 		[self getAppList];
 		
-		NSString *prefPath = @"/var/mobile/Library/Preferences/xyz.skitty.spectrum.apps.plist";
+		NSString *prefPath = [NSString stringWithFormat:@"/var/mobile/Library/Preferences/%@.apps.plist", BUNDLE_ID];
 		NSMutableDictionary *prefs = [NSMutableDictionary dictionaryWithContentsOfFile:prefPath];
-		NSArray *apps;
-		if ([[NSFileManager defaultManager] fileExistsAtPath:prefPath]) {
-			apps = [prefs objectForKey:@"Disabled"];
-		} else {
-			apps = @[];
-		}
+		NSArray *apps = @[];
+		if ([[NSFileManager defaultManager] fileExistsAtPath:prefPath]) apps = [prefs objectForKey:@"Enabled"] ?: @[];
 		self.preferencesAppList = apps;
 		
 		self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
-		self.searchController.obscuresBackgroundDuringPresentation = NO;
+		self.searchController.dimsBackgroundDuringPresentation = NO;
 		self.searchController.delegate = self;
 		self.searchController.searchBar.delegate = self;
 		self.searchController.searchBar.placeholder = @"Search";
@@ -71,10 +65,9 @@ static void post() {
 }
 
 // Preferences
-
 - (void)updatePreferencesAppList {
-	NSString *prefPath = @"/var/mobile/Library/Preferences/xyz.skitty.spectrum.apps.plist";
-	NSDictionary *preferencesDict = @{ @"Disabled": self.preferencesAppList };
+	NSString *prefPath = [NSString stringWithFormat:@"/var/mobile/Library/Preferences/%@.apps.plist", BUNDLE_ID];
+	NSDictionary *preferencesDict = @{ @"Enabled": self.preferencesAppList };
 	[preferencesDict writeToFile:prefPath atomically:YES];
 }
 
@@ -89,18 +82,14 @@ static void post() {
 	NSString *bundleIdentifier = self.identifiers[indexPath.row];
 
 	NSMutableArray *list = [self.preferencesAppList mutableCopy];
-	if (!on) {
-		[list addObject:bundleIdentifier];
-	} else {
-		[list removeObject:bundleIdentifier];
-	}
+	if (on) [list addObject:bundleIdentifier];
+	else [list removeObject:bundleIdentifier];
 
 	self.preferencesAppList = list;
 	[self updatePreferencesAppList];
 }
 
 // App List
-
 - (void)getAppList {
 	if (self.appList.count == 0) {
 		self.appList = @{@"Loading!": @"Loading..."};
@@ -129,7 +118,6 @@ static void post() {
 }
 
 // Table View
-
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
 	return 1;
 }
@@ -147,12 +135,12 @@ static void post() {
 	
 	cell.detailTextLabel.textColor = [UIColor grayColor];
 	
-	if (![self.preferencesAppList containsObject:self.identifiers[indexPath.row]]) {
+	if ([self.preferencesAppList containsObject:self.identifiers[indexPath.row]]) {
 		[appSwitch setOn:YES animated:NO];
 	}
 
 	cell.textLabel.text = [self.fullAppList objectForKey:self.identifiers[indexPath.row]];
-	//cell.detailTextLabel.text = self.identifiers[indexPath.row];
+	// cell.detailTextLabel.text = self.identifiers[indexPath.row];
 	
 	cell.imageView.image = [UIImage _applicationIconImageForBundleIdentifier:self.identifiers[indexPath.row] format:0 scale:[UIScreen mainScreen].scale];
 	
@@ -172,7 +160,6 @@ static void post() {
 }
 
 // Search Bar
-
 - (void)searchWithText:(NSString *)text {
 	NSDictionary *newAppList;
 	if (text.length == 0) {

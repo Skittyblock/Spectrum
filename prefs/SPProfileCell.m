@@ -29,7 +29,7 @@
 }
 
 - (void)updateProfile {
-	NSString *path = @"/Library/Application Support/Spectrum/Profiles";
+	NSString *path = @"/Library/Spectrum/Profiles";
 	NSArray *files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:nil];
 	NSMutableArray *plistFiles = [[NSMutableArray alloc] init];
 
