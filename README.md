@@ -1,5 +1,5 @@
 # Spectrum
-Customize system colors!
+Customize iOS system colors. Available on https://skitty.xyz/repo/
 
 # Compiling
 Spectrum requires the libskittycolor library.

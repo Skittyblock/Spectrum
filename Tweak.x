@@ -173,7 +173,7 @@ static void refreshPrefs() {
 		}
 	}];
 
-	NSInteger index = [plistNames indexOfObject:[[settings objectForKey:@"profile"] stringValue]] ?: 0;
+	NSInteger index = [plistNames indexOfObject:[NSString stringWithFormat:@"%@", [settings objectForKey:@"profile"]]] ?: 0;
 	if (index == NSNotFound) index = 0;
 	// int index = [[settings objectForKey:@"profile"] intValue];
 	
