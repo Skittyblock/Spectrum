@@ -47,7 +47,7 @@ static void post() {
 		self.preferencesAppList = apps;
 		
 		self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
-		self.searchController.dimsBackgroundDuringPresentation = NO;
+		self.searchController.obscuresBackgroundDuringPresentation = NO;
 		self.searchController.delegate = self;
 		self.searchController.searchBar.delegate = self;
 		self.searchController.searchBar.placeholder = @"Search";

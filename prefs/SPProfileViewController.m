@@ -13,7 +13,7 @@
 		self.title = @"Profiles";
 
 		if (@available(iOS 13, *)) {
-			self.view.backgroundColor = [UIColor systemBackgroundColor];
+			self.view.backgroundColor = [UIColor systemGroupedBackgroundColor];
 		} else {
 			self.view.backgroundColor = [UIColor groupTableViewBackgroundColor];
 		}

@@ -1,10 +1,9 @@
-ARCHS = arm64 arm64e
 TARGET = iphone:clang::11.0
 
 include $(THEOS)/makefiles/common.mk
 
 BUNDLE_NAME = Spectrum
-Spectrum_FILES = $(wildcard *.m)
+Spectrum_FILES = $(wildcard *.m) $(wildcard SkittyPrefs/*.m)
 Spectrum_INSTALL_PATH = /Library/PreferenceBundles
 Spectrum_PRIVATE_FRAMEWORKS = Preferences
 Spectrum_LIBRARIES = skittycolor

@@ -1,5 +1,7 @@
 // Tweak.h
 
+#import <UIKit/UIKit.h>
+
 CFNotificationCenterRef CFNotificationCenterGetDistributedCenter(void);
 
 @interface UIColor (Spectrum)

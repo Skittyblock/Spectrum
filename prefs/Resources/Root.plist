@@ -2,14 +2,16 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>name</key>
+	<string>Spectrum</string>
+	<key>subtitle</key>
+	<string>By Skitty</string>
+	<key>headerColor</key>
+	<string>blue</string>
+	<key>textColor</key>
+	<string>#ffffff</string>
 	<key>items</key>
 	<array>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-			<key>headerCellClass</key>
-			<string>SPHeader</string>
-		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSSwitchCell</string>
