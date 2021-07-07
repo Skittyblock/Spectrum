@@ -42,13 +42,13 @@
 		//NSDictionary *settings = [[NSDictionary alloc] initWithContentsOfFile:[NSString stringWithFormat:@"/var/mobile/Library/Preferences/%@.plist", self.properties[@"defaults"]]];
 		//int index = [settings[self.properties[@"key"]] intValue];
 		//CFPreferencesAppSynchronize((CFStringRef)self.properties[@"defaults"]);
-		CFNumberRef ref = CFPreferencesCopyAppValue((CFStringRef)self.properties[@"key"], (CFStringRef)self.properties[@"defaults"]);
-		int index = [(__bridge NSNumber *)ref intValue];
+		CFStringRef ref = CFPreferencesCopyAppValue((CFStringRef)self.properties[@"key"], (CFStringRef)self.properties[@"defaults"]);
+		// int index = [(__bridge NSNumber *)ref intValue];
 
-		if (index)
-			self.selected = index;
-		else
-			self.selected = 0;
+		NSInteger index = [plistFiles indexOfObject:(__bridge NSString *)ref];
+
+		if (index != NSNotFound) self.selected = index + 1;
+		else self.selected = 0;
 	}
 	return self;
 }
@@ -94,11 +94,11 @@
 
 	NSMutableDictionary *settings = [[NSMutableDictionary alloc] initWithContentsOfFile:[NSString stringWithFormat:@"/var/mobile/Library/Preferences/%@.plist", self.properties[@"defaults"]]];
 
-	[settings setObject:[NSNumber numberWithInteger:self.selected] forKey:self.properties[@"key"]];
+	[settings setObject:cell.textLabel.text forKey:self.properties[@"key"]];
 
 	[settings writeToURL:[NSURL URLWithString:[NSString stringWithFormat:@"file:///var/mobile/Library/Preferences/%@.plist", self.properties[@"defaults"]]] error:nil];
-	//CFPreferencesAppSynchronize((CFStringRef)self.properties[@"defaults"]);
-	CFPreferencesSetAppValue((CFStringRef)self.properties[@"key"], (CFNumberRef)[NSNumber numberWithInteger:self.selected], (CFStringRef)self.properties[@"defaults"]);
+	CFPreferencesAppSynchronize((CFStringRef)self.properties[@"defaults"]);
+	CFPreferencesSetAppValue((CFStringRef)self.properties[@"key"], (CFStringRef)cell.textLabel.text, (CFStringRef)self.properties[@"defaults"]);
 
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"xyz.skitty.spectrum.profilechange" object:self];
 	CFNotificationCenterPostNotification(CFNotificationCenterGetDistributedCenter(), (CFStringRef)self.properties[@"PostNotification"], nil, nil, true);

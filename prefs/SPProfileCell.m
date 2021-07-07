@@ -29,33 +29,9 @@
 }
 
 - (void)updateProfile {
-	NSString *path = @"/Library/Spectrum/Profiles";
-	NSArray *files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:nil];
-	NSMutableArray *plistFiles = [[NSMutableArray alloc] init];
-
-	[files enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-		NSString *filename = (NSString *)obj;
-		NSString *extension = [[filename pathExtension] lowercaseString];
-		if ([extension isEqualToString:@"plist"]) {
-			NSDictionary *contents = [[NSDictionary alloc] initWithContentsOfFile:[path stringByAppendingPathComponent:filename]];
-			if (contents[@"name"])
-				[plistFiles addObject:contents[@"name"]];
-		}
-	}];
-
 	NSDictionary *settings = [[NSDictionary alloc] initWithContentsOfFile:[NSString stringWithFormat:@"/var/mobile/Library/Preferences/%@.plist", self.specifier.properties[@"defaults"]]];
-	int index = [[settings objectForKey:self.specifier.properties[@"key"]] intValue];
 
-	//CFPreferencesAppSynchronize((CFStringRef)self.specifier.properties[@"defaults"]);
-	//CFNumberRef ref = CFPreferencesCopyAppValue((CFStringRef)self.specifier.properties[@"key"], (CFStringRef)self.specifier.properties[@"defaults"]);
-	//int index = [(__bridge NSNumber *)ref intValue];
-
-	NSString *title = @"";
-	
-	if (index == 0)
-		title = @"Default";
-	else if (plistFiles.count >= index - 1)
-		title = plistFiles[index - 1];
+	NSString *title = [[settings objectForKey:self.specifier.properties[@"key"]] stringValue] ?: @"Default";
 
 	self.detailTextLabel.text = title;
 }

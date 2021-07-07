@@ -159,23 +159,28 @@ static void refreshPrefs() {
 	NSString *path = @"/Library/Spectrum/Profiles";
 	NSArray *files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:nil];
 	NSMutableArray *plistFiles = [[NSMutableArray alloc] init];
+	NSMutableArray *plistNames = [[NSMutableArray alloc] init];
 
 	[files enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
 		NSString *filename = (NSString *)obj;
 		NSString *extension = [[filename pathExtension] lowercaseString];
 		if ([extension isEqualToString:@"plist"]) {
 			NSDictionary *contents = [[NSDictionary alloc] initWithContentsOfFile:[path stringByAppendingPathComponent:filename]];
-			if (contents[@"name"])
+			if (contents[@"name"]) {
 				[plistFiles addObject:contents];
+				[plistNames addObject:contents[@"name"]];
+			}
 		}
 	}];
 
-	int index = [[settings objectForKey:@"profile"] intValue];
+	NSInteger index = [plistNames indexOfObject:[[settings objectForKey:@"profile"] stringValue]] ?: 0;
+	if (index == NSNotFound) index = 0;
+	// int index = [[settings objectForKey:@"profile"] intValue];
 	
 	if (index == 0)
 		isDefault = YES;
 	else
-		currentProfile = plistFiles[index - 1];
+		currentProfile = plistFiles[index];
 
 	// Settings
 	NSString *tintHex = (!getPrefBool(@"customTintColor") && currentProfile[@"tintColor"]) ? currentProfile[@"tintColor"] : ([settings objectForKey:@"tintColor"] ?: @"F22F6CFF");
