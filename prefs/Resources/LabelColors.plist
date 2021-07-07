@@ -4,12 +4,12 @@
 <dict>
 	<key>items</key>
 	<array>
-        <dict>
-            <key>cell</key>
-            <string>PSGroupCell</string>
-            <key>label</key>
-            <string>Dark Colors</string>
-        </dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Dark Colors</string>
+		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSLinkCell</string>
@@ -74,12 +74,12 @@
 			<key>label</key>
 			<string>Tertiary Label Color</string>
 		</dict>
-        <dict>
-            <key>cell</key>
-            <string>PSGroupCell</string>
-            <key>label</key>
-            <string>Light Colors</string>
-        </dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Light Colors</string>
+		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSLinkCell</string>

@@ -4,12 +4,30 @@
 <dict>
 	<key>items</key>
 	<array>
-        <dict>
-            <key>cell</key>
-            <string>PSGroupCell</string>
-            <key>label</key>
-            <string>Dark Colors</string>
-        </dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>xyz.skitty.spectrum</string>
+			<key>PostNotification</key>
+			<string>xyz.skitty.spectrum.prefschanged</string>
+			<key>key</key>
+			<string>useBadgeColor</string>
+			<key>label</key>
+			<string>Custom Badge Color</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Dark Colors</string>
+		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSLinkCell</string>
@@ -19,10 +37,10 @@
 			<string>00000000</string>
 			<key>defaults</key>
 			<string>xyz.skitty.spectrum</string>
-			<key>key</key>
-			<string>darkBarColor</string>
 			<key>PostNotification</key>
 			<string>xyz.skitty.spectrum.prefschanged</string>
+			<key>key</key>
+			<string>darkBarColor</string>
 			<key>label</key>
 			<string>Bar Color</string>
 		</dict>
@@ -35,10 +53,10 @@
 			<string>FF0000</string>
 			<key>defaults</key>
 			<string>xyz.skitty.spectrum</string>
-			<key>key</key>
-			<string>darkBadgeColor</string>
 			<key>PostNotification</key>
 			<string>xyz.skitty.spectrum.prefschanged</string>
+			<key>key</key>
+			<string>darkBadgeColor</string>
 			<key>label</key>
 			<string>Badge Color</string>
 		</dict>
@@ -51,19 +69,19 @@
 			<string>FFFFFF</string>
 			<key>defaults</key>
 			<string>xyz.skitty.spectrum</string>
-			<key>key</key>
-			<string>darkBadgeTextColor</string>
 			<key>PostNotification</key>
 			<string>xyz.skitty.spectrum.prefschanged</string>
+			<key>key</key>
+			<string>darkBadgeTextColor</string>
 			<key>label</key>
 			<string>Badge Text Color</string>
 		</dict>
-        <dict>
-            <key>cell</key>
-            <string>PSGroupCell</string>
-            <key>label</key>
-            <string>Light Colors</string>
-        </dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Light Colors</string>
+		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSLinkCell</string>
@@ -73,10 +91,10 @@
 			<string>00000000</string>
 			<key>defaults</key>
 			<string>xyz.skitty.spectrum</string>
-			<key>key</key>
-			<string>lightBarColor</string>
 			<key>PostNotification</key>
 			<string>xyz.skitty.spectrum.prefschanged</string>
+			<key>key</key>
+			<string>lightBarColor</string>
 			<key>label</key>
 			<string>Bar Color</string>
 		</dict>
@@ -89,10 +107,10 @@
 			<string>FF0000</string>
 			<key>defaults</key>
 			<string>xyz.skitty.spectrum</string>
-			<key>key</key>
-			<string>lightBadgeColor</string>
 			<key>PostNotification</key>
 			<string>xyz.skitty.spectrum.prefschanged</string>
+			<key>key</key>
+			<string>lightBadgeColor</string>
 			<key>label</key>
 			<string>Badge Color</string>
 		</dict>
@@ -105,10 +123,10 @@
 			<string>FFFFFF</string>
 			<key>defaults</key>
 			<string>xyz.skitty.spectrum</string>
-			<key>key</key>
-			<string>lightBadgeTextColor</string>
 			<key>PostNotification</key>
 			<string>xyz.skitty.spectrum.prefschanged</string>
+			<key>key</key>
+			<string>lightBadgeTextColor</string>
 			<key>label</key>
 			<string>Badge Text Color</string>
 		</dict>

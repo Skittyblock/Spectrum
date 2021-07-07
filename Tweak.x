@@ -38,10 +38,10 @@ UIColor *appTintColorFromWindow(UIWindow *window) {
 // Color from hex
 static CGFloat colorComponentFrom(NSString *string, NSInteger start, NSInteger length) {
 	NSString *substring = [string substringWithRange: NSMakeRange(start, length)];
-    NSString *fullHex = length == 2 ? substring : [NSString stringWithFormat: @"%@%@", substring, substring];
-    unsigned hexComponent;
-    [[NSScanner scannerWithString:fullHex] scanHexInt:&hexComponent];
-    return hexComponent / 255.0;
+	NSString *fullHex = length == 2 ? substring : [NSString stringWithFormat: @"%@%@", substring, substring];
+	unsigned hexComponent;
+	[[NSScanner scannerWithString:fullHex] scanHexInt:&hexComponent];
+	return hexComponent / 255.0;
 }
 
 static UIColor *colorFromHexString(NSString *hexString) {
@@ -71,12 +71,12 @@ static UIColor *colorFromHexString(NSString *hexString) {
 			blue = colorComponentFrom(hexString, 4, 2);
 			alpha = colorComponentFrom(hexString, 6, 2);
 			break;
-        default: // Invalid color
+		default: // Invalid color
 			red = 0;
 			green = 0;
 			blue = 0;
 			alpha = 0;
-            break;
+			break;
 	}
 	return [UIColor colorWithRed:red green:green blue:blue alpha:alpha];
 }
@@ -107,6 +107,8 @@ static void refreshPrefs() {
 		@"customDarkColors": @NO,
 		@"customLightColors": @NO,
 		@"tintColor": @"F22F6C",
+
+		@"useBadgeColor": @NO,
 
 		@"darkGroupTableViewBackgroundColor": @"000000",
 		@"darkSeparatorColor": @"54545899",
@@ -450,6 +452,7 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 
 // Badge color
 %hook SBIconBadgeView
+
 - (void)configureForIcon:(id)arg1 infoProvider:(SBIconView *)arg2 {
 	%orig;
 	[self updateColor];
@@ -463,13 +466,20 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *lightKey, NSStr
 %new
 - (void)updateColor {
 	UIImageView *textView = [self valueForKey:@"_textView"];
- 	textView.image = [textView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-	[textView setTintColor:dynamicColorWithOptions(nil, @"lightBadgeTextColor", @"darkBadgeTextColor")];
-
 	UIImageView *backgroundView = [self valueForKey:@"_backgroundView"];
-	backgroundView.image = [backgroundView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-	[backgroundView setTintColor:dynamicColorWithOptions(nil, @"lightBadgeColor", @"darkBadgeColor")];
+
+	if (getPrefBool(@"useBadgeColor")) {
+		textView.image = [textView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+		[textView setTintColor:dynamicColorWithOptions(nil, @"lightBadgeTextColor", @"darkBadgeTextColor")];
+
+		backgroundView.image = [backgroundView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+		[backgroundView setTintColor:dynamicColorWithOptions(nil, @"lightBadgeColor", @"darkBadgeColor")];
+	} else {
+		textView.image = [textView.image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+		backgroundView.image = [backgroundView.image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+	}
 }
+
 %end
 
 %end
@@ -530,7 +540,7 @@ static NSArray *disabledApps() {
 
 %ctor {
 	// Hidden system apps
-	systemIdentifiers = @[@"com.apple.AppSSOUIService", @"com.apple.AuthKitUIService", @"com.apple.BusinessChatViewService", @"com.apple.CTNotifyUIService", @"com.apple.CarPlaySplashScreen", @"com.apple.FTMInternal", @"com.apple.appleseed.FeedbackAssistant", @"com.apple.FontInstallViewService", @"com.apple.BarcodeScanner", @"com.apple.icloud.spnfcurl", @"com.apple.ScreenTimeUnlock", @"com.apple.CarPlaySettings", @"com.apple.SharedWebCredentialViewService", @"com.apple.sidecar", @"com.apple.Spotlight", @"com.apple.iMessageAppsViewService", @"com.apple.AXUIViewService", @"com.apple.AccountAuthenticationDialog", @"com.apple.AdPlatformsDiagnostics", @"com.apple.CTCarrierSpaceAuth", @"com.apple.CheckerBoard", @"com.apple.CloudKit.ShareBear", @"com.apple.AskPermissionUI", @"com.apple.CompassCalibrationViewService", @"com.apple.sidecar.camera", @"com.apple.datadetectors.DDActionsService", @"com.apple.DataActivation", @"com.apple.DemoApp", @"com.apple.Diagnostics", @"com.apple.DiagnosticsService", @"com.apple.carkit.DNDBuddy", @"com.apple.family", @"com.apple.fieldtest", @"com.apple.gamecenter.GameCenterUIService", @"com.apple.HealthPrivacyService", @"com.apple.Home.HomeUIService", @"com.apple.InCallService", @"com.apple.MailCompositionService", @"com.apple.mobilesms.compose", @"com.apple.MobileReplayer", @"com.apple.MusicUIService", @"com.apple.PhotosViewService", @"com.apple.PreBoard", @"com.apple.PrintKit.Print-Center", @"com.apple.social.SLYahooAuth", @"com.apple.SafariViewService", @"org.coolstar.SafeMode", @"com.apple.ScreenshotServicesSharing", @"com.apple.ScreenshotServicesService", @"com.apple.ScreenSharingViewService", @"com.apple.SIMSetupUIService", @"com.apple.Magnifier", @"com.apple.purplebuddy", @"com.apple.SharedWebCredentialsViewService", @"com.apple.SharingViewService", @"com.apple.SiriViewService", @"com.apple.susuiservice", @"com.apple.StoreDemoViewService", @"com.apple.TVAccessViewService", @"com.apple.TVRemoteUIService", @"com.apple.TrustMe", @"com.apple.CoreAuthUI", @"com.apple.VSViewService", @"com.apple.PassbookStub", @"com.apple.PassbookUIService", @"com.apple.WebContentFilter.remoteUI.WebContentAnalysisUI", @"com.apple.WebSheet", @"com.apple.iad.iAdOptOut", @"com.apple.ios.StoreKitUIService", @"com.apple.webapp", @"com.apple.webapp1", @"com.apple.springboard"];
+	systemIdentifiers = @[@"com.apple.AppSSOUIService", @"com.apple.AuthKitUIService", @"com.apple.BusinessChatViewService", @"com.apple.CTNotifyUIService", @"com.apple.ctkui", @"com.apple.ClipViewService", @"com.apple.CredentialSharingService", @"com.apple.CarPlaySplashScreen", @"com.apple.HealthENLauncher", @"com.apple.HealthENBuddy", @"com.apple.PublicHealthRemoteUI", @"com.apple.FTMInternal", @"com.apple.appleseed.FeedbackAssistant", @"com.apple.FontInstallViewService", @"com.apple.BarcodeScanner", @"com.apple.icloud.spnfcurl", @"com.apple.ScreenTimeUnlock", @"com.apple.CarPlaySettings", @"com.apple.SharedWebCredentialViewService", @"com.apple.sidecar", @"com.apple.Spotlight", @"com.apple.iMessageAppsViewService", @"com.apple.AXUIViewService", @"com.apple.AccountAuthenticationDialog", @"com.apple.AdPlatformsDiagnostics", @"com.apple.CTCarrierSpaceAuth", @"com.apple.CheckerBoard", @"com.apple.CloudKit.ShareBear", @"com.apple.AskPermissionUI", @"com.apple.CompassCalibrationViewService", @"com.apple.sidecar.camera", @"com.apple.datadetectors.DDActionsService", @"com.apple.DataActivation", @"com.apple.DemoApp", @"com.apple.Diagnostics", @"com.apple.DiagnosticsService", @"com.apple.carkit.DNDBuddy", @"com.apple.family", @"com.apple.fieldtest", @"com.apple.gamecenter.GameCenterUIService", @"com.apple.HealthPrivacyService", @"com.apple.Home.HomeUIService", @"com.apple.InCallService", @"com.apple.MailCompositionService", @"com.apple.mobilesms.compose", @"com.apple.MobileReplayer", @"com.apple.MusicUIService", @"com.apple.PhotosViewService", @"com.apple.PreBoard", @"com.apple.PrintKit.Print-Center", @"com.apple.social.SLYahooAuth", @"com.apple.SafariViewService", @"org.coolstar.SafeMode", @"com.apple.ScreenshotServicesSharing", @"com.apple.ScreenshotServicesService", @"com.apple.ScreenSharingViewService", @"com.apple.SIMSetupUIService", @"com.apple.Magnifier", @"com.apple.purplebuddy", @"com.apple.SharedWebCredentialsViewService", @"com.apple.SharingViewService", @"com.apple.SiriViewService", @"com.apple.susuiservice", @"com.apple.StoreDemoViewService", @"com.apple.TVAccessViewService", @"com.apple.TVRemoteUIService", @"com.apple.TrustMe", @"com.apple.CoreAuthUI", @"com.apple.VSViewService", @"com.apple.PassbookStub", @"com.apple.PassbookUIService", @"com.apple.WebContentFilter.remoteUI.WebContentAnalysisUI", @"com.apple.WebSheet", @"com.apple.iad.iAdOptOut", @"com.apple.ios.StoreKitUIService", @"com.apple.webapp", @"com.apple.webapp1", @"com.apple.springboard", @"com.apple.PassbookSecureUIService", @"com.apple.Photos.PhotosUIService", @"com.apple.RemoteiCloudQuotaUI", @"com.apple.shortcuts.runtime", @"com.apple.SleepLockScreen", @"com.apple.SubcredentialUIService", @"com.apple.dt.XcodePreviews", @"com.apple.icq"];
 
 	//iconTint = iconTintColorForCurrentApp();
 	CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback) PreferencesChangedCallback, (CFStringRef)[BUNDLE_ID stringByAppendingString:@".prefschanged"], NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
