@@ -254,7 +254,7 @@ UIColor *staticColor(NSString *mode, NSString *key) {
 
 	if ((getPrefBool(@"customLightColors") && [mode isEqualToString:@"light"]) || (getPrefBool(@"customDarkColors") && [mode isEqualToString:@"dark"])) {
 		color = getPrefColor(prefKey);
-	} else if (currentProfile && currentProfile[key]) {
+	} else if (currentProfile && getProfileColor(mode, key)) {
 		color = getProfileColor(mode, key);
 	}
 
@@ -264,9 +264,37 @@ UIColor *staticColor(NSString *mode, NSString *key) {
 // UIColor Hooks
 %group UIColor
 
-// Override apps that try to fake it
+%hook UIDynamicSystemColor
+
+- (id)initWithName:(NSString *)name colorsByThemeKey:(NSDictionary *)colors {
+	NSString *lightKey = [@"light" stringByAppendingString:[name capitalizeFirstLetter]];
+	NSString *darkKey = [@"dark" stringByAppendingString:[name capitalizeFirstLetter]];
+
+	BOOL customColorOverride = (getPrefBool(@"customLightColors") && getPrefColor(lightKey)) || (getPrefBool(@"customDarkColors") && getPrefColor(darkKey));
+	BOOL profileOverride = currentProfile && currentProfile[name];
+
+	if (customColorOverride || profileOverride) {
+		NSMutableDictionary *newColors = [colors mutableCopy];
+
+		if (getPrefBool(@"customLightColors") && getPrefColor(lightKey)) [newColors setObject:getPrefColor(lightKey) forKey:@0];
+		else if (getProfileColor(@"light", name)) [newColors setObject:getProfileColor(@"dark", name) forKey:@0];
+
+		if (getPrefBool(@"customDarkColors") && getPrefColor(darkKey)) [newColors setObject:getPrefColor(darkKey) forKey:@0];
+		else if (getProfileColor(@"dark", name)) [newColors setObject:getProfileColor(@"dark", name) forKey:@2];
+
+		return %orig(name, newColors);
+	}
+
+	return %orig;
+}
+
+%end
+
+// These can also be set with the previous hook, but I've simplified some of the keys for people making custom profiles
+// e.g. just do tintColor instead of systemBlueColor, _systemBlueColor2, etc.
 %hook UIColor
 
+// Override apps that try to fake it
 + (id)colorWithRed:(double)red green:(double)green blue:(double)blue alpha:(double)alpha {
 	if (red == 0.0 && green == 122.0/255.0 && blue == 1.0) {
 		return useTint ? tint : %orig;
@@ -274,7 +302,6 @@ UIColor *staticColor(NSString *mode, NSString *key) {
 	return %orig;
 }
 
-// Default tint
 + (id)systemBlueColor {
 	return useTint ? tint : %orig;
 }
@@ -303,54 +330,7 @@ UIColor *staticColor(NSString *mode, NSString *key) {
 	return useTint ? tint : %orig;
 }
 
-// Primary color
-+ (id)systemBackgroundColor {
-	return dynamicColorWithOptions(%orig, @"systemBackgroundColor");
-}
-
-+ (id)systemGroupedBackgroundColor {
-	return dynamicColorWithOptions(%orig, @"systemGroupedBackgroundColor");
-}
-
-+ (id)groupTableViewBackgroundColor {
-	return dynamicColorWithOptions(%orig, @"groupTableViewBackgroundColor");
-}
-
-+ (id)tableBackgroundColor {
-	return dynamicColorWithOptions(%orig, @"groupTableViewBackgroundColor");
-}
-
-+ (id)tableCellPlainBackgroundColor {
-	return dynamicColorWithOptions(%orig, @"systemBackgroundColor");
-}
-
-+ (id)tableCellGroupedBackgroundColor {
-	return dynamicColorWithOptions(%orig, @"tableCellGroupedBackgroundColor");
-}
-
-// Secondary color
-+ (id)secondarySystemBackgroundColor {
-	return dynamicColorWithOptions(%orig, @"secondarySystemBackgroundColor");
-}
-
-+ (id)secondarySystemGroupedBackgroundColor {
-	return dynamicColorWithOptions(%orig, @"secondarySystemGroupedBackgroundColor");
-}
-
-// Tertiary color
-+ (id)tertiarySystemBackgroundColor {
-	return dynamicColorWithOptions(%orig, @"tertiarySystemBackgroundColor");
-}
-
-+ (id)tertiarySystemGroupedBackgroundColor {
-	return dynamicColorWithOptions(%orig, @"tertiarySystemGroupedBackgroundColor");
-}
-
 // Separator color
-+ (id)separatorColor {
-	return dynamicColorWithOptions(%orig, @"separatorColor");
-}
-
 + (id)opaqueSeparatorColor {
 	return dynamicColorWithOptions(%orig, @"separatorColor");
 }
@@ -360,22 +340,6 @@ UIColor *staticColor(NSString *mode, NSString *key) {
 }
 
 // Label colors
-+ (id)labelColor {
-	return dynamicColorWithOptions(%orig, @"labelColor");
-}
-
-+ (id)secondaryLabelColor {
-	return dynamicColorWithOptions(%orig, @"secondaryLabelColor");
-}
-
-+ (id)placeholderLabelColor {
-	return dynamicColorWithOptions(%orig, @"placeholderLabelColor");
-}
-
-+ (id)tertiaryLabelColor {
-	return dynamicColorWithOptions(%orig, @"tertiaryLabelColor");
-}
-
 + (id)tablePlainHeaderFooterBackgroundColor {
 	return dynamicColorWithOptions(%orig, @"tertiaryLabelColor");
 }
