@@ -9,10 +9,9 @@
 static NSMutableDictionary *settings;
 static NSArray *systemIdentifiers;
 
-static bool isDefault;
+static BOOL isDefault;
 static NSDictionary *currentProfile;
 
-static UIColor *tint;
 static UIColor *highlight;
 
 // Dark Colors
@@ -87,7 +86,7 @@ UIColor *colorFromHexStringWithAlpha(NSString *hexString, double alpha) {
 }
 
 // Preferences
-static bool getPrefBool(NSString *key) {
+BOOL getPrefBool(NSString *key) {
 	return [([settings objectForKey:key] ?: defaults[key]) boolValue];
 }
 static NSString *getPrefString(NSString *key) {
@@ -190,6 +189,7 @@ static void refreshPrefs() {
 	else currentProfile = plistFiles[index];
 
 	// Settings
+	useTint = getPrefBool(@"customTintColor") || currentProfile[@"tintColor"];
 	NSString *tintHex = (!getPrefBool(@"customTintColor") && currentProfile[@"tintColor"]) ? currentProfile[@"tintColor"] : ([settings objectForKey:@"tintColor"] ?: @"F22F6CFF");
 	tint = colorFromHexString(tintHex);
 	highlight = colorFromHexStringWithAlpha(tintHex, 0.3);
@@ -219,7 +219,7 @@ static UIColor *dynamicColor(UIColor *defaultColor, UIColor *darkColor) {
 	return defaultColor;
 }
 
-static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *key) {
+UIColor *dynamicColorWithOptions(UIColor *orig, NSString *key) {
 	NSString *lightKey = [@"light" stringByAppendingString:[key capitalizeFirstLetter]];
 	NSString *darkKey = [@"dark" stringByAppendingString:[key capitalizeFirstLetter]];
 	UIColor *lightColor = orig ? [orig resolvedColorWithTraitCollection:[UITraitCollection traitCollectionWithUserInterfaceStyle:UIUserInterfaceStyleLight]] : [UIColor whiteColor];
@@ -247,6 +247,20 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *key) {
 	return dynamicColor(lightColor, darkColor);
 }
 
+UIColor *staticColor(NSString *mode, NSString *key) {
+	NSString *prefKey = [mode stringByAppendingString:[key capitalizeFirstLetter]];
+
+	UIColor *color = nil;
+
+	if ((getPrefBool(@"customLightColors") && [mode isEqualToString:@"light"]) || (getPrefBool(@"customDarkColors") && [mode isEqualToString:@"dark"])) {
+		color = getPrefColor(prefKey);
+	} else if (currentProfile && currentProfile[key]) {
+		color = getProfileColor(mode, key);
+	}
+
+	return color;
+}
+
 // UIColor Hooks
 %group UIColor
 
@@ -255,38 +269,38 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *key) {
 
 + (id)colorWithRed:(double)red green:(double)green blue:(double)blue alpha:(double)alpha {
 	if (red == 0.0 && green == 122.0/255.0 && blue == 1.0) {
-		return (getPrefBool(@"customTintColor") || currentProfile[@"tintColor"]) ? tint : %orig;
+		return useTint ? tint : %orig;
 	}
 	return %orig;
 }
 
 // Default tint
 + (id)systemBlueColor {
-	return (getPrefBool(@"customTintColor") || currentProfile[@"tintColor"]) ? tint : %orig;
+	return useTint ? tint : %orig;
 }
 
 + (id)_systemBlueColor2 {
-	return (getPrefBool(@"customTintColor") || currentProfile[@"tintColor"]) ? tint : %orig;
+	return useTint ? tint : %orig;
 }
 
 // Selection point
 + (id)insertionPointColor {
-	return (getPrefBool(@"customTintColor") || currentProfile[@"tintColor"]) ? tint : %orig;
+	return useTint ? tint : %orig;
 }
 
 // Selection highlight
 + (id)selectionHighlightColor {
-	return (getPrefBool(@"customTintColor") || currentProfile[@"tintColor"]) ? highlight : %orig;
+	return useTint ? highlight : %orig;
 }
 
 // Selection grabbers
 + (id)selectionGrabberColor {
-	return (getPrefBool(@"customTintColor") || currentProfile[@"tintColor"]) ? tint : %orig;
+	return useTint ? tint : %orig;
 }
 
 // Links
 + (id)linkColor {
-	return (getPrefBool(@"customTintColor") || currentProfile[@"tintColor"]) ? tint : %orig;
+	return useTint ? tint : %orig;
 }
 
 // Primary color
@@ -482,7 +496,7 @@ static UIColor *dynamicColorWithOptions(UIColor *orig, NSString *key) {
 
 - (UIColor *)tintColor {
 	if (![self isKindOfClass:%c(UIWindow)] && [self _normalInheritedTintColor] == appTintColorFromWindow([self window])) {
-		return (getPrefBool(@"customTintColor") || currentProfile[@"tintColor"]) ? tint : %orig;
+		return useTint ? tint : %orig;
 	}
 	return %orig;
 }
@@ -549,26 +563,18 @@ static NSMutableDictionary *appList() {
 		bool add = YES;
 		NSString *name = app.displayName ?: @"Error";
 		for (NSString *id in systemIdentifiers) {
-			if ([app.bundleIdentifier isEqual:id]) {
-				add = NO;
-			}
+			if ([app.bundleIdentifier isEqual:id]) add = NO;
 		}
-		if (add) {
-			[mutableDict setObject:name forKey:app.bundleIdentifier];
-		}
+		if (add) [mutableDict setObject:name forKey:app.bundleIdentifier];
 	}
 
 	return mutableDict;
 }
 
 static void getAppList(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
-	if (![[[NSBundle mainBundle] bundleIdentifier] isEqual:@"com.apple.springboard"]) {
-		return;
-	}
+	if (![[[NSBundle mainBundle] bundleIdentifier] isEqual:@"com.apple.springboard"]) return;
 
-	NSMutableDictionary *mutableDict = appList();
-
-	CFNotificationCenterPostNotification(CFNotificationCenterGetDistributedCenter(), (CFStringRef)[BUNDLE_ID stringByAppendingString:@".setapps"], nil, (__bridge CFDictionaryRef)mutableDict, true);
+	CFNotificationCenterPostNotification(CFNotificationCenterGetDistributedCenter(), (CFStringRef)[BUNDLE_ID stringByAppendingString:@".setapps"], nil, (__bridge CFDictionaryRef)appList(), true);
 }
 
 static NSArray *disabledApps() {
@@ -586,20 +592,24 @@ static NSArray *disabledApps() {
 	// Hidden system apps
 	systemIdentifiers = @[@"com.apple.AppSSOUIService", @"com.apple.AuthKitUIService", @"com.apple.BusinessChatViewService", @"com.apple.CTNotifyUIService", @"com.apple.ctkui", @"com.apple.ClipViewService", @"com.apple.CredentialSharingService", @"com.apple.CarPlaySplashScreen", @"com.apple.HealthENLauncher", @"com.apple.HealthENBuddy", @"com.apple.PublicHealthRemoteUI", @"com.apple.FTMInternal", @"com.apple.appleseed.FeedbackAssistant", @"com.apple.FontInstallViewService", @"com.apple.BarcodeScanner", @"com.apple.icloud.spnfcurl", @"com.apple.ScreenTimeUnlock", @"com.apple.CarPlaySettings", @"com.apple.SharedWebCredentialViewService", @"com.apple.sidecar", @"com.apple.Spotlight", @"com.apple.iMessageAppsViewService", @"com.apple.AXUIViewService", @"com.apple.AccountAuthenticationDialog", @"com.apple.AdPlatformsDiagnostics", @"com.apple.CTCarrierSpaceAuth", @"com.apple.CheckerBoard", @"com.apple.CloudKit.ShareBear", @"com.apple.AskPermissionUI", @"com.apple.CompassCalibrationViewService", @"com.apple.sidecar.camera", @"com.apple.datadetectors.DDActionsService", @"com.apple.DataActivation", @"com.apple.DemoApp", @"com.apple.Diagnostics", @"com.apple.DiagnosticsService", @"com.apple.carkit.DNDBuddy", @"com.apple.family", @"com.apple.fieldtest", @"com.apple.gamecenter.GameCenterUIService", @"com.apple.HealthPrivacyService", @"com.apple.Home.HomeUIService", @"com.apple.InCallService", @"com.apple.MailCompositionService", @"com.apple.mobilesms.compose", @"com.apple.MobileReplayer", @"com.apple.MusicUIService", @"com.apple.PhotosViewService", @"com.apple.PreBoard", @"com.apple.PrintKit.Print-Center", @"com.apple.social.SLYahooAuth", @"com.apple.SafariViewService", @"org.coolstar.SafeMode", @"com.apple.ScreenshotServicesSharing", @"com.apple.ScreenshotServicesService", @"com.apple.ScreenSharingViewService", @"com.apple.SIMSetupUIService", @"com.apple.Magnifier", @"com.apple.purplebuddy", @"com.apple.SharedWebCredentialsViewService", @"com.apple.SharingViewService", @"com.apple.SiriViewService", @"com.apple.susuiservice", @"com.apple.StoreDemoViewService", @"com.apple.TVAccessViewService", @"com.apple.TVRemoteUIService", @"com.apple.TrustMe", @"com.apple.CoreAuthUI", @"com.apple.VSViewService", @"com.apple.PassbookStub", @"com.apple.PassbookUIService", @"com.apple.WebContentFilter.remoteUI.WebContentAnalysisUI", @"com.apple.WebSheet", @"com.apple.iad.iAdOptOut", @"com.apple.ios.StoreKitUIService", @"com.apple.webapp", @"com.apple.webapp1", @"com.apple.springboard", @"com.apple.PassbookSecureUIService", @"com.apple.Photos.PhotosUIService", @"com.apple.RemoteiCloudQuotaUI", @"com.apple.shortcuts.runtime", @"com.apple.SleepLockScreen", @"com.apple.SubcredentialUIService", @"com.apple.dt.XcodePreviews", @"com.apple.icq"];
 
-	//iconTint = iconTintColorForCurrentApp();
 	CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback) PreferencesChangedCallback, (CFStringRef)[BUNDLE_ID stringByAppendingString:@".prefschanged"], NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
 
 	CFNotificationCenterAddObserver(CFNotificationCenterGetDistributedCenter(), NULL, getAppList, (CFStringRef)[BUNDLE_ID stringByAppendingString:@".getapps"], NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
 
 	refreshPrefs();
 
-	NSArray *apps = disabledApps();
+	NSArray *blacklistedApps = disabledApps();
 
-	if (getPrefBool(@"enabled") && ((![apps containsObject:[[NSBundle mainBundle] bundleIdentifier]] && ![systemIdentifiers containsObject:[[NSBundle mainBundle] bundleIdentifier]]) || (getPrefBool(@"hookSpringBoard") && [[[NSBundle mainBundle] bundleIdentifier] isEqual:@"com.apple.springboard"]))) {
+	NSString *bundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
+	BOOL isBlacklisted = [blacklistedApps containsObject:bundleIdentifier] || [systemIdentifiers containsObject:bundleIdentifier];
+	BOOL isSpringBoard = getPrefBool(@"hookSpringBoard") && [bundleIdentifier isEqual:@"com.apple.springboard"];
+	BOOL isTwitter = [bundleIdentifier isEqual:@"com.atebits.Tweetie2"];
+
+	if (getPrefBool(@"enabled") && !isTwitter && (!isBlacklisted || isSpringBoard)) {
 		%init(App);
 		%init(UIColor);
 	}
-	if (getPrefBool(@"enabled") && getPrefBool(@"hookSpringBoard") && [[[NSBundle mainBundle] bundleIdentifier] isEqual:@"com.apple.springboard"]) {
+	if (getPrefBool(@"enabled") && isSpringBoard) {
 		%init(SpringBoard)
 	}
 }

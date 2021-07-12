@@ -2,6 +2,13 @@
 
 #import <UIKit/UIKit.h>
 
+BOOL useTint;
+UIColor *tint;
+
+BOOL getPrefBool(NSString *key);
+UIColor *dynamicColorWithOptions(UIColor *orig, NSString *key);
+UIColor *staticColor(NSString *mode, NSString *key);
+
 CFNotificationCenterRef CFNotificationCenterGetDistributedCenter(void);
 
 @interface UIColor (Spectrum)
