@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>name</key>
+	<string>Twitter</string>
+	<key>systemBackgroundColor</key>
+	<dict>
+		<key>dark</key>
+		<string>10171E</string>
+	</dict>
+	<key>systemGroupedBackgroundColor</key>
+	<dict>
+		<key>dark</key>
+		<string>10171E</string>
+	</dict>
+	<key>groupTableViewBackgroundColor</key>
+	<dict>
+		<key>dark</key>
+		<string>10171E</string>
+	</dict>
+	<key>secondarySystemBackgroundColor</key>
+	<dict>
+		<key>dark</key>
+		<string>15202B</string>
+	</dict>
+	<key>secondarySystemGroupedBackgroundColor</key>
+	<dict>
+		<key>dark</key>
+		<string>15202B</string>
+	</dict>
+	<key>placeholderLabelColor</key>
+	<dict>
+		<key>dark</key>
+		<string>FFFFFF</string>
+	</dict>
+	<key>tableCellGroupedBackgroundColor</key>
+	<dict>
+		<key>dark</key>
+		<string>15202B</string>
+	</dict>
+	<key>separatorColor</key>
+	<dict>
+		<key>dark</key>
+		<string>38434D</string>
+	</dict>
+	<key>opaqueSeparatorColor</key>
+	<dict>
+		<key>dark</key>
+		<string>38434D</string>
+	</dict>
+	<key>tableViewCellSelectionColor</key>
+	<dict>
+		<key>dark</key>
+		<string>10171E</string>
+	</dict>
+	<key>barColor</key>
+	<dict>
+		<key>dark</key>
+		<string>03111E</string>
+	</dict>
+	<key>tintColor</key>
+	<string>1DA1F2</string>
+</dict>
+</plist>

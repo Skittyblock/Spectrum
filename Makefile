@@ -7,7 +7,7 @@ include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = Spectrum
 
-Spectrum_FILES = Tweak.x
+Spectrum_FILES = Tweak.x $(wildcard *.m)
 Spectrum_CFLAGS = -fobjc-arc
 
 include $(THEOS_MAKE_PATH)/tweak.mk

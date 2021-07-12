@@ -23,7 +23,7 @@
 		self.tableView.dataSource = self;
 		[self.view addSubview:self.tableView];
 
-		NSString *path = @"/Library/Spectrum/Profiles";
+		NSString *path = @"/Library/Spectrum";
 		NSArray *files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:nil];
 		NSMutableArray *plistFiles = [[NSMutableArray alloc] init];
 
@@ -32,18 +32,13 @@
 			NSString *extension = [[filename pathExtension] lowercaseString];
 			if ([extension isEqualToString:@"plist"]) {
 				NSDictionary *contents = [[NSDictionary alloc] initWithContentsOfFile:[path stringByAppendingPathComponent:filename]];
-				if (contents[@"name"])
-					[plistFiles addObject:contents[@"name"]];
+				if (contents[@"name"] && ![contents[@"name"] isEqualToString:@"Default"]) [plistFiles addObject:contents[@"name"]];
 			}
 		}];
 
 		self.profiles = plistFiles;
 
-		//NSDictionary *settings = [[NSDictionary alloc] initWithContentsOfFile:[NSString stringWithFormat:@"/var/mobile/Library/Preferences/%@.plist", self.properties[@"defaults"]]];
-		//int index = [settings[self.properties[@"key"]] intValue];
-		//CFPreferencesAppSynchronize((CFStringRef)self.properties[@"defaults"]);
 		CFStringRef ref = CFPreferencesCopyAppValue((CFStringRef)self.properties[@"key"], (CFStringRef)self.properties[@"defaults"]);
-		// int index = [(__bridge NSNumber *)ref intValue];
 
 		NSInteger index = [plistFiles indexOfObject:(__bridge NSString *)ref];
 

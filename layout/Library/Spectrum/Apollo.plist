@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>name</key>
+	<string>Apollo</string>
+	<key>systemBackgroundColor</key>
+	<dict>
+		<key>dark</key>
+		<string>2C3038</string>
+	</dict>
+	<key>systemGroupedBackgroundColor</key>
+	<dict>
+		<key>dark</key>
+		<string>2C3038</string>
+	</dict>
+	<key>groupTableViewBackgroundColor</key>
+	<dict>
+		<key>dark</key>
+		<string>2C3038</string>
+	</dict>
+	<key>secondarySystemBackgroundColor</key>
+	<dict>
+		<key>dark</key>
+		<string>21242E</string>
+	</dict>
+	<key>secondarySystemGroupedBackgroundColor</key>
+	<dict>
+		<key>dark</key>
+		<string>21242E</string>
+	</dict>
+	<key>tableCellGroupedBackgroundColor</key>
+	<dict>
+		<key>dark</key>
+		<string>21242E</string>
+	</dict>
+	<key>separatorColor</key>
+	<dict>
+		<key>dark</key>
+		<string>484E5B</string>
+	</dict>
+	<key>opaqueSeparatorColor</key>
+	<dict>
+		<key>dark</key>
+		<string>484E5B</string>
+	</dict>
+</dict>
+</plist>

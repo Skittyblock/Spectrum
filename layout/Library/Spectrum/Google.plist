@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>name</key>
+	<string>Google</string>
+	<key>systemBackgroundColor</key>
+	<dict>
+		<key>dark</key>
+		<string>212121</string>
+	</dict>
+	<key>systemGroupedBackgroundColor</key>
+	<dict>
+		<key>dark</key>
+		<string>212121</string>
+	</dict>
+	<key>groupTableViewBackgroundColor</key>
+	<dict>
+		<key>dark</key>
+		<string>212121</string>
+	</dict>
+	<key>secondarySystemBackgroundColor</key>
+	<dict>
+		<key>dark</key>
+		<string>282828</string>
+	</dict>
+	<key>secondarySystemGroupedBackgroundColor</key>
+	<dict>
+		<key>dark</key>
+		<string>282828</string>
+	</dict>
+	<key>tableCellGroupedBackgroundColor</key>
+	<dict>
+		<key>dark</key>
+		<string>282828</string>
+	</dict>
+	<key>separatorColor</key>
+	<dict>
+		<key>dark</key>
+		<string>373737</string>
+	</dict>
+	<key>opaqueSeparatorColor</key>
+	<dict>
+		<key>dark</key>
+		<string>373737</string>
+	</dict>
+</dict>
+</plist>

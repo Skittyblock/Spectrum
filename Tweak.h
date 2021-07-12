@@ -18,14 +18,17 @@ CFNotificationCenterRef CFNotificationCenterGetDistributedCenter(void);
 
 @interface UINavigationBar (Spectrum)
 @property (nonatomic, retain) UIColor *storedBarColor;
+- (void)updateSpectrumColors;
 @end
 
 @interface UIToolbar (Spectrum)
 @property (nonatomic, retain) UIColor *storedBarColor;
+- (void)updateSpectrumColors;
 @end
 
 @interface UITabBar (Spectrum)
 @property (nonatomic, retain) UIColor *storedBarColor;
+- (void)updateSpectrumColors;
 @end
 
 @interface SBApplication : NSObject

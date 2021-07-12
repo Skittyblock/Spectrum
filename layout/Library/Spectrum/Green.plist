@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>name</key>
+	<string>Green</string>
+	<key>systemBackgroundColor</key>
+	<dict>
+		<key>dark</key>
+		<string>0F1717</string>
+	</dict>
+	<key>systemGroupedBackgroundColor</key>
+	<dict>
+		<key>dark</key>
+		<string>0F1717</string>
+	</dict>
+	<key>groupTableViewBackgroundColor</key>
+	<dict>
+		<key>dark</key>
+		<string>0F1717</string>
+	</dict>
+	<key>secondarySystemBackgroundColor</key>
+	<dict>
+		<key>dark</key>
+		<string>15201F</string>
+	</dict>
+	<key>secondarySystemGroupedBackgroundColor</key>
+	<dict>
+		<key>dark</key>
+		<string>15201F</string>
+	</dict>
+	<key>tableCellGroupedBackgroundColor</key>
+	<dict>
+		<key>dark</key>
+		<string>15201F</string>
+	</dict>
+	<key>separatorColor</key>
+	<dict>
+		<key>dark</key>
+		<string>202B2A</string>
+	</dict>
+	<key>opaqueSeparatorColor</key>
+	<dict>
+		<key>dark</key>
+		<string>202B2A</string>
+	</dict>
+	<key>tableViewCellSelectionColor</key>
+	<dict>
+		<key>dark</key>
+		<string>0F1717</string>
+	</dict>
+	<key>barColor</key>
+	<dict>
+		<key>dark</key>
+		<string>061312</string>
+	</dict>
+	<key>tintColor</key>
+	<string>365957</string>
+</dict>
+</plist>
