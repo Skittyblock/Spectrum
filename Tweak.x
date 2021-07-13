@@ -6,8 +6,9 @@
 
 #define BUNDLE_ID @"xyz.skitty.spectrum"
 
-static NSMutableDictionary *settings;
 static NSArray *systemIdentifiers;
+static NSMutableDictionary *settings;
+static NSDictionary *generals;
 
 static BOOL isDefault;
 static NSDictionary *currentProfile;
@@ -267,19 +268,37 @@ UIColor *staticColor(NSString *mode, NSString *key) {
 %hook UIDynamicSystemColor
 
 - (id)initWithName:(NSString *)name colorsByThemeKey:(NSDictionary *)colors {
-	NSString *lightKey = [@"light" stringByAppendingString:[name capitalizeFirstLetter]];
-	NSString *darkKey = [@"dark" stringByAppendingString:[name capitalizeFirstLetter]];
+	// Generalize some colors for the custom color selection, not color profiles
+	if (!generals) {
+		generals = @{
+			@"tableBackgroundColor": @"groupTableViewBackgroundColor",
+			@"tableCellPlainBackgroundColor": @"systemBackgroundColor",
+			@"opaqueSeparatorColor": @"separatorColor",
+			@"tableSeparatorColor": @"separatorColor",
+			@"tablePlainHeaderFooterBackgroundColor": @"tertiaryLabelColor",
+			@"systemGray4Color": @"tableViewCellSelectionColor",
+			@"systemGray5Color": @"tableViewCellSelectionColor"
+		};
+	}
 
-	BOOL customColorOverride = (getPrefBool(@"customLightColors") && getPrefColor(lightKey)) || (getPrefBool(@"customDarkColors") && getPrefColor(darkKey));
+	NSString *keyName = name;
+	if (generals[name]) keyName = generals[name];
+
+	NSString *lightKey = [@"light" stringByAppendingString:[keyName capitalizeFirstLetter]];
+	NSString *darkKey = [@"dark" stringByAppendingString:[keyName capitalizeFirstLetter]];
+
+	BOOL overridesLight = getPrefBool(@"customLightColors") && getPrefColor(lightKey);
+	BOOL overridesDark = getPrefBool(@"customDarkColors") && getPrefColor(darkKey);
+	BOOL customColorOverride = overridesLight || overridesDark;
 	BOOL profileOverride = currentProfile && currentProfile[name];
 
 	if (customColorOverride || profileOverride) {
 		NSMutableDictionary *newColors = [colors mutableCopy];
 
-		if (getPrefBool(@"customLightColors") && getPrefColor(lightKey)) [newColors setObject:getPrefColor(lightKey) forKey:@0];
-		else if (getProfileColor(@"light", name)) [newColors setObject:getProfileColor(@"dark", name) forKey:@0];
+		if (overridesLight) [newColors setObject:getPrefColor(lightKey) forKey:@0];
+		else if (getProfileColor(@"light", name)) [newColors setObject:getProfileColor(@"light", name) forKey:@0];
 
-		if (getPrefBool(@"customDarkColors") && getPrefColor(darkKey)) [newColors setObject:getPrefColor(darkKey) forKey:@0];
+		if (overridesDark) [newColors setObject:getPrefColor(darkKey) forKey:@2];
 		else if (getProfileColor(@"dark", name)) [newColors setObject:getProfileColor(@"dark", name) forKey:@2];
 
 		return %orig(name, newColors);
@@ -328,29 +347,6 @@ UIColor *staticColor(NSString *mode, NSString *key) {
 // Links
 + (id)linkColor {
 	return useTint ? tint : %orig;
-}
-
-// Separator color
-+ (id)opaqueSeparatorColor {
-	return dynamicColorWithOptions(%orig, @"separatorColor");
-}
-
-+ (id)tableSeparatorColor {
-	return dynamicColorWithOptions(%orig, @"separatorColor");
-}
-
-// Label colors
-+ (id)tablePlainHeaderFooterBackgroundColor {
-	return dynamicColorWithOptions(%orig, @"tertiaryLabelColor");
-}
-
-// UITableViewCell selection color
-+ (id)systemGray4Color {
-	return dynamicColorWithOptions(%orig, @"tableViewCellSelectionColor");
-}
-
-+ (id)systemGray5Color {
-	return dynamicColorWithOptions(%orig, @"tableViewCellSelectionColor");
 }
 
 %end

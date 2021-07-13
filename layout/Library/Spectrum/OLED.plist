@@ -29,7 +29,27 @@
 		<key>dark</key>
 		<string>000000</string>
 	</dict>
+	<key>tertiarySystemBackgroundColor</key>
+	<dict>
+		<key>dark</key>
+		<string>000000</string>
+	</dict>
+	<key>tertiarySystemGroupedBackgroundColor</key>
+	<dict>
+		<key>dark</key>
+		<string>000000</string>
+	</dict>
 	<key>tableCellGroupedBackgroundColor</key>
+	<dict>
+		<key>dark</key>
+		<string>000000</string>
+	</dict>
+	<key>tableBackgroundColor</key>
+	<dict>
+		<key>dark</key>
+		<string>000000</string>
+	</dict>
+	<key>tableCellPlainBackgroundColor</key>
 	<dict>
 		<key>dark</key>
 		<string>000000</string>
@@ -44,7 +64,22 @@
 		<key>dark</key>
 		<string>000000</string>
 	</dict>
+	<key>tableSeparatorColor</key>
+	<dict>
+		<key>dark</key>
+		<string>000000</string>
+	</dict>
 	<key>tableViewCellSelectionColor</key>
+	<dict>
+		<key>dark</key>
+		<string>000000</string>
+	</dict>
+	<key>systemGray4Color</key>
+	<dict>
+		<key>dark</key>
+		<string>000000</string>
+	</dict>
+	<key>systemGray5Color</key>
 	<dict>
 		<key>dark</key>
 		<string>000000</string>

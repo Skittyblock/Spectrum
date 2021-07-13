@@ -29,15 +29,35 @@
 		<key>dark</key>
 		<string>15202B</string>
 	</dict>
-	<key>placeholderLabelColor</key>
+	<key>tertiarySystemBackgroundColor</key>
 	<dict>
 		<key>dark</key>
-		<string>FFFFFF</string>
+		<string>15202B</string>
+	</dict>
+	<key>tertiarySystemGroupedBackgroundColor</key>
+	<dict>
+		<key>dark</key>
+		<string>15202B</string>
 	</dict>
 	<key>tableCellGroupedBackgroundColor</key>
 	<dict>
 		<key>dark</key>
 		<string>15202B</string>
+	</dict>
+	<key>tableBackgroundColor</key>
+	<dict>
+		<key>dark</key>
+		<string>10171E</string>
+	</dict>
+	<key>tableCellPlainBackgroundColor</key>
+	<dict>
+		<key>dark</key>
+		<string>10171E</string>
+	</dict>
+	<key>placeholderLabelColor</key>
+	<dict>
+		<key>dark</key>
+		<string>FFFFFF</string>
 	</dict>
 	<key>separatorColor</key>
 	<dict>
@@ -49,7 +69,22 @@
 		<key>dark</key>
 		<string>38434D</string>
 	</dict>
+	<key>tableSeparatorColor</key>
+	<dict>
+		<key>dark</key>
+		<string>38434D</string>
+	</dict>
 	<key>tableViewCellSelectionColor</key>
+	<dict>
+		<key>dark</key>
+		<string>10171E</string>
+	</dict>
+	<key>systemGray4Color</key>
+	<dict>
+		<key>dark</key>
+		<string>10171E</string>
+	</dict>
+	<key>systemGray5Color</key>
 	<dict>
 		<key>dark</key>
 		<string>10171E</string>
