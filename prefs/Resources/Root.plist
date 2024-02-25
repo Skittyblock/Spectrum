@@ -216,6 +216,8 @@
 			<string>Skitty</string>
 			<key>twitter</key>
 			<string>Skittyblock</string>
+			<key>imageURL</key>
+			<string>https://github.com/Skittyblock.png</string>
 			<key>subtitle</key>
 			<string>Lead Developer</string>
 		</dict>
@@ -224,8 +226,8 @@
 			<string>SPCreditCell</string>
 			<key>label</key>
 			<string>Even</string>
-			<key>twitter</key>
-			<string>even_dev</string>
+			<key>imageURL</key>
+			<string>https://styles.redditmedia.com/t5_qrier/styles/profileIcon_i4w9xwuy3wq21.jpg</string>
 			<key>subtitle</key>
 			<string>Developer</string>
 		</dict>

@@ -2,6 +2,7 @@
 
 #import "SPProfileCell.h"
 #import "SPProfileViewController.h"
+#import <rootless.h>
 
 @implementation SPProfileCell
 
@@ -29,7 +30,7 @@
 }
 
 - (void)updateProfile {
-	NSDictionary *settings = [[NSDictionary alloc] initWithContentsOfFile:[NSString stringWithFormat:@"/var/mobile/Library/Preferences/%@.plist", self.specifier.properties[@"defaults"]]];
+	NSDictionary *settings = [[NSDictionary alloc] initWithContentsOfFile:[NSString stringWithFormat:ROOT_PATH_NS(@"/var/mobile/Library/Preferences/%@.plist"), self.specifier.properties[@"defaults"]]];
 
 	NSString *title = [[settings objectForKey:self.specifier.properties[@"key"]] stringValue] ?: @"Default";
 

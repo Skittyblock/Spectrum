@@ -3,6 +3,7 @@
 
 #import "SkittyAppListViewController.h"
 #import "Preferences.h"
+#import <rootless.h>
 
 #define BUNDLE_ID @"xyz.skitty.spectrum"
 
@@ -34,7 +35,7 @@ static void post() {
 
 		[self getAppList];
 		
-		NSString *prefPath = [NSString stringWithFormat:@"/var/mobile/Library/Preferences/%@.apps.plist", BUNDLE_ID];
+		NSString *prefPath = [NSString stringWithFormat:ROOT_PATH_NS(@"/var/mobile/Library/Preferences/%@.apps.plist"), BUNDLE_ID];
 		NSMutableDictionary *prefs = [NSMutableDictionary dictionaryWithContentsOfFile:prefPath];
 		NSArray *apps = @[];
 		if ([[NSFileManager defaultManager] fileExistsAtPath:prefPath]) apps = [prefs objectForKey:@"Enabled"] ?: @[];

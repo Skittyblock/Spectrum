@@ -3,6 +3,7 @@
 
 #import "Tweak.h"
 #import "NSString+Spectrum.h"
+#import <rootless.h>
 
 #define BUNDLE_ID @"xyz.skitty.spectrum"
 
@@ -162,11 +163,11 @@ static void refreshPrefs() {
 		settings = nil;
 	}
 	if (!settings) {
-		settings = [[NSMutableDictionary alloc] initWithContentsOfFile:[NSString stringWithFormat:@"/var/mobile/Library/Preferences/%@.plist", BUNDLE_ID]];
+		settings = [[NSMutableDictionary alloc] initWithContentsOfFile:[NSString stringWithFormat:ROOT_PATH_NS(@"/var/mobile/Library/Preferences/%@.plist"), BUNDLE_ID]];
 	}
 
 	// Profile
-	NSString *path = @"/Library/Spectrum";
+	NSString *path = ROOT_PATH_NS(@"/Library/Spectrum");
 	NSArray *files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:nil];
 	NSMutableArray *plistFiles = [[NSMutableArray alloc] init];
 	NSMutableArray *plistNames = [[NSMutableArray alloc] init];
@@ -539,7 +540,7 @@ static void getAppList(CFNotificationCenterRef center, void *observer, CFStringR
 
 static NSArray *disabledApps() {
 	NSArray *apps = @[];
-	NSString *prefPath = [NSString stringWithFormat:@"/var/mobile/Library/Preferences/%@.apps.plist", BUNDLE_ID];
+	NSString *prefPath = [NSString stringWithFormat:ROOT_PATH_NS(@"/var/mobile/Library/Preferences/%@.apps.plist"), BUNDLE_ID];
 	if ([[NSFileManager defaultManager] fileExistsAtPath:prefPath]) {
 		NSDictionary *appPrefs = [NSDictionary dictionaryWithContentsOfFile:prefPath];
 		apps = appPrefs[@"Enabled"];

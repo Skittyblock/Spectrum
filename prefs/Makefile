@@ -9,6 +9,10 @@ Spectrum_PRIVATE_FRAMEWORKS = Preferences
 Spectrum_LIBRARIES = skittycolor
 Spectrum_CFLAGS = -fobjc-arc
 
+ifeq ($(THEOS_PACKAGE_SCHEME),rootless)
+Spectrum_CFLAGS +=  -rpath /var/jb/usr/lib
+endif
+
 include $(THEOS_MAKE_PATH)/bundle.mk
 
 internal-stage::

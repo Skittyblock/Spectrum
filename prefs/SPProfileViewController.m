@@ -2,6 +2,7 @@
 
 #import "SPProfileViewController.h"
 #import "Preferences.h"
+#import <rootless.h>
 
 @implementation SPProfileViewController
 
@@ -23,7 +24,7 @@
 		self.tableView.dataSource = self;
 		[self.view addSubview:self.tableView];
 
-		NSString *path = @"/Library/Spectrum";
+		NSString *path = ROOT_PATH_NS(@"/Library/Spectrum");
 		NSArray *files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:nil];
 		NSMutableArray *plistFiles = [[NSMutableArray alloc] init];
 
@@ -87,11 +88,11 @@
 	UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
 	cell.accessoryType = UITableViewCellAccessoryCheckmark;
 
-	NSMutableDictionary *settings = [[NSMutableDictionary alloc] initWithContentsOfFile:[NSString stringWithFormat:@"/var/mobile/Library/Preferences/%@.plist", self.properties[@"defaults"]]];
+	NSMutableDictionary *settings = [[NSMutableDictionary alloc] initWithContentsOfFile:[NSString stringWithFormat:ROOT_PATH_NS(@"/var/mobile/Library/Preferences/%@.plist"), self.properties[@"defaults"]]];
 
 	[settings setObject:cell.textLabel.text forKey:self.properties[@"key"]];
 
-	[settings writeToURL:[NSURL URLWithString:[NSString stringWithFormat:@"file:///var/mobile/Library/Preferences/%@.plist", self.properties[@"defaults"]]] error:nil];
+	[settings writeToURL:[NSURL URLWithString:[NSString stringWithFormat:@"file://%@/%@.plist", ROOT_PATH_NS(@"/var/mobile/Library/Preferences"), self.properties[@"defaults"]]] error:nil];
 	CFPreferencesAppSynchronize((CFStringRef)self.properties[@"defaults"]);
 	CFPreferencesSetAppValue((CFStringRef)self.properties[@"key"], (CFStringRef)cell.textLabel.text, (CFStringRef)self.properties[@"defaults"]);
 

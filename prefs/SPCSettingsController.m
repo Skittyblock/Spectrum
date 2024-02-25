@@ -2,6 +2,7 @@
 
 #import "SPCSettingsController.h"
 #import "Preferences.h"
+#import <rootless.h>
 
 @implementation SPCSettingsController
 
@@ -11,7 +12,7 @@
 		CFPreferencesSetMultiple(nil, keyList, CFSTR("xyz.skitty.spectrum"), kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
 		CFRelease(keyList);
 	}
-	[[NSFileManager defaultManager] removeItemAtPath:@"/var/mobile/Library/Preferences/xyz.skitty.spectrum.plist" error:nil];
+	[[NSFileManager defaultManager] removeItemAtPath:ROOT_PATH_NS(@"/var/mobile/Library/Preferences/xyz.skitty.spectrum.plist") error:nil];
 
 	[self respring];
 }
